@@ -1,3 +1,25 @@
+type Token @entity {
+  id: Bytes!
+  usdPrice: BigDecimal!
+  decimals: Int!
+}
+
 type Pool @entity {
   id: Bytes!
+  token0: Token!
+  token1: Token!
+  feeTier: Int!
+  tickSpacing: Int!
+  hourlyData: [PoolHourlyData]! @derivedFrom(field: "pool")
+  dailyData: [PoolDailyData]! @derivedFrom(field: "pool")
+}
+
+type PoolHourlyData @entity {
+  id: Bytes!
+  pool: Pool!
+}
+
+type PoolDailyData @entity {
+  id: Bytes!
+  pool: Pool!
 }
