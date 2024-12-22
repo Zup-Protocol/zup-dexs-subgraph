@@ -10,6 +10,7 @@ type Pool @entity {
   token1: Token!
   feeTier: Int!
   tickSpacing: Int!
+  totalValueLockedUSD: BigDecimal!
   hourlyData: [PoolHourlyData]! @derivedFrom(field: "pool")
   dailyData: [PoolDailyData]! @derivedFrom(field: "pool")
 }

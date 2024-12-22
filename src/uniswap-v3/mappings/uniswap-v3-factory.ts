@@ -8,7 +8,7 @@ import {
 } from "../../../generated/schema";
 import { UniswapV3Pool as UniswapV3PoolTemplate } from "../../../generated/templates";
 import { ZERO_BIG_DECIMAL } from "../../utils/constants";
-import { SafeCallResult } from "../../utils/safeCallResult";
+import { SafeCallResult } from "../../utils/safe-call-result";
 
 export function handleUniswapV3PoolCreated(event: PoolCreatedEvent): void {
   let poolAddress = event.params.pool;
@@ -21,19 +21,23 @@ export function handleUniswapV3PoolCreated(event: PoolCreatedEvent): void {
   let poolDailyDataEntity = new PoolDailyDataEntity(poolAddress);
   let poolHourlyDataEntity = new PoolHourlyDataEntity(poolAddress);
 
-  if (token0Entity == null) token0Entity = new TokenEntity(token0Address);
-  if (token1Entity == null) token1Entity = new TokenEntity(token1Address);
+  if (token0Entity == null) {
+    token0Entity = new TokenEntity(token0Address);
+    token0Entity.decimals = SafeCallResult.fromi32(ERC20.bind(token0Address).try_decimals());
+    token0Entity.usdPrice = ZERO_BIG_DECIMAL;
+  }
 
-  token0Entity.decimals = SafeCallResult.fromi32(ERC20.bind(token0Address).try_decimals());
-  token0Entity.usdPrice = ZERO_BIG_DECIMAL;
-
-  token1Entity.decimals = SafeCallResult.fromi32(ERC20.bind(token1Address).try_decimals());
-  token1Entity.usdPrice = ZERO_BIG_DECIMAL;
+  if (token1Entity == null) {
+    token1Entity = new TokenEntity(token1Address);
+    token1Entity.decimals = SafeCallResult.fromi32(ERC20.bind(token1Address).try_decimals());
+    token1Entity.usdPrice = ZERO_BIG_DECIMAL;
+  }
 
   poolEntity.token0 = token0Address;
   poolEntity.token1 = token1Address;
   poolEntity.feeTier = event.params.fee;
   poolEntity.tickSpacing = event.params.tickSpacing;
+  poolEntity.totalValueLockedUSD = ZERO_BIG_DECIMAL;
 
   poolDailyDataEntity.pool = poolAddress;
   poolHourlyDataEntity.pool = poolAddress;

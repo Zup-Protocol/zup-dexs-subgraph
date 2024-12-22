@@ -28,7 +28,7 @@ dataSources:
           calls:
             Token0Decimals: ERC20[event.params.token0].decimals()
             Token1Decimals: ERC20[event.params.token1].decimals()
-      file: ./src/uniswapV3/mappings/uniswapV3Factory.ts
+      file: ./src/uniswap-v3/mappings/uniswap-v3-factory.ts
 
 templates:
   - kind: ethereum/contract
@@ -40,7 +40,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/uniswapV3/mappings/pool/index.ts
+      file: ./src/uniswap-v3/mappings/pool/index.ts
       entities:
         - Pool
         - Token
@@ -48,5 +48,5 @@ templates:
         - name: UniswapV3Pool
           file: ./abis/UniswapV3Pool.json
       eventHandlers:
-        - event: Swap(indexed address,indexed address,int256,int256,uint160,uint128,int24)
-          handler: handleUniswapV3Swap
+        - event: Initialize(uint160,int24)
+          handler: handleUniswapV3PoolInitialize

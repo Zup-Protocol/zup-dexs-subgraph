@@ -1,6 +1,9 @@
 {
   "name": "zup-dexs-subgraph",
   "license": "MIT",
+  "engines": {
+    "node": "20.11.1"
+  },
   "scripts": {
     "lint": "npx eslint .",
     "codegen": "graph codegen",
@@ -13,16 +16,16 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.93.3",
+    "@graphprotocol/graph-cli": "0.91.0",
     "@graphprotocol/graph-ts": "0.36.0"
   },
   "devDependencies": {
-    "husky": "^9.1.7",
     "@typescript-eslint/eslint-plugin": "^8.18.1",
     "@typescript-eslint/parser": "^8.18.1",
     "eslint": "^9.17.0",
     "globals": "^15.14.0",
-    "matchstick-as": "0.6.0",
+    "husky": "^9.1.7",
+    "matchstick-as": "^0.6.0",
     "typescript-eslint": "^8.18.1"
   }
 }
