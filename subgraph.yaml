@@ -15,6 +15,7 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
+      file: ./src/uniswap-v3/mappings/uniswap-v3-factory.ts
       entities:
         - Pool
       abis:
@@ -28,7 +29,6 @@ dataSources:
           calls:
             Token0Decimals: ERC20[event.params.token0].decimals()
             Token1Decimals: ERC20[event.params.token1].decimals()
-      file: ./src/uniswap-v3/mappings/uniswap-v3-factory.ts
 
 templates:
   - kind: ethereum/contract
@@ -48,5 +48,13 @@ templates:
         - name: UniswapV3Pool
           file: ./abis/UniswapV3Pool.json
       eventHandlers:
+        - event: Mint(address,indexed address,indexed int24,indexed
+            int24,uint128,uint256,uint256)
+          handler: handleUniswapV3PoolMint
         - event: Initialize(uint160,int24)
           handler: handleUniswapV3PoolInitialize
+        - event: Collect(indexed address,address,indexed int24,indexed
+            int24,uint128,uint128)
+          handler: handleUniswapV3PoolCollect
+        - event: Swap(indexed address,indexed address,int256,int256,uint160,uint128,int24)
+          handler: handleUniswapV3PoolSwap

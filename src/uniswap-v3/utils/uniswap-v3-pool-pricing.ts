@@ -1,33 +1,21 @@
-import { Pool as PoolEntity, Token as TokenEntity } from "../../../../generated/schema";
-import { Initialize as InitializeEvent } from "../../../../generated/templates/UniswapV3Pool/UniswapV3Pool";
+import { BigInt } from "@graphprotocol/graph-ts";
+import { Pool as PoolEntity, Token as TokenEntity } from "../../../generated/schema";
 import {
   findStableToken,
   findWrappedNative,
   isStablePool,
   isVariableWithStablePool,
   isWrappedNativePool,
-} from "../../../utils/pool-utils";
-import { sqrtPriceX96toPrice } from "../../utils/uniswap-v3-pool-converters";
+} from "../../utils/pool-utils";
+import { sqrtPriceX96toPrice } from "./uniswap-v3-pool-converters";
 
-export function handleUniswapV3PoolInitialize(event: InitializeEvent): void {
-  let poolEntity = PoolEntity.load(event.address)!;
-  let poolToken0Entity = TokenEntity.load(poolEntity.token0)!;
-  let poolToken1Entity = TokenEntity.load(poolEntity.token1)!;
-
-  setTokenPrices(event, poolToken0Entity, poolToken1Entity, poolEntity);
-
-  poolToken0Entity.save();
-  poolToken1Entity.save();
-  poolEntity.save();
-}
-
-function setTokenPrices(
-  event: InitializeEvent,
+export function setWhitelistedTokensPriceForUniswapV3(
+  poolSqrtPriceX96: BigInt,
   poolToken0Entity: TokenEntity,
   poolToken1Entity: TokenEntity,
   poolEntity: PoolEntity,
 ): void {
-  let poolPrices = sqrtPriceX96toPrice(event.params.sqrtPriceX96, poolToken0Entity, poolToken1Entity);
+  let poolPrices = sqrtPriceX96toPrice(poolSqrtPriceX96, poolToken0Entity, poolToken1Entity);
 
   if (isVariableWithStablePool(poolEntity)) {
     let stableToken = findStableToken(poolEntity);

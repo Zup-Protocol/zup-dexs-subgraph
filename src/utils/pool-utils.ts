@@ -1,4 +1,6 @@
+import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { Pool, Token } from "../../generated/schema";
+
 import { CurrentNetwork } from "./current-network";
 import { areEqual } from "./string-utils";
 
@@ -54,4 +56,22 @@ export function findWrappedNative(pool: Pool): Token {
   if (areEqual(pool.token1.toHexString(), CurrentNetwork.wrappedNativeAddress)) return new Token(pool.token0);
 
   return new Token(pool.token1);
+}
+
+export function getPoolHourlyDataId(blockTimestamp: BigInt, poolCreationTimestamp: BigInt, poolAddress: Bytes): Bytes {
+  let secondsPerHour = BigInt.fromU32(3_600);
+  let hourId = blockTimestamp.minus(poolCreationTimestamp).div(secondsPerHour);
+
+  let id = Address.fromHexString(Bytes.fromUTF8(`${poolAddress.toHexString()}-${hourId}`).toHex());
+
+  return id;
+}
+
+export function getPoolDailyDataId(blockTimestamp: BigInt, poolCreationTimestamp: BigInt, poolAddress: Bytes): Bytes {
+  let secondsPerDay = BigInt.fromU32(86_400);
+  let dayId = blockTimestamp.minus(poolCreationTimestamp).div(secondsPerDay);
+
+  let id = Address.fromHexString(Bytes.fromUTF8(`${poolAddress.toHexString()}-${dayId}`).toHex());
+
+  return id;
 }

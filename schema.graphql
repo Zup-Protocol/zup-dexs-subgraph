@@ -11,6 +11,9 @@ type Pool @entity {
   feeTier: Int!
   tickSpacing: Int!
   totalValueLockedUSD: BigDecimal!
+  totalValueLockedToken0: BigDecimal!
+  totalValueLockedToken1: BigDecimal!
+  createdAtTimestamp: BigInt!
   hourlyData: [PoolHourlyData]! @derivedFrom(field: "pool")
   dailyData: [PoolDailyData]! @derivedFrom(field: "pool")
 }
@@ -18,9 +21,20 @@ type Pool @entity {
 type PoolHourlyData @entity {
   id: Bytes!
   pool: Pool!
+  feesUSD: BigDecimal!
+  feesToken0: BigDecimal!
+  feesToken1: BigDecimal!
+  hourStartTimestamp: BigInt!
 }
 
 type PoolDailyData @entity {
   id: Bytes!
   pool: Pool!
+  feesUSD: BigDecimal!
+  feesToken0: BigDecimal!
+  feesToken1: BigDecimal!
+  dayStartTimestamp: BigInt!
+  totalValueLockedUSD: BigDecimal!
+  totalValueLockedToken0: BigDecimal!
+  totalValueLockedToken1: BigDecimal!
 }
