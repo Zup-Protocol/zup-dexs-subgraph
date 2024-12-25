@@ -16,13 +16,13 @@ export function handleUniswapV3PoolCreated(event: PoolCreatedEvent): void {
 
   if (token0Entity == null) {
     token0Entity = new TokenEntity(token0Address);
-    token0Entity.decimals = SafeCallResult.fromi32(ERC20.bind(token0Address).try_decimals());
+    token0Entity.decimals = SafeCallResult.fromNumber(ERC20.bind(token0Address).try_decimals());
     token0Entity.usdPrice = ZERO_BIG_DECIMAL;
   }
 
   if (token1Entity == null) {
     token1Entity = new TokenEntity(token1Address);
-    token1Entity.decimals = SafeCallResult.fromi32(ERC20.bind(token1Address).try_decimals());
+    token1Entity.decimals = SafeCallResult.fromNumber(ERC20.bind(token1Address).try_decimals());
     token1Entity.usdPrice = ZERO_BIG_DECIMAL;
   }
 

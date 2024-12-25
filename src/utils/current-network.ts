@@ -12,7 +12,7 @@ export abstract class CurrentNetwork {
     throw CurrentNetwork.unsupportedNetworkError;
   }
 
-  static get stablecoinsAddresses(): String[] {
+  static get stablecoinsAddresses(): string[] {
     if (dataSource.network() == MAINNET_NETWORK_NAME) {
       return [
         "0xdac17f958d2ee523a2206206994597c13d831ec7", // USDT

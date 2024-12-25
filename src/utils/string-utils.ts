@@ -1,3 +1,3 @@
-export function areEqual(a: string, b: string): bool {
-  return a.toLowerCase() === b.toLowerCase();
+export function areEqual(a: string, b: string): boolean {
+  return a.toLowerCase() == b.toLowerCase();
 }

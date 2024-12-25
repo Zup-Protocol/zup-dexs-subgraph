@@ -1,4 +1,4 @@
-import { BigInt, log } from "@graphprotocol/graph-ts";
+import { BigInt } from "@graphprotocol/graph-ts";
 import {
   PoolDailyData as PoolDailyDataEntity,
   Pool as PoolEntity,
@@ -9,8 +9,10 @@ import { Swap as SwapEvent } from "../../../../generated/templates/UniswapV3Pool
 import { ZERO_BIG_DECIMAL, ZERO_BIG_INT } from "../../../utils/constants";
 import { getPoolDailyDataId, getPoolHourlyDataId } from "../../../utils/pool-utils";
 import { formatFromTokenAmount } from "../../../utils/token-utils";
-import { setWhitelistedTokensPriceForUniswapV3 as setTokensPricesForUniswapV3 } from "../../utils/uniswap-v3-pool-pricing";
-import { setPoolDailyDataTVL } from "../../utils/uniswap-v3-pool-setters";
+import {
+  setPoolDailyDataTVL,
+  setPricesForWhitelistedTokensUniswapV3 as setTokensPricesForUniswapV3,
+} from "../../utils/uniswap-v3-pool-setters";
 
 export function handleUniswapV3PoolSwap(event: SwapEvent): void {
   let poolEntity = PoolEntity.load(event.address)!;
@@ -23,11 +25,6 @@ export function handleUniswapV3PoolSwap(event: SwapEvent): void {
 
   poolEntity.totalValueLockedToken0 = poolEntity.totalValueLockedToken0.plus(tokenAmount0Formatted);
   poolEntity.totalValueLockedToken1 = poolEntity.totalValueLockedToken1.plus(tokenAmount1Formatted);
-
-  log.error(
-    `swap: totalValueLockedToken0: ${poolEntity.totalValueLockedToken0}, totalValueLockedToken1: ${poolEntity.totalValueLockedToken1}`,
-    [],
-  );
 
   poolEntity.totalValueLockedUSD = poolEntity.totalValueLockedToken0
     .times(token0Entity.usdPrice)
@@ -42,7 +39,7 @@ export function handleUniswapV3PoolSwap(event: SwapEvent): void {
 }
 
 function setHourlyData(event: SwapEvent, pool: PoolEntity): void {
-  let hourlyPoolDataId = getPoolHourlyDataId(event.block.timestamp, pool.createdAtTimestamp, pool.id);
+  let hourlyPoolDataId = getPoolHourlyDataId(event.block.timestamp, pool);
   let poolHourlyDataEntity = PoolHourlyDataEntity.load(hourlyPoolDataId);
   let userInputToken = findUserInputToken(event, pool);
 
@@ -79,7 +76,7 @@ function setHourlyData(event: SwapEvent, pool: PoolEntity): void {
 function setDailyData(event: SwapEvent, pool: PoolEntity): void {
   setPoolDailyDataTVL(event, pool);
 
-  let dailyPoolDataId = getPoolDailyDataId(event.block.timestamp, pool.createdAtTimestamp, pool.id);
+  let dailyPoolDataId = getPoolDailyDataId(event.block.timestamp, pool);
   let poolDailyDataEntity = PoolDailyDataEntity.load(dailyPoolDataId)!; // adding ! here assuming [setPoolDailyDataTVL] created it if null
   let userInputToken = findUserInputToken(event, pool);
 

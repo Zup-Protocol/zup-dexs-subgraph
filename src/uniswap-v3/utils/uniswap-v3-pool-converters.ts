@@ -1,7 +1,7 @@
 import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { Token } from "../../../generated/schema";
 import { safeDiv } from "../../utils/math";
-import { tokenBaseAmountBigDecimal } from "../../utils/token-utils";
+import { tokenBaseAmount } from "../../utils/token-utils";
 
 class PriceResult {
   token0PerToken1: BigDecimal;
@@ -15,8 +15,8 @@ export function sqrtPriceX96toPrice(sqrtPriceX96: BigInt, poolToken0: Token, poo
 
   const price1 = num
     .div(denominator)
-    .times(tokenBaseAmountBigDecimal(poolToken0))
-    .div(tokenBaseAmountBigDecimal(poolToken1));
+    .times(tokenBaseAmount(poolToken0).toBigDecimal())
+    .div(tokenBaseAmount(poolToken1).toBigDecimal());
 
   const price0 = safeDiv(BigDecimal.fromString("1"), price1);
 

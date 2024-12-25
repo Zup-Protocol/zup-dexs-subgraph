@@ -4,7 +4,7 @@ import { Pool, Token } from "../../generated/schema";
 import { CurrentNetwork } from "./current-network";
 import { areEqual } from "./string-utils";
 
-export function isVariableWithStablePool(pool: Pool): bool {
+export function isVariableWithStablePool(pool: Pool): boolean {
   let stablecoinsAddressesLowercased = CurrentNetwork.stablecoinsAddresses.map<string>((address) =>
     address.toLowerCase(),
   );
@@ -17,7 +17,7 @@ export function isVariableWithStablePool(pool: Pool): bool {
   return false;
 }
 
-export function isStablePool(pool: Pool): bool {
+export function isStablePool(pool: Pool): boolean {
   let stablecoinsAddressesLowercased = CurrentNetwork.stablecoinsAddresses.map<string>((address) =>
     address.toLowerCase(),
   );
@@ -30,7 +30,7 @@ export function isStablePool(pool: Pool): bool {
   return false;
 }
 
-export function isWrappedNativePool(pool: Pool): bool {
+export function isWrappedNativePool(pool: Pool): boolean {
   let isToken0WrappedNative = areEqual(pool.token0.toHexString(), CurrentNetwork.wrappedNativeAddress);
   let isToken1WrappedNative = areEqual(pool.token1.toHexString(), CurrentNetwork.wrappedNativeAddress);
 
@@ -40,6 +40,13 @@ export function isWrappedNativePool(pool: Pool): bool {
 }
 
 export function findStableToken(pool: Pool): Token {
+  assert(
+    isStablePool(pool) || isVariableWithStablePool(pool),
+    `No mapped stablecoin token found in the pool; 
+    maybe it's a bug?;
+    maybe the stablecoin have not been added at the network whitelisted stablecoins list?`,
+  );
+
   let stablecoinsAddressesLowercased = CurrentNetwork.stablecoinsAddresses.map<string>((address) =>
     address.toLowerCase(),
   );
@@ -53,25 +60,29 @@ export function findStableToken(pool: Pool): Token {
 export function findWrappedNative(pool: Pool): Token {
   assert(isWrappedNativePool(pool), "Pool does not have an wrapped native asset, no wrapped native token can be found");
 
-  if (areEqual(pool.token1.toHexString(), CurrentNetwork.wrappedNativeAddress)) return new Token(pool.token0);
+  let isToken0WrappedNative = areEqual(pool.token0.toHexString(), CurrentNetwork.wrappedNativeAddress);
+
+  if (isToken0WrappedNative) return new Token(pool.token0);
 
   return new Token(pool.token1);
 }
 
-export function getPoolHourlyDataId(blockTimestamp: BigInt, poolCreationTimestamp: BigInt, poolAddress: Bytes): Bytes {
+export function getPoolHourlyDataId(blockTimestampInSeconds: BigInt, pool: Pool): Bytes {
   let secondsPerHour = BigInt.fromU32(3_600);
-  let hourId = blockTimestamp.minus(poolCreationTimestamp).div(secondsPerHour);
+  let hourId = blockTimestampInSeconds.minus(pool.createdAtTimestamp).div(secondsPerHour);
 
-  let id = Address.fromHexString(Bytes.fromUTF8(`${poolAddress.toHexString()}-${hourId}`).toHex());
+  let hourIdAddress = Address.fromBigInt(hourId).toHexString();
+  let id = pool.id.concat(Bytes.fromHexString(hourIdAddress));
 
   return id;
 }
 
-export function getPoolDailyDataId(blockTimestamp: BigInt, poolCreationTimestamp: BigInt, poolAddress: Bytes): Bytes {
+export function getPoolDailyDataId(blockTimestamp: BigInt, pool: Pool): Bytes {
   let secondsPerDay = BigInt.fromU32(86_400);
-  let dayId = blockTimestamp.minus(poolCreationTimestamp).div(secondsPerDay);
+  let dayId = blockTimestamp.minus(pool.createdAtTimestamp).div(secondsPerDay);
 
-  let id = Address.fromHexString(Bytes.fromUTF8(`${poolAddress.toHexString()}-${dayId}`).toHex());
+  let dayIdAddress = Address.fromBigInt(dayId).toHexString();
+  let id = pool.id.concat(Bytes.fromHexString(dayIdAddress));
 
   return id;
 }
