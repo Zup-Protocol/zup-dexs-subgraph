@@ -1,5 +1,5 @@
 import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
-import { Pool, Protocol as ProtocolEntity, Token } from "../../generated/schema";
+import { Pool, Token } from "../../generated/schema";
 
 import { CurrentNetwork } from "./current-network";
 import { areEqual } from "./string-utils";
@@ -85,13 +85,4 @@ export function getPoolDailyDataId(blockTimestamp: BigInt, pool: Pool): Bytes {
   let id = pool.id.concat(Bytes.fromHexString(dayIdAddress));
 
   return id;
-}
-
-export function checkAndCreatePoolProtocolEntity(pool: Pool, protocolCreator: () => ProtocolEntity): void {
-  if (pool.protocol != "") return;
-
-  let protocol = protocolCreator();
-
-  pool.protocol = protocol.id;
-  pool.save();
 }
