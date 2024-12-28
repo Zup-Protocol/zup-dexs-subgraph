@@ -1,9 +1,9 @@
 import { Pool as PoolEntity, Token as TokenEntity } from "../../../../generated/schema";
 import { Collect as CollectEvent } from "../../../../generated/templates/UniswapV3Pool/UniswapV3Pool";
 import { formatFromTokenAmount } from "../../../utils/token-utils";
-import { setPoolDailyDataTVL } from "../../utils/uniswap-v3-pool-setters";
+import { setPoolDailyDataTVL } from "../../utils/v3-pool-setters";
 
-export function handleUniswapV3PoolCollect(event: CollectEvent): void {
+export function handleV3PoolCollect(event: CollectEvent): void {
   let poolEntity = PoolEntity.load(event.address)!;
   let token0Entity = TokenEntity.load(poolEntity.token0)!;
   let token1Entity = TokenEntity.load(poolEntity.token1)!;

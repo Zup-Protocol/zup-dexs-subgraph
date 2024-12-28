@@ -11,10 +11,10 @@ import { getPoolDailyDataId, getPoolHourlyDataId } from "../../../utils/pool-uti
 import { formatFromTokenAmount } from "../../../utils/token-utils";
 import {
   setPoolDailyDataTVL,
-  setPricesForWhitelistedTokensUniswapV3 as setTokensPricesForUniswapV3,
-} from "../../utils/uniswap-v3-pool-setters";
+  setPricesForV3PoolWhitelistedTokens as setTokensPricesForUniswapV3,
+} from "../../utils/v3-pool-setters";
 
-export function handleUniswapV3PoolSwap(event: SwapEvent): void {
+export function handleV3PoolSwap(event: SwapEvent): void {
   let poolEntity = PoolEntity.load(event.address)!;
   let token0Entity = TokenEntity.load(poolEntity.token0)!;
   let token1Entity = TokenEntity.load(poolEntity.token1)!;

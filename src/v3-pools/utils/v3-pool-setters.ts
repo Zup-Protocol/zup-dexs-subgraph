@@ -13,7 +13,7 @@ import {
   isVariableWithStablePool,
   isWrappedNativePool,
 } from "../../utils/pool-utils";
-import { sqrtPriceX96toPrice } from "./uniswap-v3-pool-converters";
+import { sqrtPriceX96toPrice } from "./v3-pool-converters";
 
 export function setPoolDailyDataTVL(event: ethereum.Event, poolEntity: PoolEntity): void {
   let poolDailyDataId = getPoolDailyDataId(event.block.timestamp, poolEntity);
@@ -39,7 +39,7 @@ export function setPoolDailyDataTVL(event: ethereum.Event, poolEntity: PoolEntit
   poolDailyDataEntity.save();
 }
 
-export function setPricesForWhitelistedTokensUniswapV3(
+export function setPricesForV3PoolWhitelistedTokens(
   poolSqrtPriceX96: BigInt,
   poolToken0Entity: TokenEntity,
   poolToken1Entity: TokenEntity,

@@ -16,6 +16,7 @@ type Pool @entity {
   createdAtTimestamp: BigInt!
   hourlyData: [PoolHourlyData]! @derivedFrom(field: "pool")
   dailyData: [PoolDailyData]! @derivedFrom(field: "pool")
+  protocol: Protocol!
 }
 
 type PoolHourlyData @entity {
@@ -37,4 +38,11 @@ type PoolDailyData @entity {
   totalValueLockedUSD: BigDecimal!
   totalValueLockedToken0: BigDecimal!
   totalValueLockedToken1: BigDecimal!
+}
+
+type Protocol @entity(immutable: true) {
+  id: String!
+  name: String!
+  logo: String!
+  url: String!
 }
