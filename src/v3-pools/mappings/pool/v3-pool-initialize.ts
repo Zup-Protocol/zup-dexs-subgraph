@@ -1,13 +1,16 @@
 import { Pool as PoolEntity, Token as TokenEntity } from "../../../../generated/schema";
 import { Initialize as InitializeEvent } from "../../../../generated/templates/UniswapV3Pool/UniswapV3Pool";
-import { setPricesForV3PoolWhitelistedTokens } from "../../utils/v3-pool-setters";
+import { V3PoolSetters } from "../../utils/v3-pool-setters";
 
-export function handleV3PoolInitialize(event: InitializeEvent): void {
+export function handleV3PoolInitialize(
+  event: InitializeEvent,
+  v3PoolSetters: V3PoolSetters = new V3PoolSetters(),
+): void {
   let poolEntity = PoolEntity.load(event.address)!;
   let poolToken0Entity = TokenEntity.load(poolEntity.token0)!;
   let poolToken1Entity = TokenEntity.load(poolEntity.token1)!;
 
-  setPricesForV3PoolWhitelistedTokens(event.params.sqrtPriceX96, poolToken0Entity, poolToken1Entity, poolEntity);
+  v3PoolSetters.setPricesForV3PoolWhitelistedTokens(event.params.sqrtPriceX96, poolEntity);
 
   poolToken0Entity.save();
   poolToken1Entity.save();

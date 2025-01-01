@@ -2,6 +2,11 @@ specVersion: 1.2.0
 repository: https://github.com/Zup-Protocol/zup-dexs-subgraph
 indexerHints:
   prune: never
+features:
+  - grafting
+graft:
+  base: QmWV1dN6kk6EcN2NE2RFA1WQsPbn5fPriDk1toSRV9fMj5
+  block: 12788598
 schema:
   file: ./schema.graphql
 dataSources:
@@ -11,7 +16,7 @@ dataSources:
     source:
       address: "0x1F98431c8aD98523631AE4a59f267346ea31F984"
       abi: V3Factory
-      startBlock: 12369621
+      startBlock: 12788599
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

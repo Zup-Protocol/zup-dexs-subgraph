@@ -1,6 +1,7 @@
 import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { Pool, Token } from "../../generated/schema";
 
+import { ONE_HOUR_IN_SECONDS } from "./constants";
 import { CurrentNetwork } from "./current-network";
 import { areEqual } from "./string-utils";
 
@@ -68,7 +69,7 @@ export function findWrappedNative(pool: Pool): Token {
 }
 
 export function getPoolHourlyDataId(blockTimestampInSeconds: BigInt, pool: Pool): Bytes {
-  let secondsPerHour = BigInt.fromU32(3_600);
+  let secondsPerHour = BigInt.fromU32(ONE_HOUR_IN_SECONDS);
   let hourId = blockTimestampInSeconds.minus(pool.createdAtTimestamp).div(secondsPerHour);
 
   let hourIdAddress = Address.fromBigInt(hourId).toHexString();

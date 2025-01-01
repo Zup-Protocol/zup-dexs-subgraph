@@ -1,9 +1,9 @@
 import { Pool as PoolEntity, Token as TokenEntity } from "../../../../generated/schema";
 import { Mint as MintEvent } from "../../../../generated/templates/UniswapV3Pool/UniswapV3Pool";
 import { formatFromTokenAmount } from "../../../utils/token-utils";
-import { setPoolDailyDataTVL } from "../../utils/v3-pool-setters";
+import { V3PoolSetters } from "../../utils/v3-pool-setters";
 
-export function handleV3PoolMint(event: MintEvent): void {
+export function handleV3PoolMint(event: MintEvent, v3PoolSetters: V3PoolSetters = new V3PoolSetters()): void {
   let poolEntity = PoolEntity.load(event.address)!;
   let token0Entity = TokenEntity.load(poolEntity.token0)!;
   let token1Entity = TokenEntity.load(poolEntity.token1)!;
@@ -17,6 +17,6 @@ export function handleV3PoolMint(event: MintEvent): void {
     .times(token0Entity.usdPrice)
     .plus(poolEntity.totalValueLockedToken1.times(token1Entity.usdPrice));
 
-  setPoolDailyDataTVL(event, poolEntity);
+  v3PoolSetters.setPoolDailyDataTVL(event, poolEntity);
   poolEntity.save();
 }

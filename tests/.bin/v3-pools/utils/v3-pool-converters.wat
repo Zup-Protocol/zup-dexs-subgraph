@@ -1,16 +1,25 @@
 (module
   (type (;0;) (func (param i32) (result i32)))
   (type (;1;) (func (param i32 i32) (result i32)))
-  (type (;2;) (func))
-  (type (;3;) (func (param i32 i32 i32)))
-  (type (;4;) (func (param i32 i32 i32 i32)))
-  (type (;5;) (func (param i32 i32)))
-  (import "env" "abort" (func $~lib/builtins/abort (type 4)))
+  (type (;2;) (func (param i32 i32 i32)))
+  (type (;3;) (func (param i32 i32)))
+  (type (;4;) (func))
+  (type (;5;) (func (param i32 i32 i32 i32)))
+  (type (;6;) (func (param i32 i32 i32) (result i32)))
+  (import "env" "abort" (func $~lib/builtins/abort (type 5)))
   (import "conversion" "typeConversion.stringToH160" (func $~lib/@graphprotocol/graph-ts/common/conversion/typeConversion.stringToH160 (type 0)))
   (import "numbers" "bigDecimal.fromString" (func $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.fromString (type 0)))
+  (import "numbers" "bigInt.fromString" (func $~lib/@graphprotocol/graph-ts/common/numbers/bigInt.fromString (type 0)))
+  (import "numbers" "bigInt.pow" (func $~lib/@graphprotocol/graph-ts/common/numbers/bigInt.pow (type 1)))
+  (import "numbers" "bigInt.times" (func $~lib/@graphprotocol/graph-ts/common/numbers/bigInt.times (type 1)))
+  (import "conversion" "typeConversion.bigIntToString" (func $~lib/@graphprotocol/graph-ts/common/conversion/typeConversion.bigIntToString (type 0)))
+  (import "numbers" "bigDecimal.dividedBy" (func $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.dividedBy (type 1)))
+  (import "numbers" "bigDecimal.times" (func $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.times (type 1)))
   (import "numbers" "bigDecimal.minus" (func $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.minus (type 1)))
+  (import "numbers" "bigDecimal.toString" (func $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.toString (type 0)))
+  (import "assert" "_assert.equalsWithMessage" (func $~lib/matchstick-as/assert/_assert.equalsWithMessage (type 6)))
   (import "assert" "_assert.equals" (func $~lib/matchstick-as/assert/_assert.equals (type 1)))
-  (import "index" "_registerTest" (func $~lib/matchstick-as/index/_registerTest (type 3)))
+  (import "index" "_registerTest" (func $~lib/matchstick-as/index/_registerTest (type 2)))
   (func $~lib/rt/stub/__alloc (type 0) (param i32) (result i32)
     (local i32 i32 i32 i32 i32)
     local.get 0
@@ -38,7 +47,7 @@
     i32.sub
     local.tee 5
     i32.add
-    local.tee 1
+    local.tee 0
     memory.size
     local.tee 2
     i32.const 16
@@ -47,12 +56,12 @@
     i32.add
     i32.const -16
     i32.and
-    local.tee 0
+    local.tee 1
     i32.gt_u
     if  ;; label = @1
       local.get 2
-      local.get 1
       local.get 0
+      local.get 1
       i32.sub
       i32.const 65535
       i32.add
@@ -60,8 +69,8 @@
       i32.and
       i32.const 16
       i32.shr_u
-      local.tee 0
-      local.get 0
+      local.tee 1
+      local.get 1
       local.get 2
       i32.lt_s
       select
@@ -69,7 +78,7 @@
       i32.const 0
       i32.lt_s
       if  ;; label = @2
-        local.get 0
+        local.get 1
         memory.grow
         i32.const 0
         i32.lt_s
@@ -78,7 +87,7 @@
         end
       end
     end
-    local.get 1
+    local.get 0
     global.set $~lib/rt/stub/offset
     local.get 3
     local.get 5
@@ -119,7 +128,7 @@
     local.get 3
     i32.const 16
     i32.add)
-  (func $~lib/memory/memory.fill (type 5) (param i32 i32)
+  (func $~lib/memory/memory.fill (type 3) (param i32 i32)
     (local i32)
     block  ;; label = @1
       local.get 1
@@ -294,6 +303,68 @@
         end
       end
     end)
+  (func $~lib/@graphprotocol/graph-ts/common/collections/Entity#constructor (type 0) (param i32) (result i32)
+    (local i32 i32)
+    block (result i32)  ;; label = @1
+      block (result i32)  ;; label = @2
+        local.get 0
+        i32.eqz
+        if  ;; label = @3
+          i32.const 4
+          i32.const 5
+          call $~lib/rt/stub/__new
+          local.set 0
+        end
+        local.get 0
+      end
+      i32.eqz
+      if  ;; label = @2
+        i32.const 4
+        i32.const 7
+        call $~lib/rt/stub/__new
+        local.set 0
+      end
+      local.get 0
+    end
+    i32.const 0
+    i32.store
+    i32.const 16
+    i32.const 9
+    call $~lib/rt/stub/__new
+    local.tee 1
+    i32.const 0
+    i32.store
+    local.get 1
+    i32.const 0
+    i32.store offset=4
+    local.get 1
+    i32.const 0
+    i32.store offset=8
+    local.get 1
+    i32.const 0
+    i32.store offset=12
+    i32.const 32
+    i32.const 0
+    call $~lib/rt/stub/__new
+    local.tee 2
+    i32.const 32
+    call $~lib/memory/memory.fill
+    local.get 1
+    local.get 2
+    i32.store
+    local.get 1
+    local.get 2
+    i32.store offset=4
+    local.get 1
+    i32.const 32
+    i32.store offset=8
+    local.get 1
+    i32.const 0
+    i32.store offset=12
+    local.get 0
+    local.get 1
+    i32.store
+    local.get 0)
   (func $~lib/typedarray/Uint8Array#constructor (type 1) (param i32 i32) (result i32)
     (local i32)
     block (result i32)  ;; label = @1
@@ -352,7 +423,7 @@
     local.get 1
     i32.store offset=8
     local.get 0)
-  (func $~lib/typedarray/Uint8Array#__set (type 3) (param i32 i32 i32)
+  (func $~lib/typedarray/Uint8Array#__set (type 2) (param i32 i32 i32)
     local.get 1
     local.get 0
     i32.load offset=8
@@ -407,6 +478,1473 @@
     i32.shr_s
     call $~lib/typedarray/Uint8Array#__set
     local.get 1)
+  (func $~lib/array/Array<~lib/@graphprotocol/graph-ts/common/collections/TypedMapEntry<~lib/string/String_~lib/@graphprotocol/graph-ts/common/value/Value>>#__get (type 1) (param i32 i32) (result i32)
+    local.get 1
+    local.get 0
+    i32.load offset=12
+    i32.ge_u
+    if  ;; label = @1
+      i32.const 2080
+      i32.const 1856
+      i32.const 106
+      i32.const 42
+      call $~lib/builtins/abort
+      unreachable
+    end
+    local.get 0
+    i32.load offset=4
+    local.get 1
+    i32.const 2
+    i32.shl
+    i32.add
+    i32.load
+    local.tee 0
+    i32.eqz
+    if  ;; label = @1
+      i32.const 2864
+      i32.const 1856
+      i32.const 110
+      i32.const 40
+      call $~lib/builtins/abort
+      unreachable
+    end
+    local.get 0)
+  (func $~lib/string/String.__eq (type 1) (param i32 i32) (result i32)
+    (local i32 i32 i32)
+    local.get 0
+    local.get 1
+    i32.eq
+    if  ;; label = @1
+      i32.const 1
+      return
+    end
+    local.get 1
+    i32.const 0
+    local.get 0
+    select
+    i32.eqz
+    if  ;; label = @1
+      i32.const 0
+      return
+    end
+    local.get 0
+    i32.const 20
+    i32.sub
+    i32.load offset=16
+    i32.const 1
+    i32.shr_u
+    local.tee 4
+    local.get 1
+    i32.const 20
+    i32.sub
+    i32.load offset=16
+    i32.const 1
+    i32.shr_u
+    i32.ne
+    if  ;; label = @1
+      i32.const 0
+      return
+    end
+    block (result i32)  ;; label = @1
+      local.get 0
+      local.set 2
+      local.get 1
+      local.set 3
+      local.get 2
+      i32.const 7
+      i32.and
+      local.get 3
+      i32.const 7
+      i32.and
+      i32.or
+      i32.const 1
+      local.get 4
+      local.tee 0
+      i32.const 4
+      i32.ge_u
+      select
+      i32.eqz
+      if  ;; label = @2
+        loop  ;; label = @3
+          local.get 2
+          i64.load
+          local.get 3
+          i64.load
+          i64.eq
+          if  ;; label = @4
+            local.get 2
+            i32.const 8
+            i32.add
+            local.set 2
+            local.get 3
+            i32.const 8
+            i32.add
+            local.set 3
+            local.get 0
+            i32.const 4
+            i32.sub
+            local.tee 0
+            i32.const 4
+            i32.ge_u
+            br_if 1 (;@3;)
+          end
+        end
+      end
+      loop  ;; label = @2
+        local.get 0
+        local.tee 1
+        i32.const 1
+        i32.sub
+        local.set 0
+        local.get 1
+        if  ;; label = @3
+          local.get 2
+          i32.load16_u
+          local.tee 1
+          local.get 3
+          i32.load16_u
+          local.tee 4
+          i32.ne
+          if  ;; label = @4
+            local.get 1
+            local.get 4
+            i32.sub
+            br 3 (;@1;)
+          end
+          local.get 2
+          i32.const 2
+          i32.add
+          local.set 2
+          local.get 3
+          i32.const 2
+          i32.add
+          local.set 3
+          br 1 (;@2;)
+        end
+      end
+      i32.const 0
+    end
+    i32.eqz)
+  (func $~lib/util/memory/memcpy (type 2) (param i32 i32 i32)
+    (local i32 i32 i32)
+    loop  ;; label = @1
+      local.get 1
+      i32.const 3
+      i32.and
+      i32.const 0
+      local.get 2
+      select
+      if  ;; label = @2
+        local.get 0
+        local.tee 3
+        i32.const 1
+        i32.add
+        local.set 0
+        local.get 1
+        local.tee 4
+        i32.const 1
+        i32.add
+        local.set 1
+        local.get 3
+        local.get 4
+        i32.load8_u
+        i32.store8
+        local.get 2
+        i32.const 1
+        i32.sub
+        local.set 2
+        br 1 (;@1;)
+      end
+    end
+    local.get 0
+    i32.const 3
+    i32.and
+    i32.eqz
+    if  ;; label = @1
+      loop  ;; label = @2
+        local.get 2
+        i32.const 16
+        i32.ge_u
+        if  ;; label = @3
+          local.get 0
+          local.get 1
+          i32.load
+          i32.store
+          local.get 0
+          local.get 1
+          i32.load offset=4
+          i32.store offset=4
+          local.get 0
+          local.get 1
+          i32.load offset=8
+          i32.store offset=8
+          local.get 0
+          local.get 1
+          i32.load offset=12
+          i32.store offset=12
+          local.get 1
+          i32.const 16
+          i32.add
+          local.set 1
+          local.get 0
+          i32.const 16
+          i32.add
+          local.set 0
+          local.get 2
+          i32.const 16
+          i32.sub
+          local.set 2
+          br 1 (;@2;)
+        end
+      end
+      local.get 2
+      i32.const 8
+      i32.and
+      if  ;; label = @2
+        block (result i32)  ;; label = @3
+          local.get 0
+          local.get 1
+          i32.load
+          i32.store
+          local.get 0
+          local.get 1
+          i32.load offset=4
+          i32.store offset=4
+          local.get 1
+          i32.const 8
+          i32.add
+          local.set 1
+          local.get 0
+          i32.const 8
+          i32.add
+        end
+        local.set 0
+      end
+      local.get 2
+      i32.const 4
+      i32.and
+      if  ;; label = @2
+        block (result i32)  ;; label = @3
+          local.get 0
+          local.get 1
+          i32.load
+          i32.store
+          local.get 1
+          i32.const 4
+          i32.add
+          local.set 1
+          local.get 0
+          i32.const 4
+          i32.add
+        end
+        local.set 0
+      end
+      local.get 2
+      i32.const 2
+      i32.and
+      if  ;; label = @2
+        block (result i32)  ;; label = @3
+          local.get 0
+          local.get 1
+          i32.load16_u
+          i32.store16
+          local.get 1
+          i32.const 2
+          i32.add
+          local.set 1
+          local.get 0
+          i32.const 2
+          i32.add
+        end
+        local.set 0
+      end
+      local.get 2
+      i32.const 1
+      i32.and
+      if  ;; label = @2
+        local.get 0
+        local.get 1
+        i32.load8_u
+        i32.store8
+      end
+      return
+    end
+    local.get 2
+    i32.const 32
+    i32.ge_u
+    if  ;; label = @1
+      block  ;; label = @2
+        block  ;; label = @3
+          block  ;; label = @4
+            block  ;; label = @5
+              local.get 0
+              i32.const 3
+              i32.and
+              i32.const 1
+              i32.sub
+              br_table 0 (;@5;) 1 (;@4;) 2 (;@3;) 3 (;@2;)
+            end
+            local.get 1
+            i32.load
+            local.set 5
+            local.get 0
+            local.get 1
+            i32.load8_u
+            i32.store8
+            local.get 0
+            i32.const 1
+            i32.add
+            local.tee 0
+            local.get 1
+            i32.const 1
+            i32.add
+            local.tee 1
+            i32.load8_u
+            i32.store8
+            local.get 0
+            local.tee 4
+            i32.const 2
+            i32.add
+            local.set 0
+            local.get 1
+            local.tee 3
+            i32.const 2
+            i32.add
+            local.set 1
+            local.get 4
+            local.get 3
+            i32.load8_u offset=1
+            i32.store8 offset=1
+            local.get 2
+            i32.const 3
+            i32.sub
+            local.set 2
+            loop  ;; label = @5
+              local.get 2
+              i32.const 17
+              i32.ge_u
+              if  ;; label = @6
+                local.get 0
+                local.get 1
+                i32.load offset=1
+                local.tee 3
+                i32.const 8
+                i32.shl
+                local.get 5
+                i32.const 24
+                i32.shr_u
+                i32.or
+                i32.store
+                local.get 0
+                local.get 3
+                i32.const 24
+                i32.shr_u
+                local.get 1
+                i32.load offset=5
+                local.tee 3
+                i32.const 8
+                i32.shl
+                i32.or
+                i32.store offset=4
+                local.get 0
+                local.get 3
+                i32.const 24
+                i32.shr_u
+                local.get 1
+                i32.load offset=9
+                local.tee 3
+                i32.const 8
+                i32.shl
+                i32.or
+                i32.store offset=8
+                local.get 0
+                local.get 1
+                i32.load offset=13
+                local.tee 5
+                i32.const 8
+                i32.shl
+                local.get 3
+                i32.const 24
+                i32.shr_u
+                i32.or
+                i32.store offset=12
+                local.get 1
+                i32.const 16
+                i32.add
+                local.set 1
+                local.get 0
+                i32.const 16
+                i32.add
+                local.set 0
+                local.get 2
+                i32.const 16
+                i32.sub
+                local.set 2
+                br 1 (;@5;)
+              end
+            end
+            br 2 (;@2;)
+          end
+          local.get 1
+          i32.load
+          local.set 5
+          local.get 0
+          local.get 1
+          i32.load8_u
+          i32.store8
+          local.get 0
+          local.tee 4
+          i32.const 2
+          i32.add
+          local.set 0
+          local.get 1
+          local.tee 3
+          i32.const 2
+          i32.add
+          local.set 1
+          local.get 4
+          local.get 3
+          i32.load8_u offset=1
+          i32.store8 offset=1
+          local.get 2
+          i32.const 2
+          i32.sub
+          local.set 2
+          loop  ;; label = @4
+            local.get 2
+            i32.const 18
+            i32.ge_u
+            if  ;; label = @5
+              local.get 0
+              local.get 1
+              i32.load offset=2
+              local.tee 3
+              i32.const 16
+              i32.shl
+              local.get 5
+              i32.const 16
+              i32.shr_u
+              i32.or
+              i32.store
+              local.get 0
+              local.get 3
+              i32.const 16
+              i32.shr_u
+              local.get 1
+              i32.load offset=6
+              local.tee 3
+              i32.const 16
+              i32.shl
+              i32.or
+              i32.store offset=4
+              local.get 0
+              local.get 3
+              i32.const 16
+              i32.shr_u
+              local.get 1
+              i32.load offset=10
+              local.tee 3
+              i32.const 16
+              i32.shl
+              i32.or
+              i32.store offset=8
+              local.get 0
+              local.get 1
+              i32.load offset=14
+              local.tee 5
+              i32.const 16
+              i32.shl
+              local.get 3
+              i32.const 16
+              i32.shr_u
+              i32.or
+              i32.store offset=12
+              local.get 1
+              i32.const 16
+              i32.add
+              local.set 1
+              local.get 0
+              i32.const 16
+              i32.add
+              local.set 0
+              local.get 2
+              i32.const 16
+              i32.sub
+              local.set 2
+              br 1 (;@4;)
+            end
+          end
+          br 1 (;@2;)
+        end
+        local.get 1
+        i32.load
+        local.set 5
+        local.get 0
+        local.tee 3
+        i32.const 1
+        i32.add
+        local.set 0
+        local.get 1
+        local.tee 4
+        i32.const 1
+        i32.add
+        local.set 1
+        local.get 3
+        local.get 4
+        i32.load8_u
+        i32.store8
+        local.get 2
+        i32.const 1
+        i32.sub
+        local.set 2
+        loop  ;; label = @3
+          local.get 2
+          i32.const 19
+          i32.ge_u
+          if  ;; label = @4
+            local.get 0
+            local.get 1
+            i32.load offset=3
+            local.tee 3
+            i32.const 24
+            i32.shl
+            local.get 5
+            i32.const 8
+            i32.shr_u
+            i32.or
+            i32.store
+            local.get 0
+            local.get 3
+            i32.const 8
+            i32.shr_u
+            local.get 1
+            i32.load offset=7
+            local.tee 3
+            i32.const 24
+            i32.shl
+            i32.or
+            i32.store offset=4
+            local.get 0
+            local.get 3
+            i32.const 8
+            i32.shr_u
+            local.get 1
+            i32.load offset=11
+            local.tee 3
+            i32.const 24
+            i32.shl
+            i32.or
+            i32.store offset=8
+            local.get 0
+            local.get 1
+            i32.load offset=15
+            local.tee 5
+            i32.const 24
+            i32.shl
+            local.get 3
+            i32.const 8
+            i32.shr_u
+            i32.or
+            i32.store offset=12
+            local.get 1
+            i32.const 16
+            i32.add
+            local.set 1
+            local.get 0
+            i32.const 16
+            i32.add
+            local.set 0
+            local.get 2
+            i32.const 16
+            i32.sub
+            local.set 2
+            br 1 (;@3;)
+          end
+        end
+      end
+    end
+    local.get 2
+    i32.const 16
+    i32.and
+    if  ;; label = @1
+      local.get 0
+      local.get 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      local.tee 4
+      i32.const 2
+      i32.add
+      local.set 0
+      local.get 1
+      local.tee 3
+      i32.const 2
+      i32.add
+      local.set 1
+      local.get 4
+      local.get 3
+      i32.load8_u offset=1
+      i32.store8 offset=1
+    end
+    local.get 2
+    i32.const 8
+    i32.and
+    if  ;; label = @1
+      local.get 0
+      local.get 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      local.tee 4
+      i32.const 2
+      i32.add
+      local.set 0
+      local.get 1
+      local.tee 3
+      i32.const 2
+      i32.add
+      local.set 1
+      local.get 4
+      local.get 3
+      i32.load8_u offset=1
+      i32.store8 offset=1
+    end
+    local.get 2
+    i32.const 4
+    i32.and
+    if  ;; label = @1
+      local.get 0
+      local.get 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      local.tee 4
+      i32.const 2
+      i32.add
+      local.set 0
+      local.get 1
+      local.tee 3
+      i32.const 2
+      i32.add
+      local.set 1
+      local.get 4
+      local.get 3
+      i32.load8_u offset=1
+      i32.store8 offset=1
+    end
+    local.get 2
+    i32.const 2
+    i32.and
+    if  ;; label = @1
+      local.get 0
+      local.get 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      local.tee 4
+      i32.const 2
+      i32.add
+      local.set 0
+      local.get 1
+      local.tee 3
+      i32.const 2
+      i32.add
+      local.set 1
+      local.get 4
+      local.get 3
+      i32.load8_u offset=1
+      i32.store8 offset=1
+    end
+    local.get 2
+    i32.const 1
+    i32.and
+    if  ;; label = @1
+      local.get 0
+      local.get 1
+      i32.load8_u
+      i32.store8
+    end)
+  (func $~lib/memory/memory.copy (type 2) (param i32 i32 i32)
+    (local i32 i32)
+    block  ;; label = @1
+      local.get 2
+      local.set 4
+      local.get 0
+      local.get 1
+      i32.eq
+      br_if 0 (;@1;)
+      local.get 1
+      local.get 0
+      i32.sub
+      local.get 4
+      i32.sub
+      i32.const 0
+      local.get 4
+      i32.const 1
+      i32.shl
+      i32.sub
+      i32.le_u
+      if  ;; label = @2
+        local.get 0
+        local.get 1
+        local.get 4
+        call $~lib/util/memory/memcpy
+        br 1 (;@1;)
+      end
+      local.get 0
+      local.get 1
+      i32.lt_u
+      if  ;; label = @2
+        local.get 1
+        i32.const 7
+        i32.and
+        local.get 0
+        i32.const 7
+        i32.and
+        i32.eq
+        if  ;; label = @3
+          loop  ;; label = @4
+            local.get 0
+            i32.const 7
+            i32.and
+            if  ;; label = @5
+              local.get 4
+              i32.eqz
+              br_if 4 (;@1;)
+              local.get 4
+              i32.const 1
+              i32.sub
+              local.set 4
+              local.get 0
+              local.tee 2
+              i32.const 1
+              i32.add
+              local.set 0
+              local.get 1
+              local.tee 3
+              i32.const 1
+              i32.add
+              local.set 1
+              local.get 2
+              local.get 3
+              i32.load8_u
+              i32.store8
+              br 1 (;@4;)
+            end
+          end
+          loop  ;; label = @4
+            local.get 4
+            i32.const 8
+            i32.ge_u
+            if  ;; label = @5
+              local.get 0
+              local.get 1
+              i64.load
+              i64.store
+              local.get 4
+              i32.const 8
+              i32.sub
+              local.set 4
+              local.get 0
+              i32.const 8
+              i32.add
+              local.set 0
+              local.get 1
+              i32.const 8
+              i32.add
+              local.set 1
+              br 1 (;@4;)
+            end
+          end
+        end
+        loop  ;; label = @3
+          local.get 4
+          if  ;; label = @4
+            local.get 0
+            local.tee 2
+            i32.const 1
+            i32.add
+            local.set 0
+            local.get 1
+            local.tee 3
+            i32.const 1
+            i32.add
+            local.set 1
+            local.get 2
+            local.get 3
+            i32.load8_u
+            i32.store8
+            local.get 4
+            i32.const 1
+            i32.sub
+            local.set 4
+            br 1 (;@3;)
+          end
+        end
+      else
+        local.get 1
+        i32.const 7
+        i32.and
+        local.get 0
+        i32.const 7
+        i32.and
+        i32.eq
+        if  ;; label = @3
+          loop  ;; label = @4
+            local.get 0
+            local.get 4
+            i32.add
+            i32.const 7
+            i32.and
+            if  ;; label = @5
+              local.get 4
+              i32.eqz
+              br_if 4 (;@1;)
+              local.get 4
+              i32.const 1
+              i32.sub
+              local.tee 4
+              local.get 0
+              i32.add
+              local.get 1
+              local.get 4
+              i32.add
+              i32.load8_u
+              i32.store8
+              br 1 (;@4;)
+            end
+          end
+          loop  ;; label = @4
+            local.get 4
+            i32.const 8
+            i32.ge_u
+            if  ;; label = @5
+              local.get 4
+              i32.const 8
+              i32.sub
+              local.tee 4
+              local.get 0
+              i32.add
+              local.get 1
+              local.get 4
+              i32.add
+              i64.load
+              i64.store
+              br 1 (;@4;)
+            end
+          end
+        end
+        loop  ;; label = @3
+          local.get 4
+          if  ;; label = @4
+            local.get 4
+            i32.const 1
+            i32.sub
+            local.tee 4
+            local.get 0
+            i32.add
+            local.get 1
+            local.get 4
+            i32.add
+            i32.load8_u
+            i32.store8
+            br 1 (;@3;)
+          end
+        end
+      end
+    end)
+  (func $~lib/@graphprotocol/graph-ts/common/collections/TypedMap<~lib/string/String_~lib/@graphprotocol/graph-ts/common/value/Value>#set (type 2) (param i32 i32 i32)
+    (local i32 i32 i32 i32 i32 i32 i32 i32 i32 i32)
+    block (result i32)  ;; label = @1
+      loop  ;; label = @2
+        local.get 3
+        local.get 0
+        i32.load
+        i32.load offset=12
+        i32.lt_s
+        if  ;; label = @3
+          local.get 0
+          i32.load
+          local.get 3
+          call $~lib/array/Array<~lib/@graphprotocol/graph-ts/common/collections/TypedMapEntry<~lib/string/String_~lib/@graphprotocol/graph-ts/common/value/Value>>#__get
+          i32.load
+          local.get 1
+          call $~lib/string/String.__eq
+          if  ;; label = @4
+            local.get 0
+            i32.load
+            local.get 3
+            call $~lib/array/Array<~lib/@graphprotocol/graph-ts/common/collections/TypedMapEntry<~lib/string/String_~lib/@graphprotocol/graph-ts/common/value/Value>>#__get
+            br 3 (;@1;)
+          end
+          local.get 3
+          i32.const 1
+          i32.add
+          local.set 3
+          br 1 (;@2;)
+        end
+      end
+      i32.const 0
+    end
+    local.tee 3
+    if  ;; label = @1
+      local.get 3
+      local.get 2
+      i32.store offset=4
+    else
+      i32.const 8
+      i32.const 8
+      call $~lib/rt/stub/__new
+      local.tee 3
+      i32.const 0
+      i32.store
+      local.get 3
+      i32.const 0
+      i32.store offset=4
+      local.get 3
+      local.get 1
+      i32.store
+      local.get 3
+      local.get 2
+      i32.store offset=4
+      local.get 0
+      i32.load
+      local.tee 2
+      i32.load offset=12
+      local.tee 10
+      i32.const 1
+      i32.add
+      local.tee 11
+      local.tee 0
+      local.get 2
+      i32.load offset=8
+      local.tee 8
+      i32.const 2
+      i32.shr_u
+      i32.gt_u
+      if  ;; label = @2
+        local.get 0
+        i32.const 268435455
+        i32.gt_u
+        if  ;; label = @3
+          i32.const 1808
+          i32.const 1856
+          i32.const 17
+          i32.const 48
+          call $~lib/builtins/abort
+          unreachable
+        end
+        local.get 2
+        i32.load
+        local.tee 12
+        local.set 1
+        local.get 8
+        i32.const 1
+        i32.shl
+        local.tee 4
+        i32.const 1073741820
+        local.get 4
+        i32.const 1073741820
+        i32.lt_u
+        select
+        local.tee 4
+        local.get 0
+        i32.const 8
+        local.get 0
+        i32.const 8
+        i32.gt_u
+        select
+        i32.const 2
+        i32.shl
+        local.tee 0
+        local.get 0
+        local.get 4
+        i32.lt_u
+        select
+        local.tee 4
+        i32.const 1073741804
+        i32.gt_u
+        if  ;; label = @3
+          i32.const 1056
+          i32.const 1120
+          i32.const 99
+          i32.const 30
+          call $~lib/builtins/abort
+          unreachable
+        end
+        local.get 4
+        i32.const 16
+        i32.add
+        local.set 5
+        local.get 1
+        i32.const 16
+        i32.sub
+        local.tee 0
+        i32.const 15
+        i32.and
+        i32.const 1
+        local.get 0
+        select
+        if  ;; label = @3
+          i32.const 0
+          i32.const 1120
+          i32.const 45
+          i32.const 3
+          call $~lib/builtins/abort
+          unreachable
+        end
+        global.get $~lib/rt/stub/offset
+        local.get 0
+        local.get 0
+        i32.const 4
+        i32.sub
+        local.tee 9
+        i32.load
+        local.tee 7
+        i32.add
+        i32.eq
+        local.set 6
+        local.get 5
+        i32.const 19
+        i32.add
+        i32.const -16
+        i32.and
+        i32.const 4
+        i32.sub
+        local.set 1
+        local.get 5
+        local.get 7
+        i32.gt_u
+        if  ;; label = @3
+          local.get 6
+          if  ;; label = @4
+            local.get 5
+            i32.const 1073741820
+            i32.gt_u
+            if  ;; label = @5
+              i32.const 1056
+              i32.const 1120
+              i32.const 52
+              i32.const 33
+              call $~lib/builtins/abort
+              unreachable
+            end
+            local.get 0
+            local.get 1
+            i32.add
+            local.tee 5
+            memory.size
+            local.tee 7
+            i32.const 16
+            i32.shl
+            i32.const 15
+            i32.add
+            i32.const -16
+            i32.and
+            local.tee 6
+            i32.gt_u
+            if  ;; label = @5
+              local.get 7
+              local.get 5
+              local.get 6
+              i32.sub
+              i32.const 65535
+              i32.add
+              i32.const -65536
+              i32.and
+              i32.const 16
+              i32.shr_u
+              local.tee 6
+              local.get 6
+              local.get 7
+              i32.lt_s
+              select
+              memory.grow
+              i32.const 0
+              i32.lt_s
+              if  ;; label = @6
+                local.get 6
+                memory.grow
+                i32.const 0
+                i32.lt_s
+                if  ;; label = @7
+                  unreachable
+                end
+              end
+            end
+            local.get 5
+            global.set $~lib/rt/stub/offset
+            local.get 9
+            local.get 1
+            i32.store
+          else
+            local.get 1
+            local.get 7
+            i32.const 1
+            i32.shl
+            local.tee 5
+            local.get 1
+            local.get 5
+            i32.gt_u
+            select
+            call $~lib/rt/stub/__alloc
+            local.tee 1
+            local.get 0
+            local.get 7
+            call $~lib/memory/memory.copy
+            local.get 1
+            local.set 0
+          end
+        else
+          local.get 6
+          if  ;; label = @4
+            local.get 0
+            local.get 1
+            i32.add
+            global.set $~lib/rt/stub/offset
+            local.get 9
+            local.get 1
+            i32.store
+          end
+        end
+        local.get 0
+        i32.const 4
+        i32.sub
+        local.get 4
+        i32.store offset=16
+        local.get 8
+        local.get 0
+        i32.const 16
+        i32.add
+        local.tee 0
+        i32.add
+        local.get 4
+        local.get 8
+        i32.sub
+        call $~lib/memory/memory.fill
+        local.get 0
+        local.get 12
+        i32.ne
+        if  ;; label = @3
+          local.get 2
+          local.get 0
+          i32.store
+          local.get 2
+          local.get 0
+          i32.store offset=4
+        end
+        local.get 2
+        local.get 4
+        i32.store offset=8
+      end
+      local.get 2
+      i32.load offset=4
+      local.get 10
+      i32.const 2
+      i32.shl
+      i32.add
+      local.get 3
+      i32.store
+      local.get 2
+      local.get 11
+      i32.store offset=12
+    end)
+  (func $generated/schema/Token#constructor (type 0) (param i32) (result i32)
+    (local i32 i32 i64)
+    i32.const 4
+    i32.const 16
+    call $~lib/rt/stub/__new
+    call $~lib/@graphprotocol/graph-ts/common/collections/Entity#constructor
+    local.tee 1
+    local.set 2
+    local.get 0
+    i64.extend_i32_u
+    local.set 3
+    i32.const 16
+    i32.const 6
+    call $~lib/rt/stub/__new
+    local.tee 0
+    i32.const 6
+    i32.store
+    local.get 0
+    local.get 3
+    i64.store offset=8
+    local.get 2
+    i32.const 2832
+    local.get 0
+    call $~lib/@graphprotocol/graph-ts/common/collections/TypedMap<~lib/string/String_~lib/@graphprotocol/graph-ts/common/value/Value>#set
+    local.get 1)
+  (func $generated/schema/Token#set:decimals (type 3) (param i32 i32)
+    (local i64)
+    local.get 1
+    i64.extend_i32_s
+    local.set 2
+    i32.const 16
+    i32.const 6
+    call $~lib/rt/stub/__new
+    local.tee 1
+    i32.const 1
+    i32.store
+    local.get 1
+    local.get 2
+    i64.store offset=8
+    local.get 0
+    i32.const 3216
+    local.get 1
+    call $~lib/@graphprotocol/graph-ts/common/collections/TypedMap<~lib/string/String_~lib/@graphprotocol/graph-ts/common/value/Value>#set)
+  (func $~lib/@graphprotocol/graph-ts/common/numbers/BigInt#toBigDecimal (type 0) (param i32) (result i32)
+    (local i32)
+    i32.const 8
+    i32.const 15
+    call $~lib/rt/stub/__new
+    local.tee 1
+    i32.const 0
+    i32.store
+    local.get 1
+    i32.const 0
+    i32.store offset=4
+    local.get 1
+    local.get 0
+    i32.store
+    local.get 1
+    i32.const 0
+    call $~lib/@graphprotocol/graph-ts/common/collections/ByteArray.fromI32
+    i32.store offset=4
+    local.get 1)
+  (func $~lib/@graphprotocol/graph-ts/common/numbers/BigDecimal#div (type 1) (param i32 i32) (result i32)
+    local.get 0
+    i32.eqz
+    if  ;; label = @1
+      i32.const 3792
+      i32.const 3680
+      i32.const 391
+      i32.const 5
+      call $~lib/builtins/abort
+      unreachable
+    end
+    local.get 0
+    local.get 1
+    call $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.dividedBy)
   (func $~lib/typedarray/Uint8Array#__get (type 1) (param i32 i32) (result i32)
     local.get 1
     local.get 0
@@ -425,6 +1963,134 @@
     i32.load offset=4
     i32.add
     i32.load8_u)
+  (func $src/utils/token-utils/tokenBaseAmount (type 0) (param i32) (result i32)
+    (local i32 i32 i32 i32)
+    i32.const 12
+    i32.const 12
+    call $~lib/rt/stub/__new
+    i32.const 4
+    call $~lib/typedarray/Uint8Array#constructor
+    local.tee 1
+    i32.const 0
+    i32.const 10
+    call $~lib/typedarray/Uint8Array#__set
+    local.get 1
+    i32.const 1
+    i32.const 0
+    call $~lib/typedarray/Uint8Array#__set
+    local.get 1
+    i32.const 2
+    i32.const 0
+    call $~lib/typedarray/Uint8Array#__set
+    local.get 1
+    i32.const 3
+    i32.const 0
+    call $~lib/typedarray/Uint8Array#__set
+    local.get 1
+    i32.load offset=8
+    i32.const 1
+    i32.add
+    local.set 3
+    i32.const 12
+    i32.const 14
+    call $~lib/rt/stub/__new
+    local.get 3
+    call $~lib/typedarray/Uint8Array#constructor
+    local.set 3
+    loop  ;; label = @1
+      local.get 2
+      local.get 1
+      i32.load offset=8
+      i32.lt_s
+      if  ;; label = @2
+        local.get 3
+        local.get 2
+        local.get 1
+        local.get 2
+        call $~lib/typedarray/Uint8Array#__get
+        call $~lib/typedarray/Uint8Array#__set
+        local.get 2
+        i32.const 1
+        i32.add
+        local.set 2
+        br 1 (;@1;)
+      end
+    end
+    local.get 3
+    local.get 1
+    i32.load offset=8
+    i32.const 0
+    call $~lib/typedarray/Uint8Array#__set
+    local.get 3
+    block (result i32)  ;; label = @1
+      loop  ;; label = @2
+        local.get 4
+        local.get 0
+        i32.load
+        i32.load offset=12
+        i32.lt_s
+        if  ;; label = @3
+          local.get 0
+          i32.load
+          local.get 4
+          call $~lib/array/Array<~lib/@graphprotocol/graph-ts/common/collections/TypedMapEntry<~lib/string/String_~lib/@graphprotocol/graph-ts/common/value/Value>>#__get
+          i32.load
+          i32.const 3216
+          call $~lib/string/String.__eq
+          if  ;; label = @4
+            local.get 0
+            i32.load
+            local.get 4
+            call $~lib/array/Array<~lib/@graphprotocol/graph-ts/common/collections/TypedMapEntry<~lib/string/String_~lib/@graphprotocol/graph-ts/common/value/Value>>#__get
+            i32.load offset=4
+            br 3 (;@1;)
+          end
+          local.get 4
+          i32.const 1
+          i32.add
+          local.set 4
+          br 1 (;@2;)
+        end
+      end
+      i32.const 0
+    end
+    local.tee 0
+    if (result i32)  ;; label = @1
+      local.get 0
+      i32.load
+      i32.const 5
+      i32.eq
+    else
+      i32.const 1
+    end
+    if (result i32)  ;; label = @1
+      i32.const 0
+    else
+      local.get 0
+      i32.load
+      i32.const 5
+      i32.eq
+      if (result i32)  ;; label = @2
+        i32.const 0
+      else
+        local.get 0
+        i32.load
+        i32.const 1
+        i32.ne
+        if  ;; label = @3
+          i32.const 3936
+          i32.const 4000
+          i32.const 72
+          i32.const 5
+          call $~lib/builtins/abort
+          unreachable
+        end
+        local.get 0
+        i64.load offset=8
+        i32.wrap_i64
+      end
+    end
+    call $~lib/@graphprotocol/graph-ts/common/numbers/bigInt.pow)
   (func $~lib/@graphprotocol/graph-ts/common/numbers/BigInt.compare (type 1) (param i32 i32) (result i32)
     (local i32 i32 i32 i32)
     local.get 0
@@ -637,35 +2303,12 @@
       end
     end
     i32.const 0)
-  (func $~lib/@graphprotocol/graph-ts/chain/ethereum/ethereum.Value.fromBoolean (type 0) (param i32) (result i32)
-    (local i64)
-    local.get 0
-    i32.eqz
-    i32.eqz
-    i64.extend_i32_u
-    local.set 1
-    i32.const 16
-    i32.const 16
-    call $~lib/rt/stub/__new
-    local.tee 0
-    i32.const 5
-    i32.store
-    local.get 0
-    local.get 1
-    i64.store offset=8
-    local.get 0)
-  (func $start:tests/utils/constants.test~anonymous|0 (type 2)
-    (local i32 i32)
-    global.get $src/utils/constants/ZERO_BIG_DECIMAL
-    local.set 0
-    i32.const 2432
-    call $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.fromString
-    local.set 1
+  (func $~lib/@graphprotocol/graph-ts/common/numbers/BigDecimal#equals (type 1) (param i32 i32) (result i32)
     local.get 0
     i32.eqz
     if  ;; label = @1
-      i32.const 2688
-      i32.const 2848
+      i32.const 4304
+      i32.const 3680
       i32.const 379
       i32.const 5
       call $~lib/builtins/abort
@@ -693,118 +2336,353 @@
     else
       i32.const 0
     end
-    i32.eqz
-    local.set 0
-    i32.const 1
-    call $~lib/@graphprotocol/graph-ts/chain/ethereum/ethereum.Value.fromBoolean
+    i32.eqz)
+  (func $~lib/staticarray/StaticArray<~lib/string/String>#join (type 0) (param i32) (result i32)
+    (local i32 i32 i32 i32 i32 i32)
+    block (result i32)  ;; label = @1
+      i32.const 4624
+      local.get 0
+      i32.const 20
+      i32.sub
+      i32.load offset=16
+      i32.const 2
+      i32.shr_u
+      local.tee 5
+      i32.const 1
+      i32.sub
+      local.tee 6
+      i32.const 0
+      i32.lt_s
+      br_if 0 (;@1;)
+      drop
+      local.get 6
+      i32.eqz
+      if  ;; label = @2
+        local.get 0
+        i32.load
+        local.tee 0
+        if (result i32)  ;; label = @3
+          local.get 0
+        else
+          i32.const 4624
+        end
+        br 1 (;@1;)
+      end
+      loop  ;; label = @2
+        local.get 3
+        local.get 5
+        i32.lt_s
+        if  ;; label = @3
+          local.get 0
+          local.get 3
+          i32.const 2
+          i32.shl
+          i32.add
+          i32.load
+          local.tee 4
+          if  ;; label = @4
+            local.get 2
+            local.get 4
+            i32.const 20
+            i32.sub
+            i32.load offset=16
+            i32.const 1
+            i32.shr_u
+            i32.add
+            local.set 2
+          end
+          local.get 3
+          i32.const 1
+          i32.add
+          local.set 3
+          br 1 (;@2;)
+        end
+      end
+      local.get 2
+      local.get 6
+      i32.const 4620
+      i32.load
+      i32.const 1
+      i32.shr_u
+      local.tee 5
+      i32.mul
+      i32.add
+      i32.const 1
+      i32.shl
+      i32.const 1
+      call $~lib/rt/stub/__new
+      local.set 2
+      i32.const 0
+      local.set 3
+      loop  ;; label = @2
+        local.get 3
+        local.get 6
+        i32.lt_s
+        if  ;; label = @3
+          local.get 0
+          local.get 3
+          i32.const 2
+          i32.shl
+          i32.add
+          i32.load
+          local.tee 4
+          if  ;; label = @4
+            block (result i32)  ;; label = @5
+              local.get 2
+              local.get 1
+              i32.const 1
+              i32.shl
+              i32.add
+              local.get 4
+              local.get 4
+              i32.const 20
+              i32.sub
+              i32.load offset=16
+              i32.const 1
+              i32.shr_u
+              local.tee 4
+              i32.const 1
+              i32.shl
+              call $~lib/memory/memory.copy
+              local.get 1
+              local.get 4
+              i32.add
+            end
+            local.set 1
+          end
+          local.get 5
+          if  ;; label = @4
+            block (result i32)  ;; label = @5
+              local.get 2
+              local.get 1
+              i32.const 1
+              i32.shl
+              i32.add
+              i32.const 4624
+              local.get 5
+              i32.const 1
+              i32.shl
+              call $~lib/memory/memory.copy
+              local.get 1
+              local.get 5
+              i32.add
+            end
+            local.set 1
+          end
+          local.get 3
+          i32.const 1
+          i32.add
+          local.set 3
+          br 1 (;@2;)
+        end
+      end
+      local.get 0
+      local.get 6
+      i32.const 2
+      i32.shl
+      i32.add
+      i32.load
+      local.tee 0
+      if  ;; label = @2
+        local.get 2
+        local.get 1
+        i32.const 1
+        i32.shl
+        i32.add
+        local.get 0
+        local.get 0
+        i32.const 20
+        i32.sub
+        i32.load offset=16
+        i32.const 1
+        i32.shr_u
+        i32.const 1
+        i32.shl
+        call $~lib/memory/memory.copy
+      end
+      local.get 2
+    end)
+  (func $~lib/@graphprotocol/graph-ts/chain/ethereum/ethereum.Value.fromBoolean (type 0) (param i32) (result i32)
+    (local i64)
     local.get 0
-    call $~lib/@graphprotocol/graph-ts/chain/ethereum/ethereum.Value.fromBoolean
-    call $~lib/matchstick-as/assert/_assert.equals
+    i32.eqz
+    i32.eqz
+    i64.extend_i32_u
+    local.set 1
+    i32.const 16
+    i32.const 19
+    call $~lib/rt/stub/__new
+    local.tee 0
+    i32.const 5
+    i32.store
+    local.get 0
+    local.get 1
+    i64.store offset=8
+    local.get 0)
+  (func $~lib/matchstick-as/assert/assert.assertTrue (type 3) (param i32 i32)
+    local.get 1
+    if (result i32)  ;; label = @1
+      i32.const 1
+      call $~lib/@graphprotocol/graph-ts/chain/ethereum/ethereum.Value.fromBoolean
+      local.get 0
+      call $~lib/@graphprotocol/graph-ts/chain/ethereum/ethereum.Value.fromBoolean
+      local.get 1
+      call $~lib/matchstick-as/assert/_assert.equalsWithMessage
+    else
+      i32.const 1
+      call $~lib/@graphprotocol/graph-ts/chain/ethereum/ethereum.Value.fromBoolean
+      local.get 0
+      call $~lib/@graphprotocol/graph-ts/chain/ethereum/ethereum.Value.fromBoolean
+      call $~lib/matchstick-as/assert/_assert.equals
+    end
     i32.eqz
     if  ;; label = @1
-      i32.const 2960
-      i32.const 3056
+      i32.const 4704
+      i32.const 4800
       i32.const 156
       i32.const 7
       call $~lib/builtins/abort
       unreachable
     end)
-  (func $start:tests/utils/constants.test~anonymous|1 (type 2)
-    (local i32 i32 i32 i32 i64)
-    global.get $src/utils/constants/ZERO_BIG_INT
+  (func $start:tests/v3-pools/utils/v3-pool-converters.test~anonymous|0 (type 4)
+    (local i32 i32 i32 i32 i32 i32 i32)
+    i32.const 2992
+    call $~lib/@graphprotocol/graph-ts/common/conversion/typeConversion.stringToH160
+    call $generated/schema/Token#constructor
     local.set 3
-    i32.const 12
-    i32.const 12
-    call $~lib/rt/stub/__new
-    i32.const 4
-    call $~lib/typedarray/Uint8Array#constructor
-    local.tee 0
-    i32.const 0
-    i32.const 0
-    call $~lib/typedarray/Uint8Array#__set
-    local.get 0
-    i32.const 1
-    i32.const 0
-    call $~lib/typedarray/Uint8Array#__set
-    local.get 0
-    i32.const 2
-    i32.const 0
-    call $~lib/typedarray/Uint8Array#__set
-    local.get 0
-    i32.const 3
-    i32.const 0
-    call $~lib/typedarray/Uint8Array#__set
-    local.get 0
-    i32.load offset=8
-    i32.const 1
-    i32.add
+    i32.const 3104
+    call $~lib/@graphprotocol/graph-ts/common/conversion/typeConversion.stringToH160
+    call $generated/schema/Token#constructor
     local.set 2
-    i32.const 12
-    i32.const 14
-    call $~lib/rt/stub/__new
-    local.get 2
-    call $~lib/typedarray/Uint8Array#constructor
-    local.set 2
-    loop  ;; label = @1
-      local.get 1
-      local.get 0
-      i32.load offset=8
-      i32.lt_s
-      if  ;; label = @2
-        local.get 2
-        local.get 1
-        local.get 0
-        local.get 1
-        call $~lib/typedarray/Uint8Array#__get
-        call $~lib/typedarray/Uint8Array#__set
-        local.get 1
-        i32.const 1
-        i32.add
-        local.set 1
-        br 1 (;@1;)
-      end
-    end
-    local.get 2
-    local.get 0
-    i32.load offset=8
-    i32.const 0
-    call $~lib/typedarray/Uint8Array#__set
     local.get 3
-    i64.extend_i32_u
-    local.set 4
-    i32.const 16
-    i32.const 16
-    call $~lib/rt/stub/__new
-    local.tee 0
-    i32.const 3
-    i32.store
-    local.get 0
-    local.get 4
-    i64.store offset=8
+    i32.const 18
+    call $generated/schema/Token#set:decimals
     local.get 2
-    i64.extend_i32_u
+    i32.const 6
+    call $generated/schema/Token#set:decimals
+    i32.const 3264
+    call $~lib/@graphprotocol/graph-ts/common/numbers/bigInt.fromString
+    local.set 0
+    i32.const 3344
+    call $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.fromString
     local.set 4
-    i32.const 16
-    i32.const 16
-    call $~lib/rt/stub/__new
-    local.tee 1
-    i32.const 3
-    i32.store
-    local.get 1
-    local.get 4
-    i64.store offset=8
+    i32.const 3440
+    call $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.fromString
+    local.set 5
+    i32.const 2
+    call $~lib/@graphprotocol/graph-ts/common/collections/ByteArray.fromI32
+    i32.const 192
+    call $~lib/@graphprotocol/graph-ts/common/numbers/bigInt.pow
+    local.set 6
     local.get 0
-    local.get 1
-    call $~lib/matchstick-as/assert/_assert.equals
+    local.tee 1
     i32.eqz
     if  ;; label = @1
-      i32.const 3280
-      i32.const 3056
-      i32.const 105
-      i32.const 7
+      i32.const 3536
+      i32.const 3680
+      i32.const 198
+      i32.const 5
       call $~lib/builtins/abort
       unreachable
-    end)
+    end
+    local.get 1
+    local.get 1
+    call $~lib/@graphprotocol/graph-ts/common/numbers/bigInt.times
+    call $~lib/@graphprotocol/graph-ts/common/numbers/BigInt#toBigDecimal
+    local.get 6
+    call $~lib/@graphprotocol/graph-ts/common/conversion/typeConversion.bigIntToString
+    call $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.fromString
+    call $~lib/@graphprotocol/graph-ts/common/numbers/BigDecimal#div
+    local.set 1
+    local.get 3
+    call $src/utils/token-utils/tokenBaseAmount
+    call $~lib/@graphprotocol/graph-ts/common/numbers/BigInt#toBigDecimal
+    local.set 0
+    local.get 1
+    i32.eqz
+    if  ;; label = @1
+      i32.const 4112
+      i32.const 3680
+      i32.const 385
+      i32.const 5
+      call $~lib/builtins/abort
+      unreachable
+    end
+    local.get 1
+    local.get 0
+    call $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.times
+    local.get 2
+    call $src/utils/token-utils/tokenBaseAmount
+    call $~lib/@graphprotocol/graph-ts/common/numbers/BigInt#toBigDecimal
+    call $~lib/@graphprotocol/graph-ts/common/numbers/BigDecimal#div
+    local.set 1
+    block (result i32)  ;; label = @1
+      i32.const 4272
+      call $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.fromString
+      local.set 0
+      local.get 1
+      global.get $src/utils/constants/ZERO_BIG_DECIMAL
+      call $~lib/@graphprotocol/graph-ts/common/numbers/BigDecimal#equals
+      if  ;; label = @2
+        global.get $src/utils/constants/ZERO_BIG_DECIMAL
+        br 1 (;@1;)
+      end
+      local.get 0
+      local.get 1
+      call $~lib/@graphprotocol/graph-ts/common/numbers/BigDecimal#div
+    end
+    local.set 0
+    i32.const 8
+    i32.const 17
+    call $~lib/rt/stub/__new
+    local.tee 2
+    i32.const 0
+    i32.store
+    local.get 2
+    i32.const 0
+    i32.store offset=4
+    local.get 2
+    local.get 0
+    i32.store
+    local.get 2
+    local.get 1
+    i32.store offset=4
+    local.get 2
+    i32.load
+    local.get 4
+    call $~lib/@graphprotocol/graph-ts/common/numbers/BigDecimal#equals
+    local.set 0
+    i32.const 4660
+    local.get 4
+    call $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.toString
+    i32.store
+    i32.const 4668
+    local.get 2
+    i32.load
+    call $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.toString
+    i32.store
+    local.get 0
+    i32.const 4656
+    call $~lib/staticarray/StaticArray<~lib/string/String>#join
+    call $~lib/matchstick-as/assert/assert.assertTrue
+    local.get 2
+    i32.load offset=4
+    local.get 5
+    call $~lib/@graphprotocol/graph-ts/common/numbers/BigDecimal#equals
+    local.set 0
+    i32.const 4996
+    local.get 5
+    call $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.toString
+    i32.store
+    i32.const 5004
+    local.get 2
+    i32.load offset=4
+    call $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.toString
+    i32.store
+    local.get 0
+    i32.const 4992
+    call $~lib/staticarray/StaticArray<~lib/string/String>#join
+    call $~lib/matchstick-as/assert/assert.assertTrue)
   (func $node_modules/@graphprotocol/graph-ts/global/global/id_of_type (type 0) (param i32) (result i32)
     block  ;; label = @1
       block  ;; label = @2
@@ -1642,577 +3520,519 @@
                                                                                                                                                                                                                                                                                                                                               i32.const 0
                                                                                                                                                                                                                                                                                                                                               return
                                                                                                                                                                                                                                                                                                                                             end
-                                                                                                                                                                                                                                                                                                                                            i32.const 18
+                                                                                                                                                                                                                                                                                                                                            i32.const 21
                                                                                                                                                                                                                                                                                                                                             return
                                                                                                                                                                                                                                                                                                                                           end
-                                                                                                                                                                                                                                                                                                                                          i32.const 19
+                                                                                                                                                                                                                                                                                                                                          i32.const 22
                                                                                                                                                                                                                                                                                                                                           return
                                                                                                                                                                                                                                                                                                                                         end
-                                                                                                                                                                                                                                                                                                                                        i32.const 20
+                                                                                                                                                                                                                                                                                                                                        i32.const 23
                                                                                                                                                                                                                                                                                                                                         return
                                                                                                                                                                                                                                                                                                                                       end
-                                                                                                                                                                                                                                                                                                                                      i32.const 21
+                                                                                                                                                                                                                                                                                                                                      i32.const 24
                                                                                                                                                                                                                                                                                                                                       return
                                                                                                                                                                                                                                                                                                                                     end
                                                                                                                                                                                                                                                                                                                                     i32.const 13
                                                                                                                                                                                                                                                                                                                                     return
                                                                                                                                                                                                                                                                                                                                   end
-                                                                                                                                                                                                                                                                                                                                  i32.const 22
+                                                                                                                                                                                                                                                                                                                                  i32.const 25
                                                                                                                                                                                                                                                                                                                                   return
                                                                                                                                                                                                                                                                                                                                 end
-                                                                                                                                                                                                                                                                                                                                i32.const 23
+                                                                                                                                                                                                                                                                                                                                i32.const 26
                                                                                                                                                                                                                                                                                                                                 return
                                                                                                                                                                                                                                                                                                                               end
-                                                                                                                                                                                                                                                                                                                              i32.const 24
+                                                                                                                                                                                                                                                                                                                              i32.const 27
                                                                                                                                                                                                                                                                                                                               return
                                                                                                                                                                                                                                                                                                                             end
-                                                                                                                                                                                                                                                                                                                            i32.const 25
+                                                                                                                                                                                                                                                                                                                            i32.const 28
                                                                                                                                                                                                                                                                                                                             return
                                                                                                                                                                                                                                                                                                                           end
-                                                                                                                                                                                                                                                                                                                          i32.const 26
+                                                                                                                                                                                                                                                                                                                          i32.const 29
                                                                                                                                                                                                                                                                                                                           return
                                                                                                                                                                                                                                                                                                                         end
-                                                                                                                                                                                                                                                                                                                        i32.const 27
+                                                                                                                                                                                                                                                                                                                        i32.const 30
                                                                                                                                                                                                                                                                                                                         return
                                                                                                                                                                                                                                                                                                                       end
-                                                                                                                                                                                                                                                                                                                      i32.const 29
+                                                                                                                                                                                                                                                                                                                      i32.const 32
                                                                                                                                                                                                                                                                                                                       return
                                                                                                                                                                                                                                                                                                                     end
-                                                                                                                                                                                                                                                                                                                    i32.const 30
+                                                                                                                                                                                                                                                                                                                    i32.const 33
                                                                                                                                                                                                                                                                                                                     return
                                                                                                                                                                                                                                                                                                                   end
-                                                                                                                                                                                                                                                                                                                  i32.const 32
+                                                                                                                                                                                                                                                                                                                  i32.const 35
                                                                                                                                                                                                                                                                                                                   return
                                                                                                                                                                                                                                                                                                                 end
-                                                                                                                                                                                                                                                                                                                i32.const 34
+                                                                                                                                                                                                                                                                                                                i32.const 37
                                                                                                                                                                                                                                                                                                                 return
                                                                                                                                                                                                                                                                                                               end
-                                                                                                                                                                                                                                                                                                              i32.const 36
+                                                                                                                                                                                                                                                                                                              i32.const 39
                                                                                                                                                                                                                                                                                                               return
                                                                                                                                                                                                                                                                                                             end
                                                                                                                                                                                                                                                                                                             i32.const 3
                                                                                                                                                                                                                                                                                                             return
                                                                                                                                                                                                                                                                                                           end
-                                                                                                                                                                                                                                                                                                          i32.const 38
+                                                                                                                                                                                                                                                                                                          i32.const 41
                                                                                                                                                                                                                                                                                                           return
                                                                                                                                                                                                                                                                                                         end
-                                                                                                                                                                                                                                                                                                        i32.const 40
+                                                                                                                                                                                                                                                                                                        i32.const 43
                                                                                                                                                                                                                                                                                                         return
                                                                                                                                                                                                                                                                                                       end
-                                                                                                                                                                                                                                                                                                      i32.const 45
+                                                                                                                                                                                                                                                                                                      i32.const 48
                                                                                                                                                                                                                                                                                                       return
                                                                                                                                                                                                                                                                                                     end
-                                                                                                                                                                                                                                                                                                    i32.const 46
+                                                                                                                                                                                                                                                                                                    i32.const 49
                                                                                                                                                                                                                                                                                                     return
                                                                                                                                                                                                                                                                                                   end
-                                                                                                                                                                                                                                                                                                  i32.const 47
+                                                                                                                                                                                                                                                                                                  i32.const 50
                                                                                                                                                                                                                                                                                                   return
                                                                                                                                                                                                                                                                                                 end
-                                                                                                                                                                                                                                                                                                i32.const 48
+                                                                                                                                                                                                                                                                                                i32.const 51
                                                                                                                                                                                                                                                                                                 return
                                                                                                                                                                                                                                                                                               end
-                                                                                                                                                                                                                                                                                              i32.const 49
+                                                                                                                                                                                                                                                                                              i32.const 52
                                                                                                                                                                                                                                                                                               return
                                                                                                                                                                                                                                                                                             end
-                                                                                                                                                                                                                                                                                            i32.const 37
+                                                                                                                                                                                                                                                                                            i32.const 40
                                                                                                                                                                                                                                                                                             return
                                                                                                                                                                                                                                                                                           end
-                                                                                                                                                                                                                                                                                          i32.const 53
+                                                                                                                                                                                                                                                                                          i32.const 56
                                                                                                                                                                                                                                                                                           return
                                                                                                                                                                                                                                                                                         end
-                                                                                                                                                                                                                                                                                        i32.const 54
+                                                                                                                                                                                                                                                                                        i32.const 57
                                                                                                                                                                                                                                                                                         return
                                                                                                                                                                                                                                                                                       end
-                                                                                                                                                                                                                                                                                      i32.const 55
+                                                                                                                                                                                                                                                                                      i32.const 58
                                                                                                                                                                                                                                                                                       return
                                                                                                                                                                                                                                                                                     end
-                                                                                                                                                                                                                                                                                    i32.const 31
+                                                                                                                                                                                                                                                                                    i32.const 34
                                                                                                                                                                                                                                                                                     return
                                                                                                                                                                                                                                                                                   end
-                                                                                                                                                                                                                                                                                  i32.const 33
+                                                                                                                                                                                                                                                                                  i32.const 36
                                                                                                                                                                                                                                                                                   return
                                                                                                                                                                                                                                                                                 end
-                                                                                                                                                                                                                                                                                i32.const 35
+                                                                                                                                                                                                                                                                                i32.const 38
                                                                                                                                                                                                                                                                                 return
                                                                                                                                                                                                                                                                               end
-                                                                                                                                                                                                                                                                              i32.const 56
+                                                                                                                                                                                                                                                                              i32.const 59
                                                                                                                                                                                                                                                                               return
                                                                                                                                                                                                                                                                             end
-                                                                                                                                                                                                                                                                            i32.const 41
+                                                                                                                                                                                                                                                                            i32.const 44
                                                                                                                                                                                                                                                                             return
                                                                                                                                                                                                                                                                           end
-                                                                                                                                                                                                                                                                          i32.const 61
+                                                                                                                                                                                                                                                                          i32.const 64
                                                                                                                                                                                                                                                                           return
                                                                                                                                                                                                                                                                         end
-                                                                                                                                                                                                                                                                        i32.const 42
+                                                                                                                                                                                                                                                                        i32.const 45
                                                                                                                                                                                                                                                                         return
                                                                                                                                                                                                                                                                       end
-                                                                                                                                                                                                                                                                      i32.const 61
+                                                                                                                                                                                                                                                                      i32.const 64
                                                                                                                                                                                                                                                                       return
                                                                                                                                                                                                                                                                     end
-                                                                                                                                                                                                                                                                    i32.const 62
+                                                                                                                                                                                                                                                                    i32.const 65
                                                                                                                                                                                                                                                                     return
                                                                                                                                                                                                                                                                   end
-                                                                                                                                                                                                                                                                  i32.const 65
+                                                                                                                                                                                                                                                                  i32.const 68
                                                                                                                                                                                                                                                                   return
                                                                                                                                                                                                                                                                 end
-                                                                                                                                                                                                                                                                i32.const 67
+                                                                                                                                                                                                                                                                i32.const 70
                                                                                                                                                                                                                                                                 return
                                                                                                                                                                                                                                                               end
-                                                                                                                                                                                                                                                              i32.const 68
+                                                                                                                                                                                                                                                              i32.const 71
                                                                                                                                                                                                                                                               return
                                                                                                                                                                                                                                                             end
-                                                                                                                                                                                                                                                            i32.const 69
+                                                                                                                                                                                                                                                            i32.const 72
                                                                                                                                                                                                                                                             return
                                                                                                                                                                                                                                                           end
-                                                                                                                                                                                                                                                          i32.const 70
+                                                                                                                                                                                                                                                          i32.const 73
                                                                                                                                                                                                                                                           return
                                                                                                                                                                                                                                                         end
-                                                                                                                                                                                                                                                        i32.const 71
+                                                                                                                                                                                                                                                        i32.const 74
                                                                                                                                                                                                                                                         return
                                                                                                                                                                                                                                                       end
-                                                                                                                                                                                                                                                      i32.const 72
+                                                                                                                                                                                                                                                      i32.const 75
                                                                                                                                                                                                                                                       return
                                                                                                                                                                                                                                                     end
-                                                                                                                                                                                                                                                    i32.const 73
+                                                                                                                                                                                                                                                    i32.const 76
                                                                                                                                                                                                                                                     return
                                                                                                                                                                                                                                                   end
-                                                                                                                                                                                                                                                  i32.const 74
+                                                                                                                                                                                                                                                  i32.const 77
                                                                                                                                                                                                                                                   return
                                                                                                                                                                                                                                                 end
-                                                                                                                                                                                                                                                i32.const 75
+                                                                                                                                                                                                                                                i32.const 78
                                                                                                                                                                                                                                                 return
                                                                                                                                                                                                                                               end
-                                                                                                                                                                                                                                              i32.const 76
+                                                                                                                                                                                                                                              i32.const 79
                                                                                                                                                                                                                                               return
                                                                                                                                                                                                                                             end
-                                                                                                                                                                                                                                            i32.const 77
+                                                                                                                                                                                                                                            i32.const 80
                                                                                                                                                                                                                                             return
                                                                                                                                                                                                                                           end
-                                                                                                                                                                                                                                          i32.const 78
+                                                                                                                                                                                                                                          i32.const 81
                                                                                                                                                                                                                                           return
                                                                                                                                                                                                                                         end
-                                                                                                                                                                                                                                        i32.const 80
+                                                                                                                                                                                                                                        i32.const 83
                                                                                                                                                                                                                                         return
                                                                                                                                                                                                                                       end
-                                                                                                                                                                                                                                      i32.const 59
+                                                                                                                                                                                                                                      i32.const 62
                                                                                                                                                                                                                                       return
                                                                                                                                                                                                                                     end
-                                                                                                                                                                                                                                    i32.const 82
+                                                                                                                                                                                                                                    i32.const 85
                                                                                                                                                                                                                                     return
                                                                                                                                                                                                                                   end
-                                                                                                                                                                                                                                  i32.const 83
+                                                                                                                                                                                                                                  i32.const 86
                                                                                                                                                                                                                                   return
                                                                                                                                                                                                                                 end
-                                                                                                                                                                                                                                i32.const 88
+                                                                                                                                                                                                                                i32.const 91
                                                                                                                                                                                                                                 return
                                                                                                                                                                                                                               end
-                                                                                                                                                                                                                              i32.const 90
+                                                                                                                                                                                                                              i32.const 93
                                                                                                                                                                                                                               return
                                                                                                                                                                                                                             end
-                                                                                                                                                                                                                            i32.const 92
+                                                                                                                                                                                                                            i32.const 95
                                                                                                                                                                                                                             return
                                                                                                                                                                                                                           end
-                                                                                                                                                                                                                          i32.const 94
+                                                                                                                                                                                                                          i32.const 97
                                                                                                                                                                                                                           return
                                                                                                                                                                                                                         end
-                                                                                                                                                                                                                        i32.const 95
+                                                                                                                                                                                                                        i32.const 98
                                                                                                                                                                                                                         return
                                                                                                                                                                                                                       end
-                                                                                                                                                                                                                      i32.const 81
+                                                                                                                                                                                                                      i32.const 84
                                                                                                                                                                                                                       return
                                                                                                                                                                                                                     end
-                                                                                                                                                                                                                    i32.const 87
+                                                                                                                                                                                                                    i32.const 90
                                                                                                                                                                                                                     return
                                                                                                                                                                                                                   end
-                                                                                                                                                                                                                  i32.const 91
+                                                                                                                                                                                                                  i32.const 94
                                                                                                                                                                                                                   return
                                                                                                                                                                                                                 end
-                                                                                                                                                                                                                i32.const 96
+                                                                                                                                                                                                                i32.const 99
                                                                                                                                                                                                                 return
                                                                                                                                                                                                               end
-                                                                                                                                                                                                              i32.const 97
+                                                                                                                                                                                                              i32.const 100
                                                                                                                                                                                                               return
                                                                                                                                                                                                             end
-                                                                                                                                                                                                            i32.const 95
+                                                                                                                                                                                                            i32.const 98
                                                                                                                                                                                                             return
                                                                                                                                                                                                           end
-                                                                                                                                                                                                          i32.const 79
+                                                                                                                                                                                                          i32.const 82
                                                                                                                                                                                                           return
                                                                                                                                                                                                         end
-                                                                                                                                                                                                        i32.const 98
+                                                                                                                                                                                                        i32.const 101
                                                                                                                                                                                                         return
                                                                                                                                                                                                       end
-                                                                                                                                                                                                      i32.const 99
+                                                                                                                                                                                                      i32.const 102
                                                                                                                                                                                                       return
                                                                                                                                                                                                     end
-                                                                                                                                                                                                    i32.const 100
+                                                                                                                                                                                                    i32.const 103
                                                                                                                                                                                                     return
                                                                                                                                                                                                   end
-                                                                                                                                                                                                  i32.const 101
+                                                                                                                                                                                                  i32.const 104
                                                                                                                                                                                                   return
                                                                                                                                                                                                 end
-                                                                                                                                                                                                i32.const 102
+                                                                                                                                                                                                i32.const 105
                                                                                                                                                                                                 return
                                                                                                                                                                                               end
-                                                                                                                                                                                              i32.const 103
+                                                                                                                                                                                              i32.const 106
                                                                                                                                                                                               return
                                                                                                                                                                                             end
-                                                                                                                                                                                            i32.const 105
+                                                                                                                                                                                            i32.const 108
                                                                                                                                                                                             return
                                                                                                                                                                                           end
-                                                                                                                                                                                          i32.const 106
+                                                                                                                                                                                          i32.const 109
                                                                                                                                                                                           return
                                                                                                                                                                                         end
-                                                                                                                                                                                        i32.const 107
+                                                                                                                                                                                        i32.const 110
                                                                                                                                                                                         return
                                                                                                                                                                                       end
-                                                                                                                                                                                      i32.const 108
+                                                                                                                                                                                      i32.const 111
                                                                                                                                                                                       return
                                                                                                                                                                                     end
-                                                                                                                                                                                    i32.const 84
+                                                                                                                                                                                    i32.const 87
                                                                                                                                                                                     return
                                                                                                                                                                                   end
-                                                                                                                                                                                  i32.const 109
+                                                                                                                                                                                  i32.const 112
                                                                                                                                                                                   return
                                                                                                                                                                                 end
-                                                                                                                                                                                i32.const 89
+                                                                                                                                                                                i32.const 92
                                                                                                                                                                                 return
                                                                                                                                                                               end
-                                                                                                                                                                              i32.const 110
+                                                                                                                                                                              i32.const 113
                                                                                                                                                                               return
                                                                                                                                                                             end
-                                                                                                                                                                            i32.const 86
+                                                                                                                                                                            i32.const 89
                                                                                                                                                                             return
                                                                                                                                                                           end
-                                                                                                                                                                          i32.const 93
+                                                                                                                                                                          i32.const 96
                                                                                                                                                                           return
                                                                                                                                                                         end
-                                                                                                                                                                        i32.const 111
+                                                                                                                                                                        i32.const 114
                                                                                                                                                                         return
                                                                                                                                                                       end
-                                                                                                                                                                      i32.const 112
+                                                                                                                                                                      i32.const 115
                                                                                                                                                                       return
                                                                                                                                                                     end
-                                                                                                                                                                    i32.const 57
+                                                                                                                                                                    i32.const 60
                                                                                                                                                                     return
                                                                                                                                                                   end
-                                                                                                                                                                  i32.const 58
+                                                                                                                                                                  i32.const 61
                                                                                                                                                                   return
                                                                                                                                                                 end
-                                                                                                                                                                i32.const 30
+                                                                                                                                                                i32.const 33
                                                                                                                                                                 return
                                                                                                                                                               end
-                                                                                                                                                              i32.const 60
+                                                                                                                                                              i32.const 63
                                                                                                                                                               return
                                                                                                                                                             end
-                                                                                                                                                            i32.const 113
+                                                                                                                                                            i32.const 116
                                                                                                                                                             return
                                                                                                                                                           end
-                                                                                                                                                          i32.const 114
+                                                                                                                                                          i32.const 117
                                                                                                                                                           return
                                                                                                                                                         end
-                                                                                                                                                        i32.const 59
+                                                                                                                                                        i32.const 62
                                                                                                                                                         return
                                                                                                                                                       end
-                                                                                                                                                      i32.const 116
+                                                                                                                                                      i32.const 119
                                                                                                                                                       return
                                                                                                                                                     end
-                                                                                                                                                    i32.const 119
+                                                                                                                                                    i32.const 122
                                                                                                                                                     return
                                                                                                                                                   end
-                                                                                                                                                  i32.const 123
+                                                                                                                                                  i32.const 126
                                                                                                                                                   return
                                                                                                                                                 end
-                                                                                                                                                i32.const 122
+                                                                                                                                                i32.const 125
                                                                                                                                                 return
                                                                                                                                               end
-                                                                                                                                              i32.const 139
+                                                                                                                                              i32.const 142
                                                                                                                                               return
                                                                                                                                             end
-                                                                                                                                            i32.const 144
+                                                                                                                                            i32.const 147
                                                                                                                                             return
                                                                                                                                           end
-                                                                                                                                          i32.const 146
+                                                                                                                                          i32.const 149
                                                                                                                                           return
                                                                                                                                         end
-                                                                                                                                        i32.const 154
+                                                                                                                                        i32.const 157
                                                                                                                                         return
                                                                                                                                       end
-                                                                                                                                      i32.const 138
+                                                                                                                                      i32.const 141
                                                                                                                                       return
                                                                                                                                     end
-                                                                                                                                    i32.const 156
+                                                                                                                                    i32.const 159
                                                                                                                                     return
                                                                                                                                   end
-                                                                                                                                  i32.const 150
+                                                                                                                                  i32.const 153
                                                                                                                                   return
                                                                                                                                 end
-                                                                                                                                i32.const 157
+                                                                                                                                i32.const 160
                                                                                                                                 return
                                                                                                                               end
-                                                                                                                              i32.const 127
+                                                                                                                              i32.const 130
                                                                                                                               return
                                                                                                                             end
-                                                                                                                            i32.const 74
+                                                                                                                            i32.const 77
                                                                                                                             return
                                                                                                                           end
-                                                                                                                          i32.const 162
+                                                                                                                          i32.const 165
                                                                                                                           return
                                                                                                                         end
-                                                                                                                        i32.const 115
+                                                                                                                        i32.const 118
                                                                                                                         return
                                                                                                                       end
-                                                                                                                      i32.const 134
+                                                                                                                      i32.const 137
                                                                                                                       return
                                                                                                                     end
-                                                                                                                    i32.const 117
+                                                                                                                    i32.const 120
                                                                                                                     return
                                                                                                                   end
-                                                                                                                  i32.const 143
+                                                                                                                  i32.const 146
                                                                                                                   return
                                                                                                                 end
-                                                                                                                i32.const 133
+                                                                                                                i32.const 136
                                                                                                                 return
                                                                                                               end
-                                                                                                              i32.const 161
+                                                                                                              i32.const 164
                                                                                                               return
                                                                                                             end
-                                                                                                            i32.const 125
+                                                                                                            i32.const 128
                                                                                                             return
                                                                                                           end
-                                                                                                          i32.const 164
+                                                                                                          i32.const 167
                                                                                                           return
                                                                                                         end
-                                                                                                        i32.const 120
+                                                                                                        i32.const 123
                                                                                                         return
                                                                                                       end
-                                                                                                      i32.const 121
+                                                                                                      i32.const 124
                                                                                                       return
                                                                                                     end
-                                                                                                    i32.const 167
+                                                                                                    i32.const 170
                                                                                                     return
                                                                                                   end
-                                                                                                  i32.const 126
+                                                                                                  i32.const 129
                                                                                                   return
                                                                                                 end
-                                                                                                i32.const 124
+                                                                                                i32.const 127
                                                                                                 return
                                                                                               end
-                                                                                              i32.const 158
+                                                                                              i32.const 161
                                                                                               return
                                                                                             end
-                                                                                            i32.const 163
+                                                                                            i32.const 166
                                                                                             return
                                                                                           end
-                                                                                          i32.const 151
+                                                                                          i32.const 154
                                                                                           return
                                                                                         end
-                                                                                        i32.const 132
+                                                                                        i32.const 135
                                                                                         return
                                                                                       end
-                                                                                      i32.const 168
+                                                                                      i32.const 171
                                                                                       return
                                                                                     end
-                                                                                    i32.const 130
+                                                                                    i32.const 133
                                                                                     return
                                                                                   end
-                                                                                  i32.const 129
+                                                                                  i32.const 132
                                                                                   return
                                                                                 end
-                                                                                i32.const 140
+                                                                                i32.const 143
                                                                                 return
                                                                               end
-                                                                              i32.const 142
+                                                                              i32.const 145
                                                                               return
                                                                             end
-                                                                            i32.const 141
+                                                                            i32.const 144
                                                                             return
                                                                           end
-                                                                          i32.const 128
+                                                                          i32.const 131
                                                                           return
                                                                         end
-                                                                        i32.const 137
+                                                                        i32.const 140
                                                                         return
                                                                       end
-                                                                      i32.const 159
+                                                                      i32.const 162
                                                                       return
                                                                     end
-                                                                    i32.const 153
+                                                                    i32.const 156
                                                                     return
                                                                   end
-                                                                  i32.const 160
+                                                                  i32.const 163
                                                                   return
                                                                 end
-                                                                i32.const 74
+                                                                i32.const 77
                                                                 return
                                                               end
-                                                              i32.const 131
+                                                              i32.const 134
                                                               return
                                                             end
-                                                            i32.const 74
+                                                            i32.const 77
                                                             return
                                                           end
-                                                          i32.const 145
+                                                          i32.const 148
                                                           return
                                                         end
-                                                        i32.const 118
+                                                        i32.const 121
                                                         return
                                                       end
-                                                      i32.const 152
+                                                      i32.const 155
                                                       return
                                                     end
-                                                    i32.const 170
+                                                    i32.const 173
                                                     return
                                                   end
-                                                  i32.const 148
+                                                  i32.const 151
                                                   return
                                                 end
-                                                i32.const 149
+                                                i32.const 152
                                                 return
                                               end
-                                              i32.const 147
+                                              i32.const 150
                                               return
                                             end
-                                            i32.const 136
+                                            i32.const 139
                                             return
                                           end
-                                          i32.const 165
+                                          i32.const 168
                                           return
                                         end
-                                        i32.const 135
+                                        i32.const 138
                                         return
                                       end
-                                      i32.const 171
+                                      i32.const 174
                                       return
                                     end
-                                    i32.const 155
+                                    i32.const 158
                                     return
                                   end
-                                  i32.const 166
+                                  i32.const 169
                                   return
                                 end
-                                i32.const 172
+                                i32.const 175
                                 return
                               end
-                              i32.const 169
+                              i32.const 172
                               return
                             end
-                            i32.const 173
+                            i32.const 176
                             return
                           end
-                          i32.const 176
+                          i32.const 179
                           return
                         end
-                        i32.const 174
+                        i32.const 177
                         return
                       end
-                      i32.const 175
+                      i32.const 178
                       return
                     end
-                    i32.const 177
+                    i32.const 180
                     return
                   end
-                  i32.const 178
+                  i32.const 181
                   return
                 end
-                i32.const 179
+                i32.const 182
                 return
               end
-              i32.const 180
+              i32.const 183
               return
             end
-            i32.const 181
+            i32.const 184
             return
           end
-          i32.const 74
+          i32.const 77
           return
         end
-        i32.const 182
+        i32.const 185
         return
       end
-      i32.const 59
+      i32.const 62
       return
     end
     i32.const 0)
   (func $node_modules/@graphprotocol/graph-ts/global/global/allocate (type 0) (param i32) (result i32)
     local.get 0
     call $~lib/rt/stub/__alloc)
-  (func $~start (type 2)
-    (local i32 i32 i32)
+  (func $~start (type 4)
     global.get $~started
     if  ;; label = @1
       return
     end
     i32.const 1
     global.set $~started
-    i32.const 3500
+    i32.const 5164
     global.set $~lib/rt/stub/offset
     i32.const 0
     call $~lib/rt/stub/__alloc
     drop
-    block (result i32)  ;; label = @1
-      block (result i32)  ;; label = @2
-        i32.const 4
-        i32.const 4
-        call $~lib/rt/stub/__new
-        local.tee 0
-        i32.eqz
-        if  ;; label = @3
-          i32.const 4
-          i32.const 5
-          call $~lib/rt/stub/__new
-          local.set 0
-        end
-        local.get 0
-      end
-      i32.eqz
-      if  ;; label = @2
-        i32.const 4
-        i32.const 7
-        call $~lib/rt/stub/__new
-        local.set 0
-      end
-      local.get 0
-    end
-    i32.const 0
-    i32.store
-    i32.const 16
-    i32.const 9
+    i32.const 4
+    i32.const 4
     call $~lib/rt/stub/__new
-    local.tee 1
-    i32.const 0
-    i32.store
-    local.get 1
-    i32.const 0
-    i32.store offset=4
-    local.get 1
-    i32.const 0
-    i32.store offset=8
-    local.get 1
-    i32.const 0
-    i32.store offset=12
-    i32.const 32
-    i32.const 0
-    call $~lib/rt/stub/__new
-    local.tee 2
-    i32.const 32
-    call $~lib/memory/memory.fill
-    local.get 1
-    local.get 2
-    i32.store
-    local.get 1
-    local.get 2
-    i32.store offset=4
-    local.get 1
-    i32.const 32
-    i32.store offset=8
-    local.get 1
-    i32.const 0
-    i32.store offset=12
-    local.get 0
-    local.get 1
-    i32.store
+    call $~lib/@graphprotocol/graph-ts/common/collections/Entity#constructor
+    drop
     i32.const 1904
     call $~lib/@graphprotocol/graph-ts/common/conversion/typeConversion.stringToH160
     drop
@@ -2227,25 +4047,19 @@
     global.set $src/utils/constants/ZERO_BIG_DECIMAL
     i32.const 0
     call $~lib/@graphprotocol/graph-ts/common/collections/ByteArray.fromI32
-    global.set $src/utils/constants/ZERO_BIG_INT
+    drop
     i32.const 2560
     i32.const 0
-    i32.const 3136
-    i32.load
-    call $~lib/matchstick-as/index/_registerTest
-    i32.const 3168
-    i32.const 0
-    i32.const 3376
+    i32.const 5040
     i32.load
     call $~lib/matchstick-as/index/_registerTest
     i32.const 0
     call $~lib/rt/stub/__alloc
     drop)
-  (table $0 3 funcref)
+  (table $0 2 funcref)
   (memory (;0;) 1)
   (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
   (global $src/utils/constants/ZERO_BIG_DECIMAL (mut i32) (i32.const 0))
-  (global $src/utils/constants/ZERO_BIG_INT (mut i32) (i32.const 0))
   (global $node_modules/@graphprotocol/graph-ts/global/global/TypeId.String i32 (i32.const 0))
   (global $node_modules/@graphprotocol/graph-ts/global/global/TypeId.ArrayBuffer i32 (i32.const 1))
   (global $node_modules/@graphprotocol/graph-ts/global/global/TypeId.Int8Array i32 (i32.const 2))
@@ -2414,179 +4228,179 @@
   (global $node_modules/@graphprotocol/graph-ts/global/global/TypeId.StarknetEvent i32 (i32.const 3503))
   (global $node_modules/@graphprotocol/graph-ts/global/global/TypeId.StarknetArrayBytes i32 (i32.const 3504))
   (global $~started (mut i32) (i32.const 0))
-  (export "TypeId.String" (global 3))
-  (export "TypeId.ArrayBuffer" (global 4))
-  (export "TypeId.Int8Array" (global 5))
-  (export "TypeId.Int16Array" (global 6))
-  (export "TypeId.Int32Array" (global 7))
-  (export "TypeId.Int64Array" (global 8))
-  (export "TypeId.Uint8Array" (global 9))
-  (export "TypeId.Uint16Array" (global 10))
-  (export "TypeId.Uint32Array" (global 11))
-  (export "TypeId.Uint64Array" (global 12))
-  (export "TypeId.Float32Array" (global 13))
-  (export "TypeId.Float64Array" (global 14))
-  (export "TypeId.BigDecimal" (global 15))
-  (export "TypeId.ArrayBool" (global 16))
-  (export "TypeId.ArrayUint8Array" (global 17))
-  (export "TypeId.ArrayEthereumValue" (global 18))
-  (export "TypeId.ArrayStoreValue" (global 19))
-  (export "TypeId.ArrayJsonValue" (global 20))
-  (export "TypeId.ArrayString" (global 21))
-  (export "TypeId.ArrayEventParam" (global 22))
-  (export "TypeId.ArrayTypedMapEntryStringJsonValue" (global 23))
-  (export "TypeId.ArrayTypedMapEntryStringStoreValue" (global 24))
-  (export "TypeId.SmartContractCall" (global 25))
-  (export "TypeId.EventParam" (global 26))
-  (export "TypeId.EthereumTransaction" (global 27))
-  (export "TypeId.EthereumBlock" (global 28))
-  (export "TypeId.EthereumCall" (global 29))
-  (export "TypeId.WrappedTypedMapStringJsonValue" (global 30))
-  (export "TypeId.WrappedBool" (global 31))
-  (export "TypeId.WrappedJsonValue" (global 32))
-  (export "TypeId.EthereumValue" (global 33))
-  (export "TypeId.StoreValue" (global 34))
-  (export "TypeId.JsonValue" (global 35))
-  (export "TypeId.EthereumEvent" (global 36))
-  (export "TypeId.TypedMapEntryStringStoreValue" (global 37))
-  (export "TypeId.TypedMapEntryStringJsonValue" (global 38))
-  (export "TypeId.TypedMapStringStoreValue" (global 39))
-  (export "TypeId.TypedMapStringJsonValue" (global 40))
-  (export "TypeId.TypedMapStringTypedMapStringJsonValue" (global 41))
-  (export "TypeId.ResultTypedMapStringJsonValueBool" (global 42))
-  (export "TypeId.ResultJsonValueBool" (global 43))
-  (export "TypeId.ArrayU8" (global 44))
-  (export "TypeId.ArrayU16" (global 45))
-  (export "TypeId.ArrayU32" (global 46))
-  (export "TypeId.ArrayU64" (global 47))
-  (export "TypeId.ArrayI8" (global 48))
-  (export "TypeId.ArrayI16" (global 49))
-  (export "TypeId.ArrayI32" (global 50))
-  (export "TypeId.ArrayI64" (global 51))
-  (export "TypeId.ArrayF32" (global 52))
-  (export "TypeId.ArrayF64" (global 53))
-  (export "TypeId.ArrayBigDecimal" (global 54))
-  (export "TypeId.NearArrayDataReceiver" (global 55))
-  (export "TypeId.NearArrayCryptoHash" (global 56))
-  (export "TypeId.NearArrayActionValue" (global 57))
-  (export "TypeId.NearMerklePath" (global 58))
-  (export "TypeId.NearArrayValidatorStake" (global 59))
-  (export "TypeId.NearArraySlashedValidator" (global 60))
-  (export "TypeId.NearArraySignature" (global 61))
-  (export "TypeId.NearArrayChunkHeader" (global 62))
-  (export "TypeId.NearAccessKeyPermissionValue" (global 63))
-  (export "TypeId.NearActionValue" (global 64))
-  (export "TypeId.NearDirection" (global 65))
-  (export "TypeId.NearPublicKey" (global 66))
-  (export "TypeId.NearSignature" (global 67))
-  (export "TypeId.NearFunctionCallPermission" (global 68))
-  (export "TypeId.NearFullAccessPermission" (global 69))
-  (export "TypeId.NearAccessKey" (global 70))
-  (export "TypeId.NearDataReceiver" (global 71))
-  (export "TypeId.NearCreateAccountAction" (global 72))
-  (export "TypeId.NearDeployContractAction" (global 73))
-  (export "TypeId.NearFunctionCallAction" (global 74))
-  (export "TypeId.NearTransferAction" (global 75))
-  (export "TypeId.NearStakeAction" (global 76))
-  (export "TypeId.NearAddKeyAction" (global 77))
-  (export "TypeId.NearDeleteKeyAction" (global 78))
-  (export "TypeId.NearDeleteAccountAction" (global 79))
-  (export "TypeId.NearActionReceipt" (global 80))
-  (export "TypeId.NearSuccessStatus" (global 81))
-  (export "TypeId.NearMerklePathItem" (global 82))
-  (export "TypeId.NearExecutionOutcome" (global 83))
-  (export "TypeId.NearSlashedValidator" (global 84))
-  (export "TypeId.NearBlockHeader" (global 85))
-  (export "TypeId.NearValidatorStake" (global 86))
-  (export "TypeId.NearChunkHeader" (global 87))
-  (export "TypeId.NearBlock" (global 88))
-  (export "TypeId.NearReceiptWithOutcome" (global 89))
-  (export "TypeId.TransactionReceipt" (global 90))
-  (export "TypeId.Log" (global 91))
-  (export "TypeId.ArrayH256" (global 92))
-  (export "TypeId.ArrayLog" (global 93))
-  (export "TypeId.CosmosAny" (global 94))
-  (export "TypeId.CosmosAnyArray" (global 95))
-  (export "TypeId.CosmosBytesArray" (global 96))
-  (export "TypeId.CosmosCoinArray" (global 97))
-  (export "TypeId.CosmosCommitSigArray" (global 98))
-  (export "TypeId.CosmosEventArray" (global 99))
-  (export "TypeId.CosmosEventAttributeArray" (global 100))
-  (export "TypeId.CosmosEvidenceArray" (global 101))
-  (export "TypeId.CosmosModeInfoArray" (global 102))
-  (export "TypeId.CosmosSignerInfoArray" (global 103))
-  (export "TypeId.CosmosTxResultArray" (global 104))
-  (export "TypeId.CosmosValidatorArray" (global 105))
-  (export "TypeId.CosmosValidatorUpdateArray" (global 106))
-  (export "TypeId.CosmosAuthInfo" (global 107))
-  (export "TypeId.CosmosBlock" (global 108))
-  (export "TypeId.CosmosBlockId" (global 109))
-  (export "TypeId.CosmosBlockIdFlagEnum" (global 110))
-  (export "TypeId.CosmosBlockParams" (global 111))
-  (export "TypeId.CosmosCoin" (global 112))
-  (export "TypeId.CosmosCommit" (global 113))
-  (export "TypeId.CosmosCommitSig" (global 114))
-  (export "TypeId.CosmosCompactBitArray" (global 115))
-  (export "TypeId.CosmosConsensus" (global 116))
-  (export "TypeId.CosmosConsensusParams" (global 117))
-  (export "TypeId.CosmosDuplicateVoteEvidence" (global 118))
-  (export "TypeId.CosmosDuration" (global 119))
-  (export "TypeId.CosmosEvent" (global 120))
-  (export "TypeId.CosmosEventAttribute" (global 121))
-  (export "TypeId.CosmosEventData" (global 122))
-  (export "TypeId.CosmosEventVote" (global 123))
-  (export "TypeId.CosmosEvidence" (global 124))
-  (export "TypeId.CosmosEvidenceList" (global 125))
-  (export "TypeId.CosmosEvidenceParams" (global 126))
-  (export "TypeId.CosmosFee" (global 127))
-  (export "TypeId.CosmosHeader" (global 128))
-  (export "TypeId.CosmosHeaderOnlyBlock" (global 129))
-  (export "TypeId.CosmosLightBlock" (global 130))
-  (export "TypeId.CosmosLightClientAttackEvidence" (global 131))
-  (export "TypeId.CosmosModeInfo" (global 132))
-  (export "TypeId.CosmosModeInfoMulti" (global 133))
-  (export "TypeId.CosmosModeInfoSingle" (global 134))
-  (export "TypeId.CosmosPartSetHeader" (global 135))
-  (export "TypeId.CosmosPublicKey" (global 136))
-  (export "TypeId.CosmosResponseBeginBlock" (global 137))
-  (export "TypeId.CosmosResponseDeliverTx" (global 138))
-  (export "TypeId.CosmosResponseEndBlock" (global 139))
-  (export "TypeId.CosmosSignModeEnum" (global 140))
-  (export "TypeId.CosmosSignedHeader" (global 141))
-  (export "TypeId.CosmosSignedMsgTypeEnum" (global 142))
-  (export "TypeId.CosmosSignerInfo" (global 143))
-  (export "TypeId.CosmosTimestamp" (global 144))
-  (export "TypeId.CosmosTip" (global 145))
-  (export "TypeId.CosmosTransactionData" (global 146))
-  (export "TypeId.CosmosTx" (global 147))
-  (export "TypeId.CosmosTxBody" (global 148))
-  (export "TypeId.CosmosTxResult" (global 149))
-  (export "TypeId.CosmosValidator" (global 150))
-  (export "TypeId.CosmosValidatorParams" (global 151))
-  (export "TypeId.CosmosValidatorSet" (global 152))
-  (export "TypeId.CosmosValidatorSetUpdates" (global 153))
-  (export "TypeId.CosmosValidatorUpdate" (global 154))
-  (export "TypeId.CosmosVersionParams" (global 155))
-  (export "TypeId.CosmosMessageData" (global 156))
-  (export "TypeId.CosmosTransactionContext" (global 157))
-  (export "TypeId.ArweaveBlock" (global 158))
-  (export "TypeId.ArweaveProofOfAccess" (global 159))
-  (export "TypeId.ArweaveTag" (global 160))
-  (export "TypeId.ArweaveTagArray" (global 161))
-  (export "TypeId.ArweaveTransaction" (global 162))
-  (export "TypeId.ArweaveTransactionArray" (global 163))
-  (export "TypeId.ArweaveTransactionWithBlockPtr" (global 164))
-  (export "TypeId.StarknetBlock" (global 165))
-  (export "TypeId.StarknetTransaction" (global 166))
-  (export "TypeId.StarknetTransactionTypeEnum" (global 167))
-  (export "TypeId.StarknetEvent" (global 168))
-  (export "TypeId.StarknetArrayBytes" (global 169))
+  (export "TypeId.String" (global 2))
+  (export "TypeId.ArrayBuffer" (global 3))
+  (export "TypeId.Int8Array" (global 4))
+  (export "TypeId.Int16Array" (global 5))
+  (export "TypeId.Int32Array" (global 6))
+  (export "TypeId.Int64Array" (global 7))
+  (export "TypeId.Uint8Array" (global 8))
+  (export "TypeId.Uint16Array" (global 9))
+  (export "TypeId.Uint32Array" (global 10))
+  (export "TypeId.Uint64Array" (global 11))
+  (export "TypeId.Float32Array" (global 12))
+  (export "TypeId.Float64Array" (global 13))
+  (export "TypeId.BigDecimal" (global 14))
+  (export "TypeId.ArrayBool" (global 15))
+  (export "TypeId.ArrayUint8Array" (global 16))
+  (export "TypeId.ArrayEthereumValue" (global 17))
+  (export "TypeId.ArrayStoreValue" (global 18))
+  (export "TypeId.ArrayJsonValue" (global 19))
+  (export "TypeId.ArrayString" (global 20))
+  (export "TypeId.ArrayEventParam" (global 21))
+  (export "TypeId.ArrayTypedMapEntryStringJsonValue" (global 22))
+  (export "TypeId.ArrayTypedMapEntryStringStoreValue" (global 23))
+  (export "TypeId.SmartContractCall" (global 24))
+  (export "TypeId.EventParam" (global 25))
+  (export "TypeId.EthereumTransaction" (global 26))
+  (export "TypeId.EthereumBlock" (global 27))
+  (export "TypeId.EthereumCall" (global 28))
+  (export "TypeId.WrappedTypedMapStringJsonValue" (global 29))
+  (export "TypeId.WrappedBool" (global 30))
+  (export "TypeId.WrappedJsonValue" (global 31))
+  (export "TypeId.EthereumValue" (global 32))
+  (export "TypeId.StoreValue" (global 33))
+  (export "TypeId.JsonValue" (global 34))
+  (export "TypeId.EthereumEvent" (global 35))
+  (export "TypeId.TypedMapEntryStringStoreValue" (global 36))
+  (export "TypeId.TypedMapEntryStringJsonValue" (global 37))
+  (export "TypeId.TypedMapStringStoreValue" (global 38))
+  (export "TypeId.TypedMapStringJsonValue" (global 39))
+  (export "TypeId.TypedMapStringTypedMapStringJsonValue" (global 40))
+  (export "TypeId.ResultTypedMapStringJsonValueBool" (global 41))
+  (export "TypeId.ResultJsonValueBool" (global 42))
+  (export "TypeId.ArrayU8" (global 43))
+  (export "TypeId.ArrayU16" (global 44))
+  (export "TypeId.ArrayU32" (global 45))
+  (export "TypeId.ArrayU64" (global 46))
+  (export "TypeId.ArrayI8" (global 47))
+  (export "TypeId.ArrayI16" (global 48))
+  (export "TypeId.ArrayI32" (global 49))
+  (export "TypeId.ArrayI64" (global 50))
+  (export "TypeId.ArrayF32" (global 51))
+  (export "TypeId.ArrayF64" (global 52))
+  (export "TypeId.ArrayBigDecimal" (global 53))
+  (export "TypeId.NearArrayDataReceiver" (global 54))
+  (export "TypeId.NearArrayCryptoHash" (global 55))
+  (export "TypeId.NearArrayActionValue" (global 56))
+  (export "TypeId.NearMerklePath" (global 57))
+  (export "TypeId.NearArrayValidatorStake" (global 58))
+  (export "TypeId.NearArraySlashedValidator" (global 59))
+  (export "TypeId.NearArraySignature" (global 60))
+  (export "TypeId.NearArrayChunkHeader" (global 61))
+  (export "TypeId.NearAccessKeyPermissionValue" (global 62))
+  (export "TypeId.NearActionValue" (global 63))
+  (export "TypeId.NearDirection" (global 64))
+  (export "TypeId.NearPublicKey" (global 65))
+  (export "TypeId.NearSignature" (global 66))
+  (export "TypeId.NearFunctionCallPermission" (global 67))
+  (export "TypeId.NearFullAccessPermission" (global 68))
+  (export "TypeId.NearAccessKey" (global 69))
+  (export "TypeId.NearDataReceiver" (global 70))
+  (export "TypeId.NearCreateAccountAction" (global 71))
+  (export "TypeId.NearDeployContractAction" (global 72))
+  (export "TypeId.NearFunctionCallAction" (global 73))
+  (export "TypeId.NearTransferAction" (global 74))
+  (export "TypeId.NearStakeAction" (global 75))
+  (export "TypeId.NearAddKeyAction" (global 76))
+  (export "TypeId.NearDeleteKeyAction" (global 77))
+  (export "TypeId.NearDeleteAccountAction" (global 78))
+  (export "TypeId.NearActionReceipt" (global 79))
+  (export "TypeId.NearSuccessStatus" (global 80))
+  (export "TypeId.NearMerklePathItem" (global 81))
+  (export "TypeId.NearExecutionOutcome" (global 82))
+  (export "TypeId.NearSlashedValidator" (global 83))
+  (export "TypeId.NearBlockHeader" (global 84))
+  (export "TypeId.NearValidatorStake" (global 85))
+  (export "TypeId.NearChunkHeader" (global 86))
+  (export "TypeId.NearBlock" (global 87))
+  (export "TypeId.NearReceiptWithOutcome" (global 88))
+  (export "TypeId.TransactionReceipt" (global 89))
+  (export "TypeId.Log" (global 90))
+  (export "TypeId.ArrayH256" (global 91))
+  (export "TypeId.ArrayLog" (global 92))
+  (export "TypeId.CosmosAny" (global 93))
+  (export "TypeId.CosmosAnyArray" (global 94))
+  (export "TypeId.CosmosBytesArray" (global 95))
+  (export "TypeId.CosmosCoinArray" (global 96))
+  (export "TypeId.CosmosCommitSigArray" (global 97))
+  (export "TypeId.CosmosEventArray" (global 98))
+  (export "TypeId.CosmosEventAttributeArray" (global 99))
+  (export "TypeId.CosmosEvidenceArray" (global 100))
+  (export "TypeId.CosmosModeInfoArray" (global 101))
+  (export "TypeId.CosmosSignerInfoArray" (global 102))
+  (export "TypeId.CosmosTxResultArray" (global 103))
+  (export "TypeId.CosmosValidatorArray" (global 104))
+  (export "TypeId.CosmosValidatorUpdateArray" (global 105))
+  (export "TypeId.CosmosAuthInfo" (global 106))
+  (export "TypeId.CosmosBlock" (global 107))
+  (export "TypeId.CosmosBlockId" (global 108))
+  (export "TypeId.CosmosBlockIdFlagEnum" (global 109))
+  (export "TypeId.CosmosBlockParams" (global 110))
+  (export "TypeId.CosmosCoin" (global 111))
+  (export "TypeId.CosmosCommit" (global 112))
+  (export "TypeId.CosmosCommitSig" (global 113))
+  (export "TypeId.CosmosCompactBitArray" (global 114))
+  (export "TypeId.CosmosConsensus" (global 115))
+  (export "TypeId.CosmosConsensusParams" (global 116))
+  (export "TypeId.CosmosDuplicateVoteEvidence" (global 117))
+  (export "TypeId.CosmosDuration" (global 118))
+  (export "TypeId.CosmosEvent" (global 119))
+  (export "TypeId.CosmosEventAttribute" (global 120))
+  (export "TypeId.CosmosEventData" (global 121))
+  (export "TypeId.CosmosEventVote" (global 122))
+  (export "TypeId.CosmosEvidence" (global 123))
+  (export "TypeId.CosmosEvidenceList" (global 124))
+  (export "TypeId.CosmosEvidenceParams" (global 125))
+  (export "TypeId.CosmosFee" (global 126))
+  (export "TypeId.CosmosHeader" (global 127))
+  (export "TypeId.CosmosHeaderOnlyBlock" (global 128))
+  (export "TypeId.CosmosLightBlock" (global 129))
+  (export "TypeId.CosmosLightClientAttackEvidence" (global 130))
+  (export "TypeId.CosmosModeInfo" (global 131))
+  (export "TypeId.CosmosModeInfoMulti" (global 132))
+  (export "TypeId.CosmosModeInfoSingle" (global 133))
+  (export "TypeId.CosmosPartSetHeader" (global 134))
+  (export "TypeId.CosmosPublicKey" (global 135))
+  (export "TypeId.CosmosResponseBeginBlock" (global 136))
+  (export "TypeId.CosmosResponseDeliverTx" (global 137))
+  (export "TypeId.CosmosResponseEndBlock" (global 138))
+  (export "TypeId.CosmosSignModeEnum" (global 139))
+  (export "TypeId.CosmosSignedHeader" (global 140))
+  (export "TypeId.CosmosSignedMsgTypeEnum" (global 141))
+  (export "TypeId.CosmosSignerInfo" (global 142))
+  (export "TypeId.CosmosTimestamp" (global 143))
+  (export "TypeId.CosmosTip" (global 144))
+  (export "TypeId.CosmosTransactionData" (global 145))
+  (export "TypeId.CosmosTx" (global 146))
+  (export "TypeId.CosmosTxBody" (global 147))
+  (export "TypeId.CosmosTxResult" (global 148))
+  (export "TypeId.CosmosValidator" (global 149))
+  (export "TypeId.CosmosValidatorParams" (global 150))
+  (export "TypeId.CosmosValidatorSet" (global 151))
+  (export "TypeId.CosmosValidatorSetUpdates" (global 152))
+  (export "TypeId.CosmosValidatorUpdate" (global 153))
+  (export "TypeId.CosmosVersionParams" (global 154))
+  (export "TypeId.CosmosMessageData" (global 155))
+  (export "TypeId.CosmosTransactionContext" (global 156))
+  (export "TypeId.ArweaveBlock" (global 157))
+  (export "TypeId.ArweaveProofOfAccess" (global 158))
+  (export "TypeId.ArweaveTag" (global 159))
+  (export "TypeId.ArweaveTagArray" (global 160))
+  (export "TypeId.ArweaveTransaction" (global 161))
+  (export "TypeId.ArweaveTransactionArray" (global 162))
+  (export "TypeId.ArweaveTransactionWithBlockPtr" (global 163))
+  (export "TypeId.StarknetBlock" (global 164))
+  (export "TypeId.StarknetTransaction" (global 165))
+  (export "TypeId.StarknetTransactionTypeEnum" (global 166))
+  (export "TypeId.StarknetEvent" (global 167))
+  (export "TypeId.StarknetArrayBytes" (global 168))
   (export "id_of_type" (func $node_modules/@graphprotocol/graph-ts/global/global/id_of_type))
   (export "allocate" (func $node_modules/@graphprotocol/graph-ts/global/global/allocate))
   (export "memory" (memory 0))
   (export "table" (table 0))
   (export "_start" (func $~start))
-  (elem $0 (i32.const 1) func $start:tests/utils/constants.test~anonymous|0 $start:tests/utils/constants.test~anonymous|1)
+  (elem $0 (i32.const 1) func $start:tests/v3-pools/utils/v3-pool-converters.test~anonymous|0)
   (data (;0;) (i32.const 1036) "<")
   (data (;1;) (i32.const 1048) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
   (data (;2;) (i32.const 1100) "<")
@@ -2641,25 +4455,59 @@
   (data (;51;) (i32.const 2456) "\01\00\00\00\18\00\00\00p\00a\00n\00c\00a\00k\00e\00-\00s\00w\00a\00p")
   (data (;52;) (i32.const 2492) ",")
   (data (;53;) (i32.const 2504) "\01\00\00\00\0e\00\00\00u\00n\00i\00s\00w\00a\00p")
-  (data (;54;) (i32.const 2540) "|")
-  (data (;55;) (i32.const 2552) "\01\00\00\00d\00\00\00Z\00e\00r\00o\00 \00b\00i\00g\00 \00d\00e\00c\00i\00m\00a\00l\00 \00s\00h\00o\00u\00l\00d\00 \00r\00e\00t\00u\00r\00n\00 \00z\00e\00r\00o\00 \00a\00s\00 \00B\00i\00g\00 \00D\00e\00c\00i\00m\00a\00l")
-  (data (;56;) (i32.const 2668) "\9c")
-  (data (;57;) (i32.const 2680) "\01\00\00\00~\00\00\00F\00a\00i\00l\00e\00d\00 \00t\00o\00 \00s\00u\00b\00t\00r\00a\00c\00t\00 \00B\00i\00g\00D\00e\00c\00i\00m\00a\00l\00s\00 \00b\00e\00c\00a\00u\00s\00e\00 \00l\00e\00f\00t\00 \00h\00a\00n\00d\00 \00s\00i\00d\00e\00 \00i\00s\00 \00'\00n\00u\00l\00l\00'")
-  (data (;58;) (i32.const 2828) "l")
-  (data (;59;) (i32.const 2840) "\01\00\00\00\5c\00\00\00~\00l\00i\00b\00/\00@\00g\00r\00a\00p\00h\00p\00r\00o\00t\00o\00c\00o\00l\00/\00g\00r\00a\00p\00h\00-\00t\00s\00/\00c\00o\00m\00m\00o\00n\00/\00n\00u\00m\00b\00e\00r\00s\00.\00t\00s")
-  (data (;60;) (i32.const 2940) "\5c")
-  (data (;61;) (i32.const 2952) "\01\00\00\00B\00\00\00a\00s\00s\00e\00r\00t\00.\00a\00s\00s\00e\00r\00t\00T\00r\00u\00e\00 \00A\00s\00s\00e\00r\00t\00i\00o\00n\00 \00E\00r\00r\00o\00r")
-  (data (;62;) (i32.const 3036) "L")
-  (data (;63;) (i32.const 3048) "\01\00\00\008\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00c\00h\00s\00t\00i\00c\00k\00-\00a\00s\00/\00a\00s\00s\00e\00r\00t\00.\00t\00s")
-  (data (;64;) (i32.const 3116) "\1c")
-  (data (;65;) (i32.const 3128) "\11\00\00\00\08\00\00\00\01")
-  (data (;66;) (i32.const 3148) "l")
-  (data (;67;) (i32.const 3160) "\01\00\00\00T\00\00\00Z\00e\00r\00o\00 \00b\00i\00g\00 \00i\00n\00t\00 \00s\00h\00o\00u\00l\00d\00 \00r\00e\00t\00u\00r\00n\00 \00z\00e\00r\00o\00 \00a\00s\00 \00b\00i\00g\00 \00i\00n\00t")
-  (data (;68;) (i32.const 3260) "\5c")
-  (data (;69;) (i32.const 3272) "\01\00\00\00F\00\00\00a\00s\00s\00e\00r\00t\00.\00b\00i\00g\00I\00n\00t\00E\00q\00u\00a\00l\00s\00 \00A\00s\00s\00e\00r\00t\00i\00o\00n\00 \00E\00r\00r\00o\00r")
-  (data (;70;) (i32.const 3356) "\1c")
-  (data (;71;) (i32.const 3368) "\11\00\00\00\08\00\00\00\02")
-  (data (;72;) (i32.const 3388) "<")
-  (data (;73;) (i32.const 3404) "(\00\00\00\a0\04\00\00\c0\04\00\00\e0\04\00\00\10\05\00\000\05\00\00P\05\00\00p\05\00\00\90\05\00\00\b0\05\00\00\d0\05")
-  (data (;74;) (i32.const 3452) ",")
-  (data (;75;) (i32.const 3464) "\03\00\00\00\10\00\00\00P\0d\00\00P\0d\00\00(\00\00\00\0a"))
+  (data (;54;) (i32.const 2540) "\0c\01")
+  (data (;55;) (i32.const 2552) "\01\00\00\00\f0\00\00\00W\00h\00e\00n\00 \00p\00a\00s\00s\00i\00n\00g\00 \00a\00 \00S\00q\00r\00t\00P\00r\00i\00c\00e\00X\009\006\00 \00t\00o\00 \00'\00s\00q\00r\00t\00P\00r\00i\00c\00e\00X\009\006\00t\00o\00P\00r\00i\00c\00e\00'\00\0a\00 \00 \00 \00 \00i\00t\00 \00s\00h\00o\00u\00l\00d\00 \00r\00e\00t\00u\00r\00n\00 \00t\00h\00e\00 \00p\00o\00o\00l\00 \00t\00o\00k\00e\00n\00 \00p\00r\00i\00c\00e\00s\00 \00b\00a\00s\00e\00d\00 \00o\00n\00 \00e\00a\00c\00h\00 \00o\00t\00h\00e\00r\00\0a\00 \00 \00 \00 ")
+  (data (;56;) (i32.const 2812) "\1c")
+  (data (;57;) (i32.const 2824) "\01\00\00\00\04\00\00\00i\00d")
+  (data (;58;) (i32.const 2844) "|")
+  (data (;59;) (i32.const 2856) "\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
+  (data (;60;) (i32.const 2972) "l")
+  (data (;61;) (i32.const 2984) "\01\00\00\00T\00\00\000\00x\001\00f\009\008\004\000\00a\008\005\00d\005\00a\00F\005\00b\00f\001\00D\001\007\006\002\00F\009\002\005\00B\00D\00A\00D\00d\00C\004\002\000\001\00F\009\008\004")
+  (data (;62;) (i32.const 3084) "l")
+  (data (;63;) (i32.const 3096) "\01\00\00\00T\00\00\000\00x\00d\00A\00C\001\007\00F\009\005\008\00D\002\00e\00e\005\002\003\00a\002\002\000\006\002\000\006\009\009\004\005\009\007\00C\001\003\00D\008\003\001\00e\00c\007")
+  (data (;64;) (i32.const 3196) ",")
+  (data (;65;) (i32.const 3208) "\01\00\00\00\10\00\00\00d\00e\00c\00i\00m\00a\00l\00s")
+  (data (;66;) (i32.const 3244) "L")
+  (data (;67;) (i32.const 3256) "\01\00\00\000\00\00\002\009\004\007\006\001\000\004\007\009\002\008\000\009\005\001\002\009\006\007\003\009\007\000")
+  (data (;68;) (i32.const 3324) "\5c")
+  (data (;69;) (i32.const 3336) "\01\00\00\00J\00\00\000\00.\000\007\002\002\004\006\008\006\001\002\001\004\001\006\001\003\009\002\009\009\007\000\003\008\004\002\002\007\001\003\007\005\002\001\007")
+  (data (;70;) (i32.const 3420) "\5c")
+  (data (;71;) (i32.const 3432) "\01\00\00\00F\00\00\001\003\00.\008\004\001\004\003\001\007\006\008\007\002\000\000\002\003\005\007\007\007\003\006\005\009\003\008\009\002\000\007\008\009\006")
+  (data (;72;) (i32.const 3516) "\8c")
+  (data (;73;) (i32.const 3528) "\01\00\00\00v\00\00\00F\00a\00i\00l\00e\00d\00 \00t\00o\00 \00m\00u\00l\00t\00i\00p\00l\00y\00 \00B\00i\00g\00I\00n\00t\00s\00 \00b\00e\00c\00a\00u\00s\00e\00 \00l\00e\00f\00t\00 \00h\00a\00n\00d\00 \00s\00i\00d\00e\00 \00i\00s\00 \00'\00n\00u\00l\00l\00'")
+  (data (;74;) (i32.const 3660) "l")
+  (data (;75;) (i32.const 3672) "\01\00\00\00\5c\00\00\00~\00l\00i\00b\00/\00@\00g\00r\00a\00p\00h\00p\00r\00o\00t\00o\00c\00o\00l\00/\00g\00r\00a\00p\00h\00-\00t\00s\00/\00c\00o\00m\00m\00o\00n\00/\00n\00u\00m\00b\00e\00r\00s\00.\00t\00s")
+  (data (;76;) (i32.const 3772) "\8c")
+  (data (;77;) (i32.const 3784) "\01\00\00\00z\00\00\00F\00a\00i\00l\00e\00d\00 \00t\00o\00 \00d\00i\00v\00i\00d\00e\00 \00B\00i\00g\00D\00e\00c\00i\00m\00a\00l\00s\00 \00b\00e\00c\00a\00u\00s\00e\00 \00l\00e\00f\00t\00 \00h\00a\00n\00d\00 \00s\00i\00d\00e\00 \00i\00s\00 \00'\00n\00u\00l\00l\00'")
+  (data (;78;) (i32.const 3916) "<")
+  (data (;79;) (i32.const 3928) "\01\00\00\00(\00\00\00V\00a\00l\00u\00e\00 \00i\00s\00 \00n\00o\00t\00 \00a\00n\00 \00i\003\002\00.")
+  (data (;80;) (i32.const 3980) "l")
+  (data (;81;) (i32.const 3992) "\01\00\00\00X\00\00\00~\00l\00i\00b\00/\00@\00g\00r\00a\00p\00h\00p\00r\00o\00t\00o\00c\00o\00l\00/\00g\00r\00a\00p\00h\00-\00t\00s\00/\00c\00o\00m\00m\00o\00n\00/\00v\00a\00l\00u\00e\00.\00t\00s")
+  (data (;82;) (i32.const 4092) "\9c")
+  (data (;83;) (i32.const 4104) "\01\00\00\00~\00\00\00F\00a\00i\00l\00e\00d\00 \00t\00o\00 \00m\00u\00l\00t\00i\00p\00l\00y\00 \00B\00i\00g\00D\00e\00c\00i\00m\00a\00l\00s\00 \00b\00e\00c\00a\00u\00s\00e\00 \00l\00e\00f\00t\00 \00h\00a\00n\00d\00 \00s\00i\00d\00e\00 \00i\00s\00 \00'\00n\00u\00l\00l\00'")
+  (data (;84;) (i32.const 4252) "\1c")
+  (data (;85;) (i32.const 4264) "\01\00\00\00\02\00\00\001")
+  (data (;86;) (i32.const 4284) "\9c")
+  (data (;87;) (i32.const 4296) "\01\00\00\00~\00\00\00F\00a\00i\00l\00e\00d\00 \00t\00o\00 \00s\00u\00b\00t\00r\00a\00c\00t\00 \00B\00i\00g\00D\00e\00c\00i\00m\00a\00l\00s\00 \00b\00e\00c\00a\00u\00s\00e\00 \00l\00e\00f\00t\00 \00h\00a\00n\00d\00 \00s\00i\00d\00e\00 \00i\00s\00 \00'\00n\00u\00l\00l\00'")
+  (data (;88;) (i32.const 4444) "l")
+  (data (;89;) (i32.const 4456) "\01\00\00\00T\00\00\00t\00o\00k\00e\00n\000\00P\00e\00r\00T\00o\00k\00e\00n\001\00 \00i\00s\00 \00n\00o\00t\00 \00c\00o\00r\00r\00e\00c\00t\00,\00 \00e\00x\00p\00e\00c\00t\00e\00d\00:\00 ")
+  (data (;90;) (i32.const 4556) ",")
+  (data (;91;) (i32.const 4568) "\01\00\00\00\14\00\00\00,\00 \00a\00c\00t\00u\00a\00l\00:\00 ")
+  (data (;92;) (i32.const 4604) "\1c")
+  (data (;93;) (i32.const 4616) "\01")
+  (data (;94;) (i32.const 4636) ",")
+  (data (;95;) (i32.const 4648) "\12\00\00\00\14\00\00\00p\11\00\00\00\00\00\00\e0\11\00\00\00\00\00\00\10\12")
+  (data (;96;) (i32.const 4684) "\5c")
+  (data (;97;) (i32.const 4696) "\01\00\00\00B\00\00\00a\00s\00s\00e\00r\00t\00.\00a\00s\00s\00e\00r\00t\00T\00r\00u\00e\00 \00A\00s\00s\00e\00r\00t\00i\00o\00n\00 \00E\00r\00r\00o\00r")
+  (data (;98;) (i32.const 4780) "L")
+  (data (;99;) (i32.const 4792) "\01\00\00\008\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00c\00h\00s\00t\00i\00c\00k\00-\00a\00s\00/\00a\00s\00s\00e\00r\00t\00.\00t\00s")
+  (data (;100;) (i32.const 4860) "l")
+  (data (;101;) (i32.const 4872) "\01\00\00\00T\00\00\00t\00o\00k\00e\00n\001\00P\00e\00r\00T\00o\00k\00e\00n\000\00 \00i\00s\00 \00n\00o\00t\00 \00c\00o\00r\00r\00e\00c\00t\00,\00 \00e\00x\00p\00e\00c\00t\00e\00d\00:\00 ")
+  (data (;102;) (i32.const 4972) ",")
+  (data (;103;) (i32.const 4984) "\12\00\00\00\14\00\00\00\10\13\00\00\00\00\00\00\e0\11\00\00\00\00\00\00\10\12")
+  (data (;104;) (i32.const 5020) "\1c")
+  (data (;105;) (i32.const 5032) "\14\00\00\00\08\00\00\00\01")
+  (data (;106;) (i32.const 5052) "<")
+  (data (;107;) (i32.const 5068) "(\00\00\00\a0\04\00\00\c0\04\00\00\e0\04\00\00\10\05\00\000\05\00\00P\05\00\00p\05\00\00\90\05\00\00\b0\05\00\00\d0\05")
+  (data (;108;) (i32.const 5116) ",")
+  (data (;109;) (i32.const 5128) "\03\00\00\00\10\00\00\00\d0\13\00\00\d0\13\00\00(\00\00\00\0a"))

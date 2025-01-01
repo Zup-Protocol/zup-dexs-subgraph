@@ -1,16 +1,13 @@
 (module
   (type (;0;) (func (param i32) (result i32)))
-  (type (;1;) (func (param i32 i32) (result i32)))
+  (type (;1;) (func (param i32 i32 i32)))
   (type (;2;) (func))
-  (type (;3;) (func (param i32 i32 i32)))
-  (type (;4;) (func (param i32 i32 i32 i32)))
+  (type (;3;) (func (param i32 i32 i32 i32)))
+  (type (;4;) (func (param i32 i32) (result i32)))
   (type (;5;) (func (param i32 i32)))
-  (import "env" "abort" (func $~lib/builtins/abort (type 4)))
+  (import "env" "abort" (func $~lib/builtins/abort (type 3)))
   (import "conversion" "typeConversion.stringToH160" (func $~lib/@graphprotocol/graph-ts/common/conversion/typeConversion.stringToH160 (type 0)))
-  (import "numbers" "bigDecimal.fromString" (func $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.fromString (type 0)))
-  (import "numbers" "bigDecimal.minus" (func $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.minus (type 1)))
-  (import "assert" "_assert.equals" (func $~lib/matchstick-as/assert/_assert.equals (type 1)))
-  (import "index" "_registerTest" (func $~lib/matchstick-as/index/_registerTest (type 3)))
+  (import "index" "_registerTest" (func $~lib/matchstick-as/index/_registerTest (type 1)))
   (func $~lib/rt/stub/__alloc (type 0) (param i32) (result i32)
     (local i32 i32 i32 i32 i32)
     local.get 0
@@ -84,7 +81,7 @@
     local.get 5
     i32.store
     local.get 4)
-  (func $~lib/rt/stub/__new (type 1) (param i32 i32) (result i32)
+  (func $~lib/rt/stub/__new (type 4) (param i32 i32) (result i32)
     (local i32 i32)
     local.get 0
     i32.const 1073741804
@@ -294,11 +291,33 @@
         end
       end
     end)
-  (func $~lib/typedarray/Uint8Array#constructor (type 1) (param i32 i32) (result i32)
-    (local i32)
+  (func $~lib/typedarray/Uint8Array#__set (type 1) (param i32 i32 i32)
+    local.get 1
+    local.get 0
+    i32.load offset=8
+    i32.ge_u
+    if  ;; label = @1
+      i32.const 2080
+      i32.const 2144
+      i32.const 175
+      i32.const 45
+      call $~lib/builtins/abort
+      unreachable
+    end
+    local.get 1
+    local.get 0
+    i32.load offset=4
+    i32.add
+    local.get 2
+    i32.store8)
+  (func $~lib/@graphprotocol/graph-ts/common/collections/ByteArray.fromI32 (type 2)
+    (local i32 i32)
     block (result i32)  ;; label = @1
       block (result i32)  ;; label = @2
-        local.get 0
+        i32.const 12
+        i32.const 12
+        call $~lib/rt/stub/__new
+        local.tee 0
         i32.eqz
         if  ;; label = @3
           i32.const 12
@@ -325,483 +344,1095 @@
     local.get 0
     i32.const 0
     i32.store offset=8
-    local.get 1
-    i32.const 1073741820
-    i32.gt_u
-    if  ;; label = @1
-      i32.const 1808
-      i32.const 2016
-      i32.const 18
-      i32.const 57
-      call $~lib/builtins/abort
-      unreachable
-    end
-    local.get 1
+    i32.const 4
     i32.const 0
     call $~lib/rt/stub/__new
-    local.tee 2
-    local.get 1
+    local.tee 1
+    i32.const 4
     call $~lib/memory/memory.fill
     local.get 0
-    local.get 2
+    local.get 1
     i32.store
     local.get 0
-    local.get 2
+    local.get 1
     i32.store offset=4
     local.get 0
-    local.get 1
-    i32.store offset=8
-    local.get 0)
-  (func $~lib/typedarray/Uint8Array#__set (type 3) (param i32 i32 i32)
-    local.get 1
-    local.get 0
-    i32.load offset=8
-    i32.ge_u
-    if  ;; label = @1
-      i32.const 2080
-      i32.const 2144
-      i32.const 175
-      i32.const 45
-      call $~lib/builtins/abort
-      unreachable
-    end
-    local.get 1
-    local.get 0
-    i32.load offset=4
-    i32.add
-    local.get 2
-    i32.store8)
-  (func $~lib/@graphprotocol/graph-ts/common/collections/ByteArray.fromI32 (type 0) (param i32) (result i32)
-    (local i32)
-    i32.const 12
-    i32.const 12
-    call $~lib/rt/stub/__new
     i32.const 4
-    call $~lib/typedarray/Uint8Array#constructor
-    local.tee 1
+    i32.store offset=8
+    local.get 0
     i32.const 0
-    local.get 0
-    i32.const 255
-    i32.and
-    call $~lib/typedarray/Uint8Array#__set
-    local.get 1
     i32.const 1
-    local.get 0
-    i32.const 8
-    i32.shr_s
-    i32.const 255
-    i32.and
     call $~lib/typedarray/Uint8Array#__set
-    local.get 1
+    local.get 0
+    i32.const 1
+    i32.const 0
+    call $~lib/typedarray/Uint8Array#__set
+    local.get 0
     i32.const 2
-    local.get 0
-    i32.const 16
-    i32.shr_s
-    i32.const 255
-    i32.and
+    i32.const 0
     call $~lib/typedarray/Uint8Array#__set
-    local.get 1
+    local.get 0
     i32.const 3
-    local.get 0
-    i32.const 24
-    i32.shr_s
-    call $~lib/typedarray/Uint8Array#__set
-    local.get 1)
-  (func $~lib/typedarray/Uint8Array#__get (type 1) (param i32 i32) (result i32)
-    local.get 1
-    local.get 0
-    i32.load offset=8
-    i32.ge_u
-    if  ;; label = @1
-      i32.const 2080
-      i32.const 2144
-      i32.const 164
-      i32.const 45
-      call $~lib/builtins/abort
-      unreachable
-    end
-    local.get 1
-    local.get 0
-    i32.load offset=4
-    i32.add
-    i32.load8_u)
-  (func $~lib/@graphprotocol/graph-ts/common/numbers/BigInt.compare (type 1) (param i32 i32) (result i32)
-    (local i32 i32 i32 i32)
-    local.get 0
-    i32.load offset=8
     i32.const 0
-    i32.gt_s
-    local.tee 2
-    if (result i32)  ;; label = @1
-      local.get 0
-      local.get 0
-      i32.load offset=8
-      i32.const 1
-      i32.sub
-      call $~lib/typedarray/Uint8Array#__get
-      i32.const 7
-      i32.shr_u
-      i32.const 1
-      i32.eq
-    else
-      local.get 2
-    end
-    local.set 3
-    i32.const 0
-    block (result i32)  ;; label = @1
+    call $~lib/typedarray/Uint8Array#__set)
+  (func $~lib/util/memory/memcpy (type 1) (param i32 i32 i32)
+    (local i32 i32 i32)
+    loop  ;; label = @1
       local.get 1
-      i32.load offset=8
+      i32.const 3
+      i32.and
       i32.const 0
-      i32.gt_s
-      local.tee 2
-      if  ;; label = @2
-        local.get 1
-        local.get 1
-        i32.load offset=8
-        i32.const 1
-        i32.sub
-        call $~lib/typedarray/Uint8Array#__get
-        i32.const 7
-        i32.shr_u
-        i32.const 1
-        i32.eq
-        local.set 2
-      end
       local.get 2
-    end
-    local.get 3
-    select
-    if  ;; label = @1
-      i32.const 1
-      return
-    end
-    local.get 2
-    i32.const 1
-    local.get 3
-    select
-    i32.eqz
-    if  ;; label = @1
-      i32.const -1
-      return
-    end
-    local.get 0
-    i32.load offset=8
-    local.set 5
-    loop  ;; label = @1
-      local.get 5
-      i32.const 0
-      i32.gt_s
-      if (result i32)  ;; label = @2
-        local.get 3
-        if (result i32)  ;; label = @3
-          i32.const 1
-        else
-          local.get 0
-          local.get 5
-          i32.const 1
-          i32.sub
-          call $~lib/typedarray/Uint8Array#__get
-        end
-        if (result i32)  ;; label = @3
-          local.get 3
-          if (result i32)  ;; label = @4
-            local.get 0
-            local.get 5
-            i32.const 1
-            i32.sub
-            call $~lib/typedarray/Uint8Array#__get
-            i32.const 255
-            i32.eq
-          else
-            i32.const 0
-          end
-        else
-          i32.const 1
-        end
-      else
-        i32.const 0
-      end
-      if  ;; label = @2
-        local.get 5
-        i32.const 1
-        i32.sub
-        local.set 5
-        br 1 (;@1;)
-      end
-    end
-    local.get 1
-    i32.load offset=8
-    local.set 4
-    loop  ;; label = @1
-      local.get 4
-      i32.const 0
-      i32.gt_s
-      if (result i32)  ;; label = @2
-        local.get 2
-        if (result i32)  ;; label = @3
-          i32.const 1
-        else
-          local.get 1
-          local.get 4
-          i32.const 1
-          i32.sub
-          call $~lib/typedarray/Uint8Array#__get
-        end
-        if (result i32)  ;; label = @3
-          local.get 2
-          if (result i32)  ;; label = @4
-            local.get 1
-            local.get 4
-            i32.const 1
-            i32.sub
-            call $~lib/typedarray/Uint8Array#__get
-            i32.const 255
-            i32.eq
-          else
-            i32.const 0
-          end
-        else
-          i32.const 1
-        end
-      else
-        i32.const 0
-      end
-      if  ;; label = @2
-        local.get 4
-        i32.const 1
-        i32.sub
-        local.set 4
-        br 1 (;@1;)
-      end
-    end
-    local.get 4
-    local.get 5
-    i32.lt_s
-    if  ;; label = @1
-      i32.const -1
-      i32.const 1
-      local.get 3
       select
-      return
-    end
-    local.get 4
-    local.get 5
-    i32.gt_s
-    if  ;; label = @1
-      i32.const 1
-      i32.const -1
-      local.get 3
-      select
-      return
-    end
-    i32.const 1
-    local.set 2
-    loop  ;; label = @1
-      local.get 2
-      local.get 5
-      i32.le_s
       if  ;; label = @2
         local.get 0
-        local.get 5
-        local.get 2
-        i32.sub
         local.tee 3
-        call $~lib/typedarray/Uint8Array#__get
-        local.get 1
-        local.get 3
-        call $~lib/typedarray/Uint8Array#__get
-        i32.lt_u
-        if  ;; label = @3
-          i32.const -1
-          return
-        end
-        local.get 0
-        local.get 5
-        local.get 2
-        i32.sub
-        local.tee 3
-        call $~lib/typedarray/Uint8Array#__get
-        local.get 1
-        local.get 3
-        call $~lib/typedarray/Uint8Array#__get
-        i32.gt_u
-        if  ;; label = @3
-          i32.const 1
-          return
-        end
-        local.get 2
         i32.const 1
         i32.add
-        local.set 2
-        br 1 (;@1;)
-      end
-    end
-    i32.const 0)
-  (func $~lib/@graphprotocol/graph-ts/chain/ethereum/ethereum.Value.fromBoolean (type 0) (param i32) (result i32)
-    (local i64)
-    local.get 0
-    i32.eqz
-    i32.eqz
-    i64.extend_i32_u
-    local.set 1
-    i32.const 16
-    i32.const 16
-    call $~lib/rt/stub/__new
-    local.tee 0
-    i32.const 5
-    i32.store
-    local.get 0
-    local.get 1
-    i64.store offset=8
-    local.get 0)
-  (func $start:tests/utils/constants.test~anonymous|0 (type 2)
-    (local i32 i32)
-    global.get $src/utils/constants/ZERO_BIG_DECIMAL
-    local.set 0
-    i32.const 2432
-    call $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.fromString
-    local.set 1
-    local.get 0
-    i32.eqz
-    if  ;; label = @1
-      i32.const 2688
-      i32.const 2848
-      i32.const 379
-      i32.const 5
-      call $~lib/builtins/abort
-      unreachable
-    end
-    local.get 0
-    local.get 1
-    call $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.minus
-    local.tee 0
-    i32.load
-    i32.const 0
-    call $~lib/@graphprotocol/graph-ts/common/collections/ByteArray.fromI32
-    call $~lib/@graphprotocol/graph-ts/common/numbers/BigInt.compare
-    if (result i32)  ;; label = @1
-      i32.const 1
-      i32.const -1
-      local.get 0
-      i32.load
-      i32.const 0
-      call $~lib/@graphprotocol/graph-ts/common/collections/ByteArray.fromI32
-      call $~lib/@graphprotocol/graph-ts/common/numbers/BigInt.compare
-      i32.const 1
-      i32.eq
-      select
-    else
-      i32.const 0
-    end
-    i32.eqz
-    local.set 0
-    i32.const 1
-    call $~lib/@graphprotocol/graph-ts/chain/ethereum/ethereum.Value.fromBoolean
-    local.get 0
-    call $~lib/@graphprotocol/graph-ts/chain/ethereum/ethereum.Value.fromBoolean
-    call $~lib/matchstick-as/assert/_assert.equals
-    i32.eqz
-    if  ;; label = @1
-      i32.const 2960
-      i32.const 3056
-      i32.const 156
-      i32.const 7
-      call $~lib/builtins/abort
-      unreachable
-    end)
-  (func $start:tests/utils/constants.test~anonymous|1 (type 2)
-    (local i32 i32 i32 i32 i64)
-    global.get $src/utils/constants/ZERO_BIG_INT
-    local.set 3
-    i32.const 12
-    i32.const 12
-    call $~lib/rt/stub/__new
-    i32.const 4
-    call $~lib/typedarray/Uint8Array#constructor
-    local.tee 0
-    i32.const 0
-    i32.const 0
-    call $~lib/typedarray/Uint8Array#__set
-    local.get 0
-    i32.const 1
-    i32.const 0
-    call $~lib/typedarray/Uint8Array#__set
-    local.get 0
-    i32.const 2
-    i32.const 0
-    call $~lib/typedarray/Uint8Array#__set
-    local.get 0
-    i32.const 3
-    i32.const 0
-    call $~lib/typedarray/Uint8Array#__set
-    local.get 0
-    i32.load offset=8
-    i32.const 1
-    i32.add
-    local.set 2
-    i32.const 12
-    i32.const 14
-    call $~lib/rt/stub/__new
-    local.get 2
-    call $~lib/typedarray/Uint8Array#constructor
-    local.set 2
-    loop  ;; label = @1
-      local.get 1
-      local.get 0
-      i32.load offset=8
-      i32.lt_s
-      if  ;; label = @2
-        local.get 2
+        local.set 0
         local.get 1
-        local.get 0
-        local.get 1
-        call $~lib/typedarray/Uint8Array#__get
-        call $~lib/typedarray/Uint8Array#__set
-        local.get 1
+        local.tee 4
         i32.const 1
         i32.add
         local.set 1
+        local.get 3
+        local.get 4
+        i32.load8_u
+        i32.store8
+        local.get 2
+        i32.const 1
+        i32.sub
+        local.set 2
         br 1 (;@1;)
       end
     end
-    local.get 2
     local.get 0
-    i32.load offset=8
-    i32.const 0
-    call $~lib/typedarray/Uint8Array#__set
-    local.get 3
-    i64.extend_i32_u
-    local.set 4
+    i32.const 3
+    i32.and
+    i32.eqz
+    if  ;; label = @1
+      loop  ;; label = @2
+        local.get 2
+        i32.const 16
+        i32.ge_u
+        if  ;; label = @3
+          local.get 0
+          local.get 1
+          i32.load
+          i32.store
+          local.get 0
+          local.get 1
+          i32.load offset=4
+          i32.store offset=4
+          local.get 0
+          local.get 1
+          i32.load offset=8
+          i32.store offset=8
+          local.get 0
+          local.get 1
+          i32.load offset=12
+          i32.store offset=12
+          local.get 1
+          i32.const 16
+          i32.add
+          local.set 1
+          local.get 0
+          i32.const 16
+          i32.add
+          local.set 0
+          local.get 2
+          i32.const 16
+          i32.sub
+          local.set 2
+          br 1 (;@2;)
+        end
+      end
+      local.get 2
+      i32.const 8
+      i32.and
+      if  ;; label = @2
+        block (result i32)  ;; label = @3
+          local.get 0
+          local.get 1
+          i32.load
+          i32.store
+          local.get 0
+          local.get 1
+          i32.load offset=4
+          i32.store offset=4
+          local.get 1
+          i32.const 8
+          i32.add
+          local.set 1
+          local.get 0
+          i32.const 8
+          i32.add
+        end
+        local.set 0
+      end
+      local.get 2
+      i32.const 4
+      i32.and
+      if  ;; label = @2
+        block (result i32)  ;; label = @3
+          local.get 0
+          local.get 1
+          i32.load
+          i32.store
+          local.get 1
+          i32.const 4
+          i32.add
+          local.set 1
+          local.get 0
+          i32.const 4
+          i32.add
+        end
+        local.set 0
+      end
+      local.get 2
+      i32.const 2
+      i32.and
+      if  ;; label = @2
+        block (result i32)  ;; label = @3
+          local.get 0
+          local.get 1
+          i32.load16_u
+          i32.store16
+          local.get 1
+          i32.const 2
+          i32.add
+          local.set 1
+          local.get 0
+          i32.const 2
+          i32.add
+        end
+        local.set 0
+      end
+      local.get 2
+      i32.const 1
+      i32.and
+      if  ;; label = @2
+        local.get 0
+        local.get 1
+        i32.load8_u
+        i32.store8
+      end
+      return
+    end
+    local.get 2
+    i32.const 32
+    i32.ge_u
+    if  ;; label = @1
+      block  ;; label = @2
+        block  ;; label = @3
+          block  ;; label = @4
+            block  ;; label = @5
+              local.get 0
+              i32.const 3
+              i32.and
+              i32.const 1
+              i32.sub
+              br_table 0 (;@5;) 1 (;@4;) 2 (;@3;) 3 (;@2;)
+            end
+            local.get 1
+            i32.load
+            local.set 5
+            local.get 0
+            local.get 1
+            i32.load8_u
+            i32.store8
+            local.get 0
+            i32.const 1
+            i32.add
+            local.tee 0
+            local.get 1
+            i32.const 1
+            i32.add
+            local.tee 1
+            i32.load8_u
+            i32.store8
+            local.get 0
+            local.tee 4
+            i32.const 2
+            i32.add
+            local.set 0
+            local.get 1
+            local.tee 3
+            i32.const 2
+            i32.add
+            local.set 1
+            local.get 4
+            local.get 3
+            i32.load8_u offset=1
+            i32.store8 offset=1
+            local.get 2
+            i32.const 3
+            i32.sub
+            local.set 2
+            loop  ;; label = @5
+              local.get 2
+              i32.const 17
+              i32.ge_u
+              if  ;; label = @6
+                local.get 0
+                local.get 1
+                i32.load offset=1
+                local.tee 3
+                i32.const 8
+                i32.shl
+                local.get 5
+                i32.const 24
+                i32.shr_u
+                i32.or
+                i32.store
+                local.get 0
+                local.get 3
+                i32.const 24
+                i32.shr_u
+                local.get 1
+                i32.load offset=5
+                local.tee 3
+                i32.const 8
+                i32.shl
+                i32.or
+                i32.store offset=4
+                local.get 0
+                local.get 3
+                i32.const 24
+                i32.shr_u
+                local.get 1
+                i32.load offset=9
+                local.tee 3
+                i32.const 8
+                i32.shl
+                i32.or
+                i32.store offset=8
+                local.get 0
+                local.get 1
+                i32.load offset=13
+                local.tee 5
+                i32.const 8
+                i32.shl
+                local.get 3
+                i32.const 24
+                i32.shr_u
+                i32.or
+                i32.store offset=12
+                local.get 1
+                i32.const 16
+                i32.add
+                local.set 1
+                local.get 0
+                i32.const 16
+                i32.add
+                local.set 0
+                local.get 2
+                i32.const 16
+                i32.sub
+                local.set 2
+                br 1 (;@5;)
+              end
+            end
+            br 2 (;@2;)
+          end
+          local.get 1
+          i32.load
+          local.set 5
+          local.get 0
+          local.get 1
+          i32.load8_u
+          i32.store8
+          local.get 0
+          local.tee 4
+          i32.const 2
+          i32.add
+          local.set 0
+          local.get 1
+          local.tee 3
+          i32.const 2
+          i32.add
+          local.set 1
+          local.get 4
+          local.get 3
+          i32.load8_u offset=1
+          i32.store8 offset=1
+          local.get 2
+          i32.const 2
+          i32.sub
+          local.set 2
+          loop  ;; label = @4
+            local.get 2
+            i32.const 18
+            i32.ge_u
+            if  ;; label = @5
+              local.get 0
+              local.get 1
+              i32.load offset=2
+              local.tee 3
+              i32.const 16
+              i32.shl
+              local.get 5
+              i32.const 16
+              i32.shr_u
+              i32.or
+              i32.store
+              local.get 0
+              local.get 3
+              i32.const 16
+              i32.shr_u
+              local.get 1
+              i32.load offset=6
+              local.tee 3
+              i32.const 16
+              i32.shl
+              i32.or
+              i32.store offset=4
+              local.get 0
+              local.get 3
+              i32.const 16
+              i32.shr_u
+              local.get 1
+              i32.load offset=10
+              local.tee 3
+              i32.const 16
+              i32.shl
+              i32.or
+              i32.store offset=8
+              local.get 0
+              local.get 1
+              i32.load offset=14
+              local.tee 5
+              i32.const 16
+              i32.shl
+              local.get 3
+              i32.const 16
+              i32.shr_u
+              i32.or
+              i32.store offset=12
+              local.get 1
+              i32.const 16
+              i32.add
+              local.set 1
+              local.get 0
+              i32.const 16
+              i32.add
+              local.set 0
+              local.get 2
+              i32.const 16
+              i32.sub
+              local.set 2
+              br 1 (;@4;)
+            end
+          end
+          br 1 (;@2;)
+        end
+        local.get 1
+        i32.load
+        local.set 5
+        local.get 0
+        local.tee 3
+        i32.const 1
+        i32.add
+        local.set 0
+        local.get 1
+        local.tee 4
+        i32.const 1
+        i32.add
+        local.set 1
+        local.get 3
+        local.get 4
+        i32.load8_u
+        i32.store8
+        local.get 2
+        i32.const 1
+        i32.sub
+        local.set 2
+        loop  ;; label = @3
+          local.get 2
+          i32.const 19
+          i32.ge_u
+          if  ;; label = @4
+            local.get 0
+            local.get 1
+            i32.load offset=3
+            local.tee 3
+            i32.const 24
+            i32.shl
+            local.get 5
+            i32.const 8
+            i32.shr_u
+            i32.or
+            i32.store
+            local.get 0
+            local.get 3
+            i32.const 8
+            i32.shr_u
+            local.get 1
+            i32.load offset=7
+            local.tee 3
+            i32.const 24
+            i32.shl
+            i32.or
+            i32.store offset=4
+            local.get 0
+            local.get 3
+            i32.const 8
+            i32.shr_u
+            local.get 1
+            i32.load offset=11
+            local.tee 3
+            i32.const 24
+            i32.shl
+            i32.or
+            i32.store offset=8
+            local.get 0
+            local.get 1
+            i32.load offset=15
+            local.tee 5
+            i32.const 24
+            i32.shl
+            local.get 3
+            i32.const 8
+            i32.shr_u
+            i32.or
+            i32.store offset=12
+            local.get 1
+            i32.const 16
+            i32.add
+            local.set 1
+            local.get 0
+            i32.const 16
+            i32.add
+            local.set 0
+            local.get 2
+            i32.const 16
+            i32.sub
+            local.set 2
+            br 1 (;@3;)
+          end
+        end
+      end
+    end
+    local.get 2
     i32.const 16
-    i32.const 16
+    i32.and
+    if  ;; label = @1
+      local.get 0
+      local.get 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      local.tee 4
+      i32.const 2
+      i32.add
+      local.set 0
+      local.get 1
+      local.tee 3
+      i32.const 2
+      i32.add
+      local.set 1
+      local.get 4
+      local.get 3
+      i32.load8_u offset=1
+      i32.store8 offset=1
+    end
+    local.get 2
+    i32.const 8
+    i32.and
+    if  ;; label = @1
+      local.get 0
+      local.get 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      local.tee 4
+      i32.const 2
+      i32.add
+      local.set 0
+      local.get 1
+      local.tee 3
+      i32.const 2
+      i32.add
+      local.set 1
+      local.get 4
+      local.get 3
+      i32.load8_u offset=1
+      i32.store8 offset=1
+    end
+    local.get 2
+    i32.const 4
+    i32.and
+    if  ;; label = @1
+      local.get 0
+      local.get 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      i32.const 1
+      i32.add
+      local.tee 0
+      local.get 1
+      i32.const 1
+      i32.add
+      local.tee 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      local.tee 4
+      i32.const 2
+      i32.add
+      local.set 0
+      local.get 1
+      local.tee 3
+      i32.const 2
+      i32.add
+      local.set 1
+      local.get 4
+      local.get 3
+      i32.load8_u offset=1
+      i32.store8 offset=1
+    end
+    local.get 2
+    i32.const 2
+    i32.and
+    if  ;; label = @1
+      local.get 0
+      local.get 1
+      i32.load8_u
+      i32.store8
+      local.get 0
+      local.tee 4
+      i32.const 2
+      i32.add
+      local.set 0
+      local.get 1
+      local.tee 3
+      i32.const 2
+      i32.add
+      local.set 1
+      local.get 4
+      local.get 3
+      i32.load8_u offset=1
+      i32.store8 offset=1
+    end
+    local.get 2
+    i32.const 1
+    i32.and
+    if  ;; label = @1
+      local.get 0
+      local.get 1
+      i32.load8_u
+      i32.store8
+    end)
+  (func $~lib/memory/memory.copy (type 1) (param i32 i32 i32)
+    (local i32 i32)
+    block  ;; label = @1
+      local.get 2
+      local.set 4
+      local.get 0
+      local.get 1
+      i32.eq
+      br_if 0 (;@1;)
+      local.get 1
+      local.get 0
+      i32.sub
+      local.get 4
+      i32.sub
+      i32.const 0
+      local.get 4
+      i32.const 1
+      i32.shl
+      i32.sub
+      i32.le_u
+      if  ;; label = @2
+        local.get 0
+        local.get 1
+        local.get 4
+        call $~lib/util/memory/memcpy
+        br 1 (;@1;)
+      end
+      local.get 0
+      local.get 1
+      i32.lt_u
+      if  ;; label = @2
+        local.get 1
+        i32.const 7
+        i32.and
+        local.get 0
+        i32.const 7
+        i32.and
+        i32.eq
+        if  ;; label = @3
+          loop  ;; label = @4
+            local.get 0
+            i32.const 7
+            i32.and
+            if  ;; label = @5
+              local.get 4
+              i32.eqz
+              br_if 4 (;@1;)
+              local.get 4
+              i32.const 1
+              i32.sub
+              local.set 4
+              local.get 0
+              local.tee 2
+              i32.const 1
+              i32.add
+              local.set 0
+              local.get 1
+              local.tee 3
+              i32.const 1
+              i32.add
+              local.set 1
+              local.get 2
+              local.get 3
+              i32.load8_u
+              i32.store8
+              br 1 (;@4;)
+            end
+          end
+          loop  ;; label = @4
+            local.get 4
+            i32.const 8
+            i32.ge_u
+            if  ;; label = @5
+              local.get 0
+              local.get 1
+              i64.load
+              i64.store
+              local.get 4
+              i32.const 8
+              i32.sub
+              local.set 4
+              local.get 0
+              i32.const 8
+              i32.add
+              local.set 0
+              local.get 1
+              i32.const 8
+              i32.add
+              local.set 1
+              br 1 (;@4;)
+            end
+          end
+        end
+        loop  ;; label = @3
+          local.get 4
+          if  ;; label = @4
+            local.get 0
+            local.tee 2
+            i32.const 1
+            i32.add
+            local.set 0
+            local.get 1
+            local.tee 3
+            i32.const 1
+            i32.add
+            local.set 1
+            local.get 2
+            local.get 3
+            i32.load8_u
+            i32.store8
+            local.get 4
+            i32.const 1
+            i32.sub
+            local.set 4
+            br 1 (;@3;)
+          end
+        end
+      else
+        local.get 1
+        i32.const 7
+        i32.and
+        local.get 0
+        i32.const 7
+        i32.and
+        i32.eq
+        if  ;; label = @3
+          loop  ;; label = @4
+            local.get 0
+            local.get 4
+            i32.add
+            i32.const 7
+            i32.and
+            if  ;; label = @5
+              local.get 4
+              i32.eqz
+              br_if 4 (;@1;)
+              local.get 4
+              i32.const 1
+              i32.sub
+              local.tee 4
+              local.get 0
+              i32.add
+              local.get 1
+              local.get 4
+              i32.add
+              i32.load8_u
+              i32.store8
+              br 1 (;@4;)
+            end
+          end
+          loop  ;; label = @4
+            local.get 4
+            i32.const 8
+            i32.ge_u
+            if  ;; label = @5
+              local.get 4
+              i32.const 8
+              i32.sub
+              local.tee 4
+              local.get 0
+              i32.add
+              local.get 1
+              local.get 4
+              i32.add
+              i64.load
+              i64.store
+              br 1 (;@4;)
+            end
+          end
+        end
+        loop  ;; label = @3
+          local.get 4
+          if  ;; label = @4
+            local.get 4
+            i32.const 1
+            i32.sub
+            local.tee 4
+            local.get 0
+            i32.add
+            local.get 1
+            local.get 4
+            i32.add
+            i32.load8_u
+            i32.store8
+            br 1 (;@3;)
+          end
+        end
+      end
+    end)
+  (func $src/utils/safe-call-result/SafeCallResult.fromNumber (type 0) (param i32) (result i32)
+    (local i32 i32)
+    local.get 0
+    i32.load
+    i32.eqz
+    if  ;; label = @1
+      i32.const 0
+      return
+    end
+    local.get 0
+    i32.load
+    i32.eqz
+    if  ;; label = @1
+      i32.const 2604
+      i32.load
+      i32.const 1
+      i32.shr_u
+      i32.const 1
+      i32.shl
+      local.tee 1
+      i32.const 2700
+      i32.load
+      i32.const 1
+      i32.shr_u
+      i32.const 1
+      i32.shl
+      local.tee 2
+      i32.add
+      local.tee 0
+      if  ;; label = @2
+        local.get 0
+        i32.const 1
+        call $~lib/rt/stub/__new
+        local.tee 0
+        i32.const 2608
+        local.get 1
+        call $~lib/memory/memory.copy
+        local.get 0
+        local.get 1
+        i32.add
+        i32.const 2704
+        local.get 2
+        call $~lib/memory/memory.copy
+      else
+        i32.const 2864
+        local.set 0
+      end
+      local.get 0
+      i32.const 2896
+      i32.const 722
+      i32.const 7
+      call $~lib/builtins/abort
+      unreachable
+    end
+    local.get 0
+    i32.load
+    i32.load)
+  (func $start:tests/utils/safe-call-result.test~anonymous|0 (type 2)
+    (local i32)
+    i32.const 4
+    i32.const 15
     call $~lib/rt/stub/__new
     local.tee 0
-    i32.const 3
+    i32.const 0
     i32.store
     local.get 0
-    local.get 4
-    i64.store offset=8
-    local.get 2
-    i64.extend_i32_u
-    local.set 4
-    i32.const 16
+    i32.const 0
+    i32.store
+    local.get 0
+    call $src/utils/safe-call-result/SafeCallResult.fromNumber
+    if  ;; label = @1
+      i32.const 0
+      i32.const 3008
+      i32.const 10
+      i32.const 3
+      call $~lib/builtins/abort
+      unreachable
+    end)
+  (func $start:tests/utils/safe-call-result.test~anonymous|1 (type 2)
+    (local i32 i32)
+    i32.const 4
+    i32.const 15
+    call $~lib/rt/stub/__new
+    local.tee 0
+    i32.const 0
+    i32.store
+    local.get 0
+    i32.const 0
+    i32.store
+    i32.const 4
     i32.const 16
     call $~lib/rt/stub/__new
     local.tee 1
-    i32.const 3
+    i32.const 0
     i32.store
     local.get 1
-    local.get 4
-    i64.store offset=8
+    i32.const 124
+    i32.store
     local.get 0
     local.get 1
-    call $~lib/matchstick-as/assert/_assert.equals
-    i32.eqz
+    i32.store
+    local.get 0
+    call $src/utils/safe-call-result/SafeCallResult.fromNumber
+    i32.const 124
+    i32.ne
     if  ;; label = @1
-      i32.const 3280
-      i32.const 3056
-      i32.const 105
-      i32.const 7
+      i32.const 0
+      i32.const 3008
+      i32.const 19
+      i32.const 3
       call $~lib/builtins/abort
       unreachable
     end)
@@ -2146,7 +2777,7 @@
     end
     i32.const 1
     global.set $~started
-    i32.const 3500
+    i32.const 3452
     global.set $~lib/rt/stub/offset
     i32.const 0
     call $~lib/rt/stub/__alloc
@@ -2216,26 +2847,16 @@
     i32.const 1904
     call $~lib/@graphprotocol/graph-ts/common/conversion/typeConversion.stringToH160
     drop
-    i32.const 1
     call $~lib/@graphprotocol/graph-ts/common/collections/ByteArray.fromI32
-    drop
-    i32.const 1
     call $~lib/@graphprotocol/graph-ts/common/collections/ByteArray.fromI32
-    drop
     i32.const 2432
-    call $~lib/@graphprotocol/graph-ts/common/numbers/bigDecimal.fromString
-    global.set $src/utils/constants/ZERO_BIG_DECIMAL
     i32.const 0
-    call $~lib/@graphprotocol/graph-ts/common/collections/ByteArray.fromI32
-    global.set $src/utils/constants/ZERO_BIG_INT
-    i32.const 2560
-    i32.const 0
-    i32.const 3136
+    i32.const 3104
     i32.load
     call $~lib/matchstick-as/index/_registerTest
-    i32.const 3168
+    i32.const 3136
     i32.const 0
-    i32.const 3376
+    i32.const 3328
     i32.load
     call $~lib/matchstick-as/index/_registerTest
     i32.const 0
@@ -2244,8 +2865,6 @@
   (table $0 3 funcref)
   (memory (;0;) 1)
   (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
-  (global $src/utils/constants/ZERO_BIG_DECIMAL (mut i32) (i32.const 0))
-  (global $src/utils/constants/ZERO_BIG_INT (mut i32) (i32.const 0))
   (global $node_modules/@graphprotocol/graph-ts/global/global/TypeId.String i32 (i32.const 0))
   (global $node_modules/@graphprotocol/graph-ts/global/global/TypeId.ArrayBuffer i32 (i32.const 1))
   (global $node_modules/@graphprotocol/graph-ts/global/global/TypeId.Int8Array i32 (i32.const 2))
@@ -2414,179 +3033,179 @@
   (global $node_modules/@graphprotocol/graph-ts/global/global/TypeId.StarknetEvent i32 (i32.const 3503))
   (global $node_modules/@graphprotocol/graph-ts/global/global/TypeId.StarknetArrayBytes i32 (i32.const 3504))
   (global $~started (mut i32) (i32.const 0))
-  (export "TypeId.String" (global 3))
-  (export "TypeId.ArrayBuffer" (global 4))
-  (export "TypeId.Int8Array" (global 5))
-  (export "TypeId.Int16Array" (global 6))
-  (export "TypeId.Int32Array" (global 7))
-  (export "TypeId.Int64Array" (global 8))
-  (export "TypeId.Uint8Array" (global 9))
-  (export "TypeId.Uint16Array" (global 10))
-  (export "TypeId.Uint32Array" (global 11))
-  (export "TypeId.Uint64Array" (global 12))
-  (export "TypeId.Float32Array" (global 13))
-  (export "TypeId.Float64Array" (global 14))
-  (export "TypeId.BigDecimal" (global 15))
-  (export "TypeId.ArrayBool" (global 16))
-  (export "TypeId.ArrayUint8Array" (global 17))
-  (export "TypeId.ArrayEthereumValue" (global 18))
-  (export "TypeId.ArrayStoreValue" (global 19))
-  (export "TypeId.ArrayJsonValue" (global 20))
-  (export "TypeId.ArrayString" (global 21))
-  (export "TypeId.ArrayEventParam" (global 22))
-  (export "TypeId.ArrayTypedMapEntryStringJsonValue" (global 23))
-  (export "TypeId.ArrayTypedMapEntryStringStoreValue" (global 24))
-  (export "TypeId.SmartContractCall" (global 25))
-  (export "TypeId.EventParam" (global 26))
-  (export "TypeId.EthereumTransaction" (global 27))
-  (export "TypeId.EthereumBlock" (global 28))
-  (export "TypeId.EthereumCall" (global 29))
-  (export "TypeId.WrappedTypedMapStringJsonValue" (global 30))
-  (export "TypeId.WrappedBool" (global 31))
-  (export "TypeId.WrappedJsonValue" (global 32))
-  (export "TypeId.EthereumValue" (global 33))
-  (export "TypeId.StoreValue" (global 34))
-  (export "TypeId.JsonValue" (global 35))
-  (export "TypeId.EthereumEvent" (global 36))
-  (export "TypeId.TypedMapEntryStringStoreValue" (global 37))
-  (export "TypeId.TypedMapEntryStringJsonValue" (global 38))
-  (export "TypeId.TypedMapStringStoreValue" (global 39))
-  (export "TypeId.TypedMapStringJsonValue" (global 40))
-  (export "TypeId.TypedMapStringTypedMapStringJsonValue" (global 41))
-  (export "TypeId.ResultTypedMapStringJsonValueBool" (global 42))
-  (export "TypeId.ResultJsonValueBool" (global 43))
-  (export "TypeId.ArrayU8" (global 44))
-  (export "TypeId.ArrayU16" (global 45))
-  (export "TypeId.ArrayU32" (global 46))
-  (export "TypeId.ArrayU64" (global 47))
-  (export "TypeId.ArrayI8" (global 48))
-  (export "TypeId.ArrayI16" (global 49))
-  (export "TypeId.ArrayI32" (global 50))
-  (export "TypeId.ArrayI64" (global 51))
-  (export "TypeId.ArrayF32" (global 52))
-  (export "TypeId.ArrayF64" (global 53))
-  (export "TypeId.ArrayBigDecimal" (global 54))
-  (export "TypeId.NearArrayDataReceiver" (global 55))
-  (export "TypeId.NearArrayCryptoHash" (global 56))
-  (export "TypeId.NearArrayActionValue" (global 57))
-  (export "TypeId.NearMerklePath" (global 58))
-  (export "TypeId.NearArrayValidatorStake" (global 59))
-  (export "TypeId.NearArraySlashedValidator" (global 60))
-  (export "TypeId.NearArraySignature" (global 61))
-  (export "TypeId.NearArrayChunkHeader" (global 62))
-  (export "TypeId.NearAccessKeyPermissionValue" (global 63))
-  (export "TypeId.NearActionValue" (global 64))
-  (export "TypeId.NearDirection" (global 65))
-  (export "TypeId.NearPublicKey" (global 66))
-  (export "TypeId.NearSignature" (global 67))
-  (export "TypeId.NearFunctionCallPermission" (global 68))
-  (export "TypeId.NearFullAccessPermission" (global 69))
-  (export "TypeId.NearAccessKey" (global 70))
-  (export "TypeId.NearDataReceiver" (global 71))
-  (export "TypeId.NearCreateAccountAction" (global 72))
-  (export "TypeId.NearDeployContractAction" (global 73))
-  (export "TypeId.NearFunctionCallAction" (global 74))
-  (export "TypeId.NearTransferAction" (global 75))
-  (export "TypeId.NearStakeAction" (global 76))
-  (export "TypeId.NearAddKeyAction" (global 77))
-  (export "TypeId.NearDeleteKeyAction" (global 78))
-  (export "TypeId.NearDeleteAccountAction" (global 79))
-  (export "TypeId.NearActionReceipt" (global 80))
-  (export "TypeId.NearSuccessStatus" (global 81))
-  (export "TypeId.NearMerklePathItem" (global 82))
-  (export "TypeId.NearExecutionOutcome" (global 83))
-  (export "TypeId.NearSlashedValidator" (global 84))
-  (export "TypeId.NearBlockHeader" (global 85))
-  (export "TypeId.NearValidatorStake" (global 86))
-  (export "TypeId.NearChunkHeader" (global 87))
-  (export "TypeId.NearBlock" (global 88))
-  (export "TypeId.NearReceiptWithOutcome" (global 89))
-  (export "TypeId.TransactionReceipt" (global 90))
-  (export "TypeId.Log" (global 91))
-  (export "TypeId.ArrayH256" (global 92))
-  (export "TypeId.ArrayLog" (global 93))
-  (export "TypeId.CosmosAny" (global 94))
-  (export "TypeId.CosmosAnyArray" (global 95))
-  (export "TypeId.CosmosBytesArray" (global 96))
-  (export "TypeId.CosmosCoinArray" (global 97))
-  (export "TypeId.CosmosCommitSigArray" (global 98))
-  (export "TypeId.CosmosEventArray" (global 99))
-  (export "TypeId.CosmosEventAttributeArray" (global 100))
-  (export "TypeId.CosmosEvidenceArray" (global 101))
-  (export "TypeId.CosmosModeInfoArray" (global 102))
-  (export "TypeId.CosmosSignerInfoArray" (global 103))
-  (export "TypeId.CosmosTxResultArray" (global 104))
-  (export "TypeId.CosmosValidatorArray" (global 105))
-  (export "TypeId.CosmosValidatorUpdateArray" (global 106))
-  (export "TypeId.CosmosAuthInfo" (global 107))
-  (export "TypeId.CosmosBlock" (global 108))
-  (export "TypeId.CosmosBlockId" (global 109))
-  (export "TypeId.CosmosBlockIdFlagEnum" (global 110))
-  (export "TypeId.CosmosBlockParams" (global 111))
-  (export "TypeId.CosmosCoin" (global 112))
-  (export "TypeId.CosmosCommit" (global 113))
-  (export "TypeId.CosmosCommitSig" (global 114))
-  (export "TypeId.CosmosCompactBitArray" (global 115))
-  (export "TypeId.CosmosConsensus" (global 116))
-  (export "TypeId.CosmosConsensusParams" (global 117))
-  (export "TypeId.CosmosDuplicateVoteEvidence" (global 118))
-  (export "TypeId.CosmosDuration" (global 119))
-  (export "TypeId.CosmosEvent" (global 120))
-  (export "TypeId.CosmosEventAttribute" (global 121))
-  (export "TypeId.CosmosEventData" (global 122))
-  (export "TypeId.CosmosEventVote" (global 123))
-  (export "TypeId.CosmosEvidence" (global 124))
-  (export "TypeId.CosmosEvidenceList" (global 125))
-  (export "TypeId.CosmosEvidenceParams" (global 126))
-  (export "TypeId.CosmosFee" (global 127))
-  (export "TypeId.CosmosHeader" (global 128))
-  (export "TypeId.CosmosHeaderOnlyBlock" (global 129))
-  (export "TypeId.CosmosLightBlock" (global 130))
-  (export "TypeId.CosmosLightClientAttackEvidence" (global 131))
-  (export "TypeId.CosmosModeInfo" (global 132))
-  (export "TypeId.CosmosModeInfoMulti" (global 133))
-  (export "TypeId.CosmosModeInfoSingle" (global 134))
-  (export "TypeId.CosmosPartSetHeader" (global 135))
-  (export "TypeId.CosmosPublicKey" (global 136))
-  (export "TypeId.CosmosResponseBeginBlock" (global 137))
-  (export "TypeId.CosmosResponseDeliverTx" (global 138))
-  (export "TypeId.CosmosResponseEndBlock" (global 139))
-  (export "TypeId.CosmosSignModeEnum" (global 140))
-  (export "TypeId.CosmosSignedHeader" (global 141))
-  (export "TypeId.CosmosSignedMsgTypeEnum" (global 142))
-  (export "TypeId.CosmosSignerInfo" (global 143))
-  (export "TypeId.CosmosTimestamp" (global 144))
-  (export "TypeId.CosmosTip" (global 145))
-  (export "TypeId.CosmosTransactionData" (global 146))
-  (export "TypeId.CosmosTx" (global 147))
-  (export "TypeId.CosmosTxBody" (global 148))
-  (export "TypeId.CosmosTxResult" (global 149))
-  (export "TypeId.CosmosValidator" (global 150))
-  (export "TypeId.CosmosValidatorParams" (global 151))
-  (export "TypeId.CosmosValidatorSet" (global 152))
-  (export "TypeId.CosmosValidatorSetUpdates" (global 153))
-  (export "TypeId.CosmosValidatorUpdate" (global 154))
-  (export "TypeId.CosmosVersionParams" (global 155))
-  (export "TypeId.CosmosMessageData" (global 156))
-  (export "TypeId.CosmosTransactionContext" (global 157))
-  (export "TypeId.ArweaveBlock" (global 158))
-  (export "TypeId.ArweaveProofOfAccess" (global 159))
-  (export "TypeId.ArweaveTag" (global 160))
-  (export "TypeId.ArweaveTagArray" (global 161))
-  (export "TypeId.ArweaveTransaction" (global 162))
-  (export "TypeId.ArweaveTransactionArray" (global 163))
-  (export "TypeId.ArweaveTransactionWithBlockPtr" (global 164))
-  (export "TypeId.StarknetBlock" (global 165))
-  (export "TypeId.StarknetTransaction" (global 166))
-  (export "TypeId.StarknetTransactionTypeEnum" (global 167))
-  (export "TypeId.StarknetEvent" (global 168))
-  (export "TypeId.StarknetArrayBytes" (global 169))
+  (export "TypeId.String" (global 1))
+  (export "TypeId.ArrayBuffer" (global 2))
+  (export "TypeId.Int8Array" (global 3))
+  (export "TypeId.Int16Array" (global 4))
+  (export "TypeId.Int32Array" (global 5))
+  (export "TypeId.Int64Array" (global 6))
+  (export "TypeId.Uint8Array" (global 7))
+  (export "TypeId.Uint16Array" (global 8))
+  (export "TypeId.Uint32Array" (global 9))
+  (export "TypeId.Uint64Array" (global 10))
+  (export "TypeId.Float32Array" (global 11))
+  (export "TypeId.Float64Array" (global 12))
+  (export "TypeId.BigDecimal" (global 13))
+  (export "TypeId.ArrayBool" (global 14))
+  (export "TypeId.ArrayUint8Array" (global 15))
+  (export "TypeId.ArrayEthereumValue" (global 16))
+  (export "TypeId.ArrayStoreValue" (global 17))
+  (export "TypeId.ArrayJsonValue" (global 18))
+  (export "TypeId.ArrayString" (global 19))
+  (export "TypeId.ArrayEventParam" (global 20))
+  (export "TypeId.ArrayTypedMapEntryStringJsonValue" (global 21))
+  (export "TypeId.ArrayTypedMapEntryStringStoreValue" (global 22))
+  (export "TypeId.SmartContractCall" (global 23))
+  (export "TypeId.EventParam" (global 24))
+  (export "TypeId.EthereumTransaction" (global 25))
+  (export "TypeId.EthereumBlock" (global 26))
+  (export "TypeId.EthereumCall" (global 27))
+  (export "TypeId.WrappedTypedMapStringJsonValue" (global 28))
+  (export "TypeId.WrappedBool" (global 29))
+  (export "TypeId.WrappedJsonValue" (global 30))
+  (export "TypeId.EthereumValue" (global 31))
+  (export "TypeId.StoreValue" (global 32))
+  (export "TypeId.JsonValue" (global 33))
+  (export "TypeId.EthereumEvent" (global 34))
+  (export "TypeId.TypedMapEntryStringStoreValue" (global 35))
+  (export "TypeId.TypedMapEntryStringJsonValue" (global 36))
+  (export "TypeId.TypedMapStringStoreValue" (global 37))
+  (export "TypeId.TypedMapStringJsonValue" (global 38))
+  (export "TypeId.TypedMapStringTypedMapStringJsonValue" (global 39))
+  (export "TypeId.ResultTypedMapStringJsonValueBool" (global 40))
+  (export "TypeId.ResultJsonValueBool" (global 41))
+  (export "TypeId.ArrayU8" (global 42))
+  (export "TypeId.ArrayU16" (global 43))
+  (export "TypeId.ArrayU32" (global 44))
+  (export "TypeId.ArrayU64" (global 45))
+  (export "TypeId.ArrayI8" (global 46))
+  (export "TypeId.ArrayI16" (global 47))
+  (export "TypeId.ArrayI32" (global 48))
+  (export "TypeId.ArrayI64" (global 49))
+  (export "TypeId.ArrayF32" (global 50))
+  (export "TypeId.ArrayF64" (global 51))
+  (export "TypeId.ArrayBigDecimal" (global 52))
+  (export "TypeId.NearArrayDataReceiver" (global 53))
+  (export "TypeId.NearArrayCryptoHash" (global 54))
+  (export "TypeId.NearArrayActionValue" (global 55))
+  (export "TypeId.NearMerklePath" (global 56))
+  (export "TypeId.NearArrayValidatorStake" (global 57))
+  (export "TypeId.NearArraySlashedValidator" (global 58))
+  (export "TypeId.NearArraySignature" (global 59))
+  (export "TypeId.NearArrayChunkHeader" (global 60))
+  (export "TypeId.NearAccessKeyPermissionValue" (global 61))
+  (export "TypeId.NearActionValue" (global 62))
+  (export "TypeId.NearDirection" (global 63))
+  (export "TypeId.NearPublicKey" (global 64))
+  (export "TypeId.NearSignature" (global 65))
+  (export "TypeId.NearFunctionCallPermission" (global 66))
+  (export "TypeId.NearFullAccessPermission" (global 67))
+  (export "TypeId.NearAccessKey" (global 68))
+  (export "TypeId.NearDataReceiver" (global 69))
+  (export "TypeId.NearCreateAccountAction" (global 70))
+  (export "TypeId.NearDeployContractAction" (global 71))
+  (export "TypeId.NearFunctionCallAction" (global 72))
+  (export "TypeId.NearTransferAction" (global 73))
+  (export "TypeId.NearStakeAction" (global 74))
+  (export "TypeId.NearAddKeyAction" (global 75))
+  (export "TypeId.NearDeleteKeyAction" (global 76))
+  (export "TypeId.NearDeleteAccountAction" (global 77))
+  (export "TypeId.NearActionReceipt" (global 78))
+  (export "TypeId.NearSuccessStatus" (global 79))
+  (export "TypeId.NearMerklePathItem" (global 80))
+  (export "TypeId.NearExecutionOutcome" (global 81))
+  (export "TypeId.NearSlashedValidator" (global 82))
+  (export "TypeId.NearBlockHeader" (global 83))
+  (export "TypeId.NearValidatorStake" (global 84))
+  (export "TypeId.NearChunkHeader" (global 85))
+  (export "TypeId.NearBlock" (global 86))
+  (export "TypeId.NearReceiptWithOutcome" (global 87))
+  (export "TypeId.TransactionReceipt" (global 88))
+  (export "TypeId.Log" (global 89))
+  (export "TypeId.ArrayH256" (global 90))
+  (export "TypeId.ArrayLog" (global 91))
+  (export "TypeId.CosmosAny" (global 92))
+  (export "TypeId.CosmosAnyArray" (global 93))
+  (export "TypeId.CosmosBytesArray" (global 94))
+  (export "TypeId.CosmosCoinArray" (global 95))
+  (export "TypeId.CosmosCommitSigArray" (global 96))
+  (export "TypeId.CosmosEventArray" (global 97))
+  (export "TypeId.CosmosEventAttributeArray" (global 98))
+  (export "TypeId.CosmosEvidenceArray" (global 99))
+  (export "TypeId.CosmosModeInfoArray" (global 100))
+  (export "TypeId.CosmosSignerInfoArray" (global 101))
+  (export "TypeId.CosmosTxResultArray" (global 102))
+  (export "TypeId.CosmosValidatorArray" (global 103))
+  (export "TypeId.CosmosValidatorUpdateArray" (global 104))
+  (export "TypeId.CosmosAuthInfo" (global 105))
+  (export "TypeId.CosmosBlock" (global 106))
+  (export "TypeId.CosmosBlockId" (global 107))
+  (export "TypeId.CosmosBlockIdFlagEnum" (global 108))
+  (export "TypeId.CosmosBlockParams" (global 109))
+  (export "TypeId.CosmosCoin" (global 110))
+  (export "TypeId.CosmosCommit" (global 111))
+  (export "TypeId.CosmosCommitSig" (global 112))
+  (export "TypeId.CosmosCompactBitArray" (global 113))
+  (export "TypeId.CosmosConsensus" (global 114))
+  (export "TypeId.CosmosConsensusParams" (global 115))
+  (export "TypeId.CosmosDuplicateVoteEvidence" (global 116))
+  (export "TypeId.CosmosDuration" (global 117))
+  (export "TypeId.CosmosEvent" (global 118))
+  (export "TypeId.CosmosEventAttribute" (global 119))
+  (export "TypeId.CosmosEventData" (global 120))
+  (export "TypeId.CosmosEventVote" (global 121))
+  (export "TypeId.CosmosEvidence" (global 122))
+  (export "TypeId.CosmosEvidenceList" (global 123))
+  (export "TypeId.CosmosEvidenceParams" (global 124))
+  (export "TypeId.CosmosFee" (global 125))
+  (export "TypeId.CosmosHeader" (global 126))
+  (export "TypeId.CosmosHeaderOnlyBlock" (global 127))
+  (export "TypeId.CosmosLightBlock" (global 128))
+  (export "TypeId.CosmosLightClientAttackEvidence" (global 129))
+  (export "TypeId.CosmosModeInfo" (global 130))
+  (export "TypeId.CosmosModeInfoMulti" (global 131))
+  (export "TypeId.CosmosModeInfoSingle" (global 132))
+  (export "TypeId.CosmosPartSetHeader" (global 133))
+  (export "TypeId.CosmosPublicKey" (global 134))
+  (export "TypeId.CosmosResponseBeginBlock" (global 135))
+  (export "TypeId.CosmosResponseDeliverTx" (global 136))
+  (export "TypeId.CosmosResponseEndBlock" (global 137))
+  (export "TypeId.CosmosSignModeEnum" (global 138))
+  (export "TypeId.CosmosSignedHeader" (global 139))
+  (export "TypeId.CosmosSignedMsgTypeEnum" (global 140))
+  (export "TypeId.CosmosSignerInfo" (global 141))
+  (export "TypeId.CosmosTimestamp" (global 142))
+  (export "TypeId.CosmosTip" (global 143))
+  (export "TypeId.CosmosTransactionData" (global 144))
+  (export "TypeId.CosmosTx" (global 145))
+  (export "TypeId.CosmosTxBody" (global 146))
+  (export "TypeId.CosmosTxResult" (global 147))
+  (export "TypeId.CosmosValidator" (global 148))
+  (export "TypeId.CosmosValidatorParams" (global 149))
+  (export "TypeId.CosmosValidatorSet" (global 150))
+  (export "TypeId.CosmosValidatorSetUpdates" (global 151))
+  (export "TypeId.CosmosValidatorUpdate" (global 152))
+  (export "TypeId.CosmosVersionParams" (global 153))
+  (export "TypeId.CosmosMessageData" (global 154))
+  (export "TypeId.CosmosTransactionContext" (global 155))
+  (export "TypeId.ArweaveBlock" (global 156))
+  (export "TypeId.ArweaveProofOfAccess" (global 157))
+  (export "TypeId.ArweaveTag" (global 158))
+  (export "TypeId.ArweaveTagArray" (global 159))
+  (export "TypeId.ArweaveTransaction" (global 160))
+  (export "TypeId.ArweaveTransactionArray" (global 161))
+  (export "TypeId.ArweaveTransactionWithBlockPtr" (global 162))
+  (export "TypeId.StarknetBlock" (global 163))
+  (export "TypeId.StarknetTransaction" (global 164))
+  (export "TypeId.StarknetTransactionTypeEnum" (global 165))
+  (export "TypeId.StarknetEvent" (global 166))
+  (export "TypeId.StarknetArrayBytes" (global 167))
   (export "id_of_type" (func $node_modules/@graphprotocol/graph-ts/global/global/id_of_type))
   (export "allocate" (func $node_modules/@graphprotocol/graph-ts/global/global/allocate))
   (export "memory" (memory 0))
   (export "table" (table 0))
   (export "_start" (func $~start))
-  (elem $0 (i32.const 1) func $start:tests/utils/constants.test~anonymous|0 $start:tests/utils/constants.test~anonymous|1)
+  (elem $0 (i32.const 1) func $start:tests/utils/safe-call-result.test~anonymous|0 $start:tests/utils/safe-call-result.test~anonymous|1)
   (data (;0;) (i32.const 1036) "<")
   (data (;1;) (i32.const 1048) "\01\00\00\00(\00\00\00A\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
   (data (;2;) (i32.const 1100) "<")
@@ -2635,31 +3254,25 @@
   (data (;45;) (i32.const 2200) "\01\00\00\00 \00\00\00d\00e\00f\00a\00u\00l\00t\00_\00l\00o\00g\00_\00t\00y\00p\00e")
   (data (;46;) (i32.const 2252) "\9c")
   (data (;47;) (i32.const 2264) "\01\00\00\00\86\00\00\00Y\00o\00u\00 \00c\00a\00n\00'\00t\00 \00m\00o\00d\00i\00f\00y\00 \00a\00 \00M\00o\00c\00k\00e\00d\00F\00u\00n\00c\00t\00i\00o\00n\00 \00i\00n\00s\00t\00a\00n\00c\00e\00 \00a\00f\00t\00e\00r\00 \00i\00t\00 \00h\00a\00s\00 \00b\00e\00e\00n\00 \00s\00a\00v\00e\00d\00.")
-  (data (;48;) (i32.const 2412) "\1c")
-  (data (;49;) (i32.const 2424) "\01\00\00\00\02\00\00\000")
-  (data (;50;) (i32.const 2444) ",")
-  (data (;51;) (i32.const 2456) "\01\00\00\00\18\00\00\00p\00a\00n\00c\00a\00k\00e\00-\00s\00w\00a\00p")
-  (data (;52;) (i32.const 2492) ",")
-  (data (;53;) (i32.const 2504) "\01\00\00\00\0e\00\00\00u\00n\00i\00s\00w\00a\00p")
-  (data (;54;) (i32.const 2540) "|")
-  (data (;55;) (i32.const 2552) "\01\00\00\00d\00\00\00Z\00e\00r\00o\00 \00b\00i\00g\00 \00d\00e\00c\00i\00m\00a\00l\00 \00s\00h\00o\00u\00l\00d\00 \00r\00e\00t\00u\00r\00n\00 \00z\00e\00r\00o\00 \00a\00s\00 \00B\00i\00g\00 \00D\00e\00c\00i\00m\00a\00l")
-  (data (;56;) (i32.const 2668) "\9c")
-  (data (;57;) (i32.const 2680) "\01\00\00\00~\00\00\00F\00a\00i\00l\00e\00d\00 \00t\00o\00 \00s\00u\00b\00t\00r\00a\00c\00t\00 \00B\00i\00g\00D\00e\00c\00i\00m\00a\00l\00s\00 \00b\00e\00c\00a\00u\00s\00e\00 \00l\00e\00f\00t\00 \00h\00a\00n\00d\00 \00s\00i\00d\00e\00 \00i\00s\00 \00'\00n\00u\00l\00l\00'")
-  (data (;58;) (i32.const 2828) "l")
-  (data (;59;) (i32.const 2840) "\01\00\00\00\5c\00\00\00~\00l\00i\00b\00/\00@\00g\00r\00a\00p\00h\00p\00r\00o\00t\00o\00c\00o\00l\00/\00g\00r\00a\00p\00h\00-\00t\00s\00/\00c\00o\00m\00m\00o\00n\00/\00n\00u\00m\00b\00e\00r\00s\00.\00t\00s")
-  (data (;60;) (i32.const 2940) "\5c")
-  (data (;61;) (i32.const 2952) "\01\00\00\00B\00\00\00a\00s\00s\00e\00r\00t\00.\00a\00s\00s\00e\00r\00t\00T\00r\00u\00e\00 \00A\00s\00s\00e\00r\00t\00i\00o\00n\00 \00E\00r\00r\00o\00r")
-  (data (;62;) (i32.const 3036) "L")
-  (data (;63;) (i32.const 3048) "\01\00\00\008\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00c\00h\00s\00t\00i\00c\00k\00-\00a\00s\00/\00a\00s\00s\00e\00r\00t\00.\00t\00s")
-  (data (;64;) (i32.const 3116) "\1c")
-  (data (;65;) (i32.const 3128) "\11\00\00\00\08\00\00\00\01")
-  (data (;66;) (i32.const 3148) "l")
-  (data (;67;) (i32.const 3160) "\01\00\00\00T\00\00\00Z\00e\00r\00o\00 \00b\00i\00g\00 \00i\00n\00t\00 \00s\00h\00o\00u\00l\00d\00 \00r\00e\00t\00u\00r\00n\00 \00z\00e\00r\00o\00 \00a\00s\00 \00b\00i\00g\00 \00i\00n\00t")
-  (data (;68;) (i32.const 3260) "\5c")
-  (data (;69;) (i32.const 3272) "\01\00\00\00F\00\00\00a\00s\00s\00e\00r\00t\00.\00b\00i\00g\00I\00n\00t\00E\00q\00u\00a\00l\00s\00 \00A\00s\00s\00e\00r\00t\00i\00o\00n\00 \00E\00r\00r\00o\00r")
-  (data (;70;) (i32.const 3356) "\1c")
-  (data (;71;) (i32.const 3368) "\11\00\00\00\08\00\00\00\02")
-  (data (;72;) (i32.const 3388) "<")
-  (data (;73;) (i32.const 3404) "(\00\00\00\a0\04\00\00\c0\04\00\00\e0\04\00\00\10\05\00\000\05\00\00P\05\00\00p\05\00\00\90\05\00\00\b0\05\00\00\d0\05")
-  (data (;74;) (i32.const 3452) ",")
-  (data (;75;) (i32.const 3464) "\03\00\00\00\10\00\00\00P\0d\00\00P\0d\00\00(\00\00\00\0a"))
+  (data (;48;) (i32.const 2412) "\ac")
+  (data (;49;) (i32.const 2424) "\01\00\00\00\8e\00\00\00W\00h\00e\00n\00 \00p\00a\00s\00s\00s\00i\00n\00g\00 \00a\00 \00r\00e\00v\00e\00r\00t\00e\00d\00 \00c\00a\00l\00l\00 \00r\00e\00s\00u\00l\00t\00 \00t\00o\00 \00`\00f\00r\00o\00m\00N\00u\00m\00b\00e\00r\00`\00 \00i\00t\00 \00s\00h\00o\00u\00l\00d\00 \00r\00e\00t\00u\00r\00n\00 \000")
+  (data (;50;) (i32.const 2588) "\5c")
+  (data (;51;) (i32.const 2600) "\01\00\00\00F\00\00\00a\00c\00c\00e\00s\00s\00e\00d\00 \00v\00a\00l\00u\00e\00 \00o\00f\00 \00a\00 \00r\00e\00v\00e\00r\00t\00e\00d\00 \00c\00a\00l\00l\00,\00 ")
+  (data (;52;) (i32.const 2684) "\9c")
+  (data (;53;) (i32.const 2696) "\01\00\00\00\88\00\00\00p\00l\00e\00a\00s\00e\00 \00c\00h\00e\00c\00k\00 \00t\00h\00e\00 \00`\00r\00e\00v\00e\00r\00t\00e\00d\00`\00 \00f\00i\00e\00l\00d\00 \00b\00e\00f\00o\00r\00e\00 \00a\00c\00c\00e\00s\00s\00i\00n\00g\00 \00t\00h\00e\00 \00`\00v\00a\00l\00u\00e\00`\00 \00f\00i\00e\00l\00d")
+  (data (;54;) (i32.const 2844) "\1c")
+  (data (;55;) (i32.const 2856) "\01")
+  (data (;56;) (i32.const 2876) "l")
+  (data (;57;) (i32.const 2888) "\01\00\00\00\5c\00\00\00~\00l\00i\00b\00/\00@\00g\00r\00a\00p\00h\00p\00r\00o\00t\00o\00c\00o\00l\00/\00g\00r\00a\00p\00h\00-\00t\00s\00/\00c\00h\00a\00i\00n\00/\00e\00t\00h\00e\00r\00e\00u\00m\00.\00t\00s")
+  (data (;58;) (i32.const 2988) "\5c")
+  (data (;59;) (i32.const 3000) "\01\00\00\00H\00\00\00t\00e\00s\00t\00s\00/\00u\00t\00i\00l\00s\00/\00s\00a\00f\00e\00-\00c\00a\00l\00l\00-\00r\00e\00s\00u\00l\00t\00.\00t\00e\00s\00t\00.\00t\00s")
+  (data (;60;) (i32.const 3084) "\1c")
+  (data (;61;) (i32.const 3096) "\11\00\00\00\08\00\00\00\01")
+  (data (;62;) (i32.const 3116) "\bc")
+  (data (;63;) (i32.const 3128) "\01\00\00\00\a6\00\00\00W\00h\00e\00n\00 \00p\00a\00s\00s\00s\00i\00n\00g\00 \00a\00 \00n\00o\00n\00-\00r\00e\00v\00e\00r\00t\00e\00d\00 \00c\00a\00l\00l\00 \00r\00e\00s\00u\00l\00t\00 \00t\00o\00 \00`\00f\00r\00o\00m\00N\00u\00m\00b\00e\00r\00`\00 \00i\00t\00 \00s\00h\00o\00u\00l\00d\00 \00r\00e\00t\00u\00r\00n\00 \00t\00h\00r\00 \00v\00a\00l\00u\00e")
+  (data (;64;) (i32.const 3308) "\1c")
+  (data (;65;) (i32.const 3320) "\11\00\00\00\08\00\00\00\02")
+  (data (;66;) (i32.const 3340) "<")
+  (data (;67;) (i32.const 3356) "(\00\00\00\a0\04\00\00\c0\04\00\00\e0\04\00\00\10\05\00\000\05\00\00P\05\00\00p\05\00\00\90\05\00\00\b0\05\00\00\d0\05")
+  (data (;68;) (i32.const 3404) ",")
+  (data (;69;) (i32.const 3416) "\03\00\00\00\10\00\00\00 \0d\00\00 \0d\00\00(\00\00\00\0a"))

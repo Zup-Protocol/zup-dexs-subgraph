@@ -1,14 +1,15 @@
 import { Protocol as ProtocolEntity } from "../../../../generated/schema";
 import { PoolCreated as PoolCreatedEvent } from "../../../../generated/UniswapV3Factory/UniswapV3Factory";
+import { UNISWAP_ID } from "../../../utils/constants";
 import { handleV3PoolCreated } from "./v3-factory";
 
 export function handleUniswapV3PoolCreated(event: PoolCreatedEvent): void {
-  let protocolId = "uniswap";
   let poolEntity = handleV3PoolCreated(event);
-  let protocolEntity = ProtocolEntity.load(protocolId);
+
+  let protocolEntity = ProtocolEntity.load(UNISWAP_ID);
 
   if (protocolEntity == null) {
-    protocolEntity = new ProtocolEntity(protocolId);
+    protocolEntity = new ProtocolEntity(UNISWAP_ID);
 
     protocolEntity.name = "Uniswap";
     protocolEntity.url = "https://uniswap.org";
@@ -18,8 +19,8 @@ export function handleUniswapV3PoolCreated(event: PoolCreatedEvent): void {
     protocolEntity.save();
   }
 
-  if (poolEntity.protocol != protocolId) {
-    poolEntity.protocol = protocolId;
+  if (poolEntity.protocol != UNISWAP_ID) {
+    poolEntity.protocol = UNISWAP_ID;
 
     poolEntity.save();
   }

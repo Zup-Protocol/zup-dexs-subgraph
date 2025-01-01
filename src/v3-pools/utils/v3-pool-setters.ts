@@ -15,74 +15,74 @@ import {
 } from "../../utils/pool-utils";
 import { sqrtPriceX96toPrice } from "./v3-pool-converters";
 
-export function setPoolDailyDataTVL(event: ethereum.Event, poolEntity: PoolEntity): void {
-  let poolDailyDataId = getPoolDailyDataId(event.block.timestamp, poolEntity);
-  let poolDailyDataEntity = PoolDailyDataEntity.load(poolDailyDataId);
+export class V3PoolSetters {
+  setPoolDailyDataTVL(event: ethereum.Event, poolEntity: PoolEntity): void {
+    let poolDailyDataId = getPoolDailyDataId(event.block.timestamp, poolEntity);
+    let poolDailyDataEntity = PoolDailyDataEntity.load(poolDailyDataId);
 
-  if (poolDailyDataEntity != null) {
-    poolDailyDataEntity.totalValueLockedUSD = poolEntity.totalValueLockedUSD;
-    poolDailyDataEntity.totalValueLockedToken0 = poolEntity.totalValueLockedToken0;
-    poolDailyDataEntity.totalValueLockedToken1 = poolEntity.totalValueLockedToken1;
-  } else {
-    poolDailyDataEntity = new PoolDailyDataEntity(poolDailyDataId);
+    if (poolDailyDataEntity != null) {
+      poolDailyDataEntity.totalValueLockedUSD = poolEntity.totalValueLockedUSD;
+      poolDailyDataEntity.totalValueLockedToken0 = poolEntity.totalValueLockedToken0;
+      poolDailyDataEntity.totalValueLockedToken1 = poolEntity.totalValueLockedToken1;
+    } else {
+      poolDailyDataEntity = new PoolDailyDataEntity(poolDailyDataId);
 
-    poolDailyDataEntity.dayStartTimestamp = event.block.timestamp;
-    poolDailyDataEntity.totalValueLockedUSD = poolEntity.totalValueLockedUSD;
-    poolDailyDataEntity.totalValueLockedToken0 = poolEntity.totalValueLockedToken0;
-    poolDailyDataEntity.totalValueLockedToken1 = poolEntity.totalValueLockedToken1;
-    poolDailyDataEntity.pool = poolEntity.id;
-    poolDailyDataEntity.feesToken0 = ZERO_BIG_DECIMAL;
-    poolDailyDataEntity.feesToken1 = ZERO_BIG_DECIMAL;
-    poolDailyDataEntity.feesUSD = ZERO_BIG_DECIMAL;
+      poolDailyDataEntity.dayStartTimestamp = event.block.timestamp;
+      poolDailyDataEntity.totalValueLockedUSD = poolEntity.totalValueLockedUSD;
+      poolDailyDataEntity.totalValueLockedToken0 = poolEntity.totalValueLockedToken0;
+      poolDailyDataEntity.totalValueLockedToken1 = poolEntity.totalValueLockedToken1;
+      poolDailyDataEntity.pool = poolEntity.id;
+      poolDailyDataEntity.feesToken0 = ZERO_BIG_DECIMAL;
+      poolDailyDataEntity.feesToken1 = ZERO_BIG_DECIMAL;
+      poolDailyDataEntity.feesUSD = ZERO_BIG_DECIMAL;
+    }
+
+    poolDailyDataEntity.save();
   }
 
-  poolDailyDataEntity.save();
-}
+  setPricesForV3PoolWhitelistedTokens(poolSqrtPriceX96: BigInt, poolEntity: PoolEntity): void {
+    let poolToken0Entity = TokenEntity.load(poolEntity.token0)!;
+    let poolToken1Entity = TokenEntity.load(poolEntity.token1)!;
 
-export function setPricesForV3PoolWhitelistedTokens(
-  poolSqrtPriceX96: BigInt,
-  poolToken0Entity: TokenEntity,
-  poolToken1Entity: TokenEntity,
-  poolEntity: PoolEntity,
-): void {
-  let poolPrices = sqrtPriceX96toPrice(poolSqrtPriceX96, poolToken0Entity, poolToken1Entity);
+    let poolPrices = sqrtPriceX96toPrice(poolSqrtPriceX96, poolToken0Entity, poolToken1Entity);
 
-  if (isVariableWithStablePool(poolEntity)) {
-    let stableToken = findStableToken(poolEntity);
+    if (isVariableWithStablePool(poolEntity)) {
+      let stableToken = findStableToken(poolEntity);
 
-    if (stableToken.id == poolToken0Entity.id) {
+      if (stableToken.id == poolToken0Entity.id) {
+        poolToken1Entity.usdPrice = poolPrices.token0PerToken1;
+        poolToken1Entity.save();
+
+        return;
+      }
+
+      poolToken0Entity.usdPrice = poolPrices.token1PerToken0;
+      poolToken0Entity.save();
+
+      return;
+    }
+
+    if (isWrappedNativePool(poolEntity)) {
+      if (findWrappedNative(poolEntity).id == poolToken0Entity.id) {
+        poolToken1Entity.usdPrice = poolPrices.token0PerToken1.times(poolToken0Entity.usdPrice);
+        poolToken1Entity.save();
+        return;
+      }
+
+      poolToken0Entity.usdPrice = poolPrices.token1PerToken0.times(poolToken1Entity.usdPrice);
+      poolToken0Entity.save();
+
+      return;
+    }
+
+    if (isStablePool(poolEntity)) {
       poolToken1Entity.usdPrice = poolPrices.token0PerToken1;
+      poolToken0Entity.usdPrice = poolPrices.token1PerToken0;
+
+      poolToken0Entity.save();
       poolToken1Entity.save();
 
       return;
     }
-
-    poolToken0Entity.usdPrice = poolPrices.token1PerToken0;
-    poolToken0Entity.save();
-
-    return;
-  }
-
-  if (isWrappedNativePool(poolEntity)) {
-    if (findWrappedNative(poolEntity).id == poolToken0Entity.id) {
-      poolToken1Entity.usdPrice = poolPrices.token0PerToken1.times(poolToken0Entity.usdPrice);
-      poolToken1Entity.save();
-      return;
-    }
-
-    poolToken0Entity.usdPrice = poolPrices.token1PerToken0.times(poolToken1Entity.usdPrice);
-    poolToken0Entity.save();
-
-    return;
-  }
-
-  if (isStablePool(poolEntity)) {
-    poolToken1Entity.usdPrice = poolPrices.token0PerToken1;
-    poolToken0Entity.usdPrice = poolPrices.token1PerToken0;
-
-    poolToken0Entity.save();
-    poolToken1Entity.save();
-
-    return;
   }
 }
