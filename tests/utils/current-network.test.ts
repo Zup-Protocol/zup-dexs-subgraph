@@ -3,12 +3,21 @@ import { assert, dataSourceMock, describe, test } from "matchstick-as";
 import { CurrentNetwork } from "../../src/utils/current-network";
 
 describe("`wrappedNativeAddress` should return the correct value for each network", () => {
-  test("Mainnet should return 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", () => {
+  test("Mainnet", () => {
     dataSourceMock.setNetwork("mainnet");
 
     assert.addressEquals(
       Address.fromString(CurrentNetwork.wrappedNativeAddress),
       Address.fromString("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"),
+    );
+  });
+
+  test("Scroll", () => {
+    dataSourceMock.setNetwork("scroll");
+
+    assert.addressEquals(
+      Address.fromString(CurrentNetwork.wrappedNativeAddress),
+      Address.fromString("0x5300000000000000000000000000000000000004"),
     );
   });
 });
@@ -24,7 +33,7 @@ test(
 );
 
 describe("`stablecoinsAddresses` should return a correct list of stablecoins for each network", () => {
-  test("mainnet stablecoin addresses", () => {
+  test("Mainnet", () => {
     dataSourceMock.setNetwork("mainnet");
 
     assert.assertTrue(
@@ -37,6 +46,15 @@ describe("`stablecoinsAddresses` should return a correct list of stablecoins for
           "0xc5f0f7b66764F6ec8C8Dff7BA683102295E16409",
           "0x6c3ea9036406852006290770bedfcaba0e23a0e8",
         ].join(),
+    );
+  });
+
+  test("Scroll", () => {
+    dataSourceMock.setNetwork("scroll");
+
+    assert.assertTrue(
+      CurrentNetwork.stablecoinsAddresses.join() ==
+        ["0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df", "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4"].join(),
     );
   });
 });

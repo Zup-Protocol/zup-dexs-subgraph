@@ -1,10 +1,3 @@
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-# ATTENTION: THIS CONFIG IS ONLY FOR TESTING PURPOSES. YOU SHOULD NOT USE THIS FILE FOR DEPLOYMENTS
-# INSTEAD, USE A MANIFEST FOR THE INTENDED NETWORK IN THE `manifests` FOLDER
-
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 specVersion: 1.2.0
 repository: https://github.com/Zup-Protocol/zup-dexs-subgraph
 indexerHints:
@@ -15,7 +8,7 @@ graft:
   base: QmWV1dN6kk6EcN2NE2RFA1WQsPbn5fPriDk1toSRV9fMj5
   block: 12788598
 schema:
-  file: ./schema.graphql
+  file: ../schema.graphql
 dataSources:
   - kind: ethereum
     name: UniswapV3Factory
@@ -28,14 +21,14 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/v3-pools/mappings/factories/index.ts
+      file: ../src/v3-pools/mappings/factories/index.ts
       entities:
         - Pool
       abis:
         - name: V3Factory
-          file: "./abis/V3Factory.json"
+          file: "../abis/V3Factory.json"
         - name: ERC20
-          file: "./abis/ERC20.json"
+          file: "../abis/ERC20.json"
       eventHandlers:
         - event: PoolCreated(indexed address,indexed address,indexed uint24,int24,address)
           handler: handleUniswapV3PoolCreated
@@ -53,14 +46,14 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/v3-pools/mappings/factories/index.ts
+      file: ../src/v3-pools/mappings/factories/index.ts
       entities:
         - Pool
       abis:
         - name: V3Factory
-          file: "./abis/V3Factory.json"
+          file: "../abis/V3Factory.json"
         - name: ERC20
-          file: "./abis/ERC20.json"
+          file: "../abis/ERC20.json"
       eventHandlers:
         - event: PoolCreated(indexed address,indexed address,indexed uint24,int24,address)
           handler: handlePancakeSwapV3PoolCreated
@@ -78,13 +71,13 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/v3-pools/mappings/pool/index.ts
+      file: ../src/v3-pools/mappings/pool/index.ts
       entities:
         - Pool
         - Token
       abis:
         - name: V3Pool
-          file: ./abis/V3Pool.json
+          file: ../abis/V3Pool.json
       eventHandlers:
         - event: Mint(address,indexed address,indexed int24,indexed
             int24,uint128,uint256,uint256)

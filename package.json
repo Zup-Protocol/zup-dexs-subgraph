@@ -5,14 +5,28 @@
   "engines": {
     "node": ">=20.11.1"
   },
+  "manifests": {
+    "mainnet": "subgraph-manifests/mainnet.subgraph.yaml",
+    "scroll": "subgraph-manifests/scroll.subgraph.yaml"
+  },
+  "commands": {
+    "deploystudio": "graph deploy --node https://api.studio.thegraph.com/deploy/",
+    "deploylocal": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 zup-dexs-subgraph",
+    "build": "graph build",
+    "codegen": "graph codegen"
+  },
   "scripts": {
     "lint": "npx eslint .",
-    "codegen": "graph codegen",
-    "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ zup-dexs-subgraph",
-    "create-local": "graph create --node http://localhost:8020/ zup-dexs-subgraph",
+    "codegen:mainnet": "$npm_package_commands_codegen $npm_package_manifests_mainnet",
+    "codegen:scroll": "$npm_package_commands_codegen $npm_package_manifests_scroll",
+    "build:mainnet": "$npm_package_commands_build $npm_package_manifests_mainnet",
+    "build:scroll": "$npm_package_commands_build $npm_package_manifests_scroll",
+    "deploy:mainnet": "$npm_package_commands_deploystudio zup-dexs-ethereum $npm_package_manifests_mainnet",
+    "deploy:scroll": "$npm_package_commands_deploystudio zup-dexs-scroll $npm_package_manifests_scroll",
     "remove-local": "graph remove --node http://localhost:8020/ zup-dexs-subgraph",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 zup-dexs-subgraph",
+    "create-local": "graph create --node http://localhost:8020/ zup-dexs-subgraph",
+    "deploy-local:scroll": "$npm_package_commands_deploylocal $npm_package_manifests_scroll",
+    "deploy-local:mainnet": "$npm_package_commands_deploylocal $npm_package_manifests_mainnet",
     "test": "graph test",
     "prepare": "husky"
   },

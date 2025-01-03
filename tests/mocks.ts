@@ -81,10 +81,14 @@ export class PoolMock extends Pool {
 class V3PoolSettersSetPricesForV3PoolWhitelistedTokensParams {
   poolSqrtPriceX96: BigInt;
   poolEntity: Pool;
+  poolToken0Entity: Token;
+  poolToken1Entity: Token;
 
-  constructor(poolSqrtPriceX96: BigInt, poolEntity: Pool) {
+  constructor(poolSqrtPriceX96: BigInt, poolEntity: Pool, poolToken0Entity: Token, poolToken1Entity: Token) {
     this.poolSqrtPriceX96 = poolSqrtPriceX96;
     this.poolEntity = poolEntity;
+    this.poolToken0Entity = poolToken0Entity;
+    this.poolToken1Entity = poolToken1Entity;
   }
 }
 
@@ -108,10 +112,20 @@ export class V3PoolSettersMock extends V3PoolSetters {
     this.setPoolDailyDataTVLCalls.push(new V3PoolSettersSetPoolDailyDataTVLCallsParams(event, poolEntity));
   }
 
-  setPricesForV3PoolWhitelistedTokens(poolSqrtPriceX96: BigInt, poolEntity: Pool): void {
-    super.setPricesForV3PoolWhitelistedTokens(poolSqrtPriceX96, poolEntity);
+  setPricesForV3PoolWhitelistedTokens(
+    poolSqrtPriceX96: BigInt,
+    poolEntity: Pool,
+    poolToken0Entity: Token,
+    poolToken1Entity: Token,
+  ): void {
+    super.setPricesForV3PoolWhitelistedTokens(poolSqrtPriceX96, poolEntity, poolToken0Entity, poolToken1Entity);
     this.setPricesForV3PoolWhitelistedTokensCalls.push(
-      new V3PoolSettersSetPricesForV3PoolWhitelistedTokensParams(poolSqrtPriceX96, poolEntity),
+      new V3PoolSettersSetPricesForV3PoolWhitelistedTokensParams(
+        poolSqrtPriceX96,
+        poolEntity,
+        poolToken0Entity,
+        poolToken1Entity,
+      ),
     );
   }
 }

@@ -9,7 +9,7 @@ This is the primary subgraph used by the Zup Protocol to calculate yields. It ag
   - To know if Node.js is installed, run `node --version` you should see a response like `vX.X.X`.
   - If Node.js is not installed, head over to [How to install Node.js](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs)
 
-- **Docker**
+- **Docker (optional)**
 
   - To know if Docker is installed, run `docker --version` you should see a response like `Docker version X.X.X`.
   - If Docker is not installed, head over to [How to install Docker](https://docs.docker.com/get-docker/)
@@ -22,7 +22,6 @@ This is the primary subgraph used by the Zup Protocol to calculate yields. It ag
 
 1. Clone the repository
 2. run `yarn install`
-3. run `yarn codegen && yarn build`
 
 ## Running tests
 
@@ -36,8 +35,7 @@ yarn test
 
 To add a new network to the subgraph, you need to do a few things:
 
-1. Add the network to the [networks.json](./networks.json) file, with all the necessary information for the subgraph, such as all DEXs factory for that network.
-2. Add a new constant with the same network name as `networks.json` in [current-network.ts](./src/utils/current-network.ts) for the new network.
+1. Add a new subgraph manifest in [subgraph-manifests](./subgraph-manifests) for the intended network with the DEXs supported in that network.
+2. Add a new constant with the network name (following the [Network CLI Name](https://thegraph.com/docs/en/supported-networks/) from the Graph) in [current-network.ts](./src/utils/current-network.ts) for the new network.
 3. Add a new entry for each function defined in [current-network.ts](./src/utils/current-network.ts) that needs to be overriden for the new network.
-
-After that is done, you can run `yarn codegen && yarn build` to generate the new subgraph build and deploy it!
+4. Optionally, add a new deploy script in [package.json](./package.json) for the new network (following the pattern `deploy:networkname`), to make it easier to deploy

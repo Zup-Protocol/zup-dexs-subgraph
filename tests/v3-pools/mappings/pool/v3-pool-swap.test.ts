@@ -6,6 +6,7 @@ import { ONE_HOUR_IN_SECONDS } from "../../../../src/utils/constants";
 import { getPoolDailyDataId, getPoolHourlyDataId } from "../../../../src/utils/pool-utils";
 import { formatFromTokenAmount } from "../../../../src/utils/token-utils";
 import { handleV3PoolSwap } from "../../../../src/v3-pools/mappings/pool";
+import { handleV3PoolSwapImpl } from "../../../../src/v3-pools/mappings/pool/v3-pool-swap";
 import { PoolDailyDataMock, PoolHourlyDataMock, PoolMock, TokenMock, V3PoolSettersMock } from "../../../mocks";
 
 class SwapEventParams {
@@ -72,7 +73,7 @@ describe("v3-pool-swap", () => {
     let event = createEvent(eventParams);
     let v3PoolSetters = new V3PoolSettersMock();
 
-    handleV3PoolSwap(event, v3PoolSetters);
+    handleV3PoolSwapImpl(event, v3PoolSetters);
 
     assert.assertTrue(
       v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls.length > 0,
@@ -86,7 +87,17 @@ describe("v3-pool-swap", () => {
 
     assert.assertTrue(
       v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls[0].poolEntity.id == event.address,
-      "tick is not the same",
+      "Pool is not the same",
+    );
+
+    assert.assertTrue(
+      v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls[0].poolToken0Entity.id == pool.token0,
+      "Token0 is not the same",
+    );
+
+    assert.assertTrue(
+      v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls[0].poolToken1Entity.id == pool.token1,
+      "Token1 is not the same",
     );
   });
 
@@ -710,7 +721,7 @@ describe("v3-pool-swap", () => {
     let pool = PoolMock.loadMock();
     let v3PoolSetters = new V3PoolSettersMock();
 
-    handleV3PoolSwap(event, v3PoolSetters);
+    handleV3PoolSwapImpl(event, v3PoolSetters);
 
     assert.assertTrue(v3PoolSetters.setPoolDailyDataTVLCalls.length > 0, "setPoolDailyDataTVL not called");
 

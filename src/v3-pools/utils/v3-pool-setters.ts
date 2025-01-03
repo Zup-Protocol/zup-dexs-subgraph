@@ -40,10 +40,12 @@ export class V3PoolSetters {
     poolDailyDataEntity.save();
   }
 
-  setPricesForV3PoolWhitelistedTokens(poolSqrtPriceX96: BigInt, poolEntity: PoolEntity): void {
-    let poolToken0Entity = TokenEntity.load(poolEntity.token0)!;
-    let poolToken1Entity = TokenEntity.load(poolEntity.token1)!;
-
+  setPricesForV3PoolWhitelistedTokens(
+    poolSqrtPriceX96: BigInt,
+    poolEntity: PoolEntity,
+    poolToken0Entity: TokenEntity,
+    poolToken1Entity: TokenEntity,
+  ): void {
     let poolPrices = sqrtPriceX96toPrice(poolSqrtPriceX96, poolToken0Entity, poolToken1Entity);
 
     if (isVariableWithStablePool(poolEntity)) {

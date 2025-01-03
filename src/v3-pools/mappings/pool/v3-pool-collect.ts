@@ -3,7 +3,11 @@ import { Collect as CollectEvent } from "../../../../generated/templates/Uniswap
 import { formatFromTokenAmount } from "../../../utils/token-utils";
 import { V3PoolSetters } from "../../utils/v3-pool-setters";
 
-export function handleV3PoolCollect(event: CollectEvent, v3PoolSetters: V3PoolSetters = new V3PoolSetters()): void {
+export function handleV3PoolCollect(event: CollectEvent): void {
+  handleV3PoolCollectImpl(event, new V3PoolSetters());
+}
+
+export function handleV3PoolCollectImpl(event: CollectEvent, v3PoolSetters: V3PoolSetters = new V3PoolSetters()): void {
   let poolEntity = PoolEntity.load(event.address)!;
   let token0Entity = TokenEntity.load(poolEntity.token0)!;
   let token1Entity = TokenEntity.load(poolEntity.token1)!;

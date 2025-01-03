@@ -11,14 +11,18 @@ import { getPoolDailyDataId, getPoolHourlyDataId } from "../../../utils/pool-uti
 import { formatFromTokenAmount } from "../../../utils/token-utils";
 import { V3PoolSetters } from "../../utils/v3-pool-setters";
 
-export function handleV3PoolSwap(event: SwapEvent, v3PoolSetters: V3PoolSetters = new V3PoolSetters()): void {
+export function handleV3PoolSwap(event: SwapEvent): void {
+  handleV3PoolSwapImpl(event);
+}
+
+export function handleV3PoolSwapImpl(event: SwapEvent, v3PoolSetters: V3PoolSetters = new V3PoolSetters()): void {
   let poolEntity = PoolEntity.load(event.address)!;
   let token0Entity = TokenEntity.load(poolEntity.token0)!;
   let token1Entity = TokenEntity.load(poolEntity.token1)!;
   let tokenAmount0Formatted = formatFromTokenAmount(event.params.amount0, token0Entity);
   let tokenAmount1Formatted = formatFromTokenAmount(event.params.amount1, token1Entity);
 
-  v3PoolSetters.setPricesForV3PoolWhitelistedTokens(event.params.sqrtPriceX96, poolEntity);
+  v3PoolSetters.setPricesForV3PoolWhitelistedTokens(event.params.sqrtPriceX96, poolEntity, token0Entity, token1Entity);
 
   poolEntity.totalValueLockedToken0 = poolEntity.totalValueLockedToken0.plus(tokenAmount0Formatted);
   poolEntity.totalValueLockedToken1 = poolEntity.totalValueLockedToken1.plus(tokenAmount1Formatted);
@@ -30,8 +34,6 @@ export function handleV3PoolSwap(event: SwapEvent, v3PoolSetters: V3PoolSetters 
   setHourlyData(event, poolEntity);
   setDailyData(event, poolEntity, v3PoolSetters);
 
-  token0Entity.save();
-  token1Entity.save();
   poolEntity.save();
 }
 

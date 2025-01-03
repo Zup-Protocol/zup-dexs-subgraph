@@ -139,7 +139,7 @@ test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of
   pool.token1 = nonStableToken.id;
   pool.save();
 
-  new V3PoolSettersMock().setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, pool);
+  new V3PoolSettersMock().setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, pool, stableToken, nonStableToken);
 
   assert.fieldEquals("Token", nonStableToken.id.toHexString(), "usdPrice", "0.3596161703425394429455590507159066");
 });
@@ -161,7 +161,7 @@ test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of
   pool.token1 = stableToken.id;
   pool.save();
 
-  new V3PoolSettersMock().setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, pool);
+  new V3PoolSettersMock().setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, pool, nonStableToken, stableToken);
 
   assert.fieldEquals("Token", nonStableToken.id.toHexString(), "usdPrice", "93501.87063469230918451445286994512");
 });
@@ -186,7 +186,7 @@ test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of
   pool.token1 = nonWrappedNative.id;
   pool.save();
 
-  new V3PoolSettersMock().setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, pool);
+  new V3PoolSettersMock().setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, pool, wrappedNative, nonWrappedNative);
 
   assert.fieldEquals("Token", nonWrappedNative.id.toHexString(), "usdPrice", "3.496912490848270512206851599806777");
 });
@@ -211,7 +211,7 @@ test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of
   pool.token1 = wrappedNative.id;
   pool.save();
 
-  new V3PoolSettersMock().setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, pool);
+  new V3PoolSettersMock().setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, pool, nonWrappedNative, wrappedNative);
 
   assert.fieldEquals("Token", nonWrappedNative.id.toHexString(), "usdPrice", "93430.72975104423786494759603164283");
 });
@@ -233,7 +233,7 @@ test(`when calling 'setPricesForV3PoolWhitelistedTokens' with a pool of token0
   pool.token1 = token1.id;
   pool.save();
 
-  new V3PoolSettersMock().setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, pool);
+  new V3PoolSettersMock().setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, pool, token0, token1);
 
   assert.fieldEquals("Token", token0.id.toHexString(), "usdPrice", "1.00202533202543717719096334135079");
   assert.fieldEquals("Token", token1.id.toHexString(), "usdPrice", "0.9979787616533174007690719676506302");
