@@ -38,4 +38,4 @@ To add a new network to the subgraph, you need to do a few things:
 1. Add a new subgraph manifest in [subgraph-manifests](./subgraph-manifests) for the intended network with the DEXs supported in that network.
 2. Add a new constant with the network name (following the [Network CLI Name](https://thegraph.com/docs/en/supported-networks/) from the Graph) in [current-network.ts](./src/utils/current-network.ts) for the new network.
 3. Add a new entry for each function defined in [current-network.ts](./src/utils/current-network.ts) that needs to be overriden for the new network.
-4. Optionally, add a new deploy script in [package.json](./package.json) for the new network (following the pattern `deploy:networkname`), to make it easier to deploy
+4. Add new scripts in [package.json](./package.json) for the new network (following the pattern `[script]:networkname`), to make it easier to deploy, generate code and build the subgraph.
