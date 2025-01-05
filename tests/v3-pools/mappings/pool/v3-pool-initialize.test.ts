@@ -1,53 +1,16 @@
-import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
-import { assert, newMockEvent, test } from "matchstick-as";
-import { Initialize as InitializeEvent } from "../../../../generated/templates/UniswapV3Pool/UniswapV3Pool";
+import { BigInt } from "@graphprotocol/graph-ts";
+import { assert, test } from "matchstick-as";
 import { handleV3PoolInitializeImpl } from "../../../../src/v3-pools/mappings/pool/v3-pool-initialize";
-import { PoolMock, V3PoolSettersMock } from "../../../mocks";
-
-class InitializeEventParams {
-  pool: Address;
-  sqrtPriceX96: BigInt;
-  tick: i32;
-
-  constructor() {
-    this.sqrtPriceX96 = BigInt.fromU32(12);
-    this.tick = 0;
-    this.pool = new PoolMock().id;
-  }
-}
-
-function createEvent(params: InitializeEventParams = new InitializeEventParams()): InitializeEvent {
-  let mockEvent = newMockEvent();
-
-  let eventParams = [
-    new ethereum.EventParam("sqrtPriceX96", ethereum.Value.fromUnsignedBigInt(params.sqrtPriceX96)),
-    new ethereum.EventParam("tick", ethereum.Value.fromI32(params.tick)),
-  ];
-
-  let event = new InitializeEvent(
-    params.pool,
-    mockEvent.logIndex,
-    mockEvent.transactionLogIndex,
-    mockEvent.logType,
-    mockEvent.block,
-    mockEvent.transaction,
-    eventParams,
-    mockEvent.receipt,
-  );
-
-  return event;
-}
+import { PoolMock, TokenMock, V3PoolSettersMock } from "../../../mocks";
 
 test(`When the handler is called, it should call 'setPricesForV3PoolWhitelistedTokens'
     with the correct params`, () => {
   let v3PoolSetters = new V3PoolSettersMock();
+
   let pool = new PoolMock();
-  let eventParams = new InitializeEventParams();
-  eventParams.pool = Address.fromBytes(pool.id);
+  let sqrtPriceX96 = BigInt.fromI32(1000);
 
-  let event = createEvent(eventParams);
-
-  handleV3PoolInitializeImpl(event, v3PoolSetters);
+  handleV3PoolInitializeImpl(pool, new TokenMock(), new TokenMock(), sqrtPriceX96, v3PoolSetters);
 
   assert.assertTrue(
     v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls.length > 0,
@@ -60,7 +23,7 @@ test(`When the handler is called, it should call 'setPricesForV3PoolWhitelistedT
   );
 
   assert.assertTrue(
-    v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls[0].poolSqrtPriceX96 == eventParams.sqrtPriceX96,
+    v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls[0].poolSqrtPriceX96 == sqrtPriceX96,
     "sqrtPriceX96 is not the same",
   );
 

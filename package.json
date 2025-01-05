@@ -27,7 +27,7 @@
     "create-local": "graph create --node http://localhost:8020/ zup-dexs-subgraph",
     "deploy-local:scroll": "$npm_package_commands_deploylocal $npm_package_manifests_scroll",
     "deploy-local:mainnet": "$npm_package_commands_deploylocal $npm_package_manifests_mainnet",
-    "test": "graph test",
+    "test": "graph codegen && graph test && rm -rf generated",
     "prepare": "husky"
   },
   "dependencies": {

@@ -1,62 +1,12 @@
-import { Address, BigDecimal, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
+import { Address, BigDecimal, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { assert, beforeEach, clearStore, describe, newMockEvent, test } from "matchstick-as";
 import { Pool } from "../../../../generated/schema";
-import { Swap as SwapEvent } from "../../../../generated/templates/UniswapV3Pool/UniswapV3Pool";
 import { ONE_HOUR_IN_SECONDS } from "../../../../src/utils/constants";
 import { getPoolDailyDataId, getPoolHourlyDataId } from "../../../../src/utils/pool-utils";
 import { formatFromTokenAmount } from "../../../../src/utils/token-utils";
-import { handleV3PoolSwap } from "../../../../src/v3-pools/mappings/pool";
-import { handleV3PoolSwapImpl } from "../../../../src/v3-pools/mappings/pool/v3-pool-swap";
+
+import { handleV3PoolSwap, handleV3PoolSwapImpl } from "../../../../src/v3-pools/mappings/pool/v3-pool-swap";
 import { PoolDailyDataMock, PoolHourlyDataMock, PoolMock, TokenMock, V3PoolSettersMock } from "../../../mocks";
-
-class SwapEventParams {
-  pool: Address;
-  sender: Address;
-  recipient: Address;
-  amount0: BigInt;
-  amount1: BigInt;
-  sqrtPriceX96: BigInt;
-  liquidity: BigInt;
-  tick: i32;
-
-  constructor() {
-    this.pool = Address.fromBytes(new PoolMock().id);
-    this.sender = Address.fromString("0x0000000000000000000000000000000000000001");
-    this.recipient = Address.fromString("0x0000000000000000000000000000000000000002");
-    this.amount0 = BigInt.fromI32(0);
-    this.amount1 = BigInt.fromI32(0);
-    this.sqrtPriceX96 = BigInt.fromI32(0);
-    this.liquidity = BigInt.fromI32(0);
-    this.tick = 0;
-  }
-}
-
-function createEvent(params: SwapEventParams = new SwapEventParams()): SwapEvent {
-  let mockEvent = newMockEvent();
-
-  let eventParams = [
-    new ethereum.EventParam("sender", ethereum.Value.fromAddress(params.sender)),
-    new ethereum.EventParam("recipient", ethereum.Value.fromAddress(params.recipient)),
-    new ethereum.EventParam("amount0", ethereum.Value.fromUnsignedBigInt(params.amount0)),
-    new ethereum.EventParam("amount1", ethereum.Value.fromUnsignedBigInt(params.amount1)),
-    new ethereum.EventParam("sqrtPriceX96", ethereum.Value.fromUnsignedBigInt(params.sqrtPriceX96)),
-    new ethereum.EventParam("liquidity", ethereum.Value.fromUnsignedBigInt(params.liquidity)),
-    new ethereum.EventParam("tick", ethereum.Value.fromI32(params.tick)),
-  ];
-
-  let event = new SwapEvent(
-    params.pool,
-    mockEvent.logIndex,
-    mockEvent.transactionLogIndex,
-    mockEvent.logType,
-    mockEvent.block,
-    mockEvent.transaction,
-    eventParams,
-    mockEvent.receipt,
-  );
-
-  return event;
-}
 
 describe("v3-pool-swap", () => {
   beforeEach(() => {
@@ -64,39 +14,43 @@ describe("v3-pool-swap", () => {
   });
 
   test(`The handler should call 'setPricesForV3PoolWhitelistedTokens' with the correct parameters to update the pool assets prices`, () => {
-    let eventParams = new SwapEventParams();
     let pool = new PoolMock();
-    eventParams.sqrtPriceX96 = BigInt.fromI32(3432);
-    eventParams.tick = 132;
-    eventParams.pool = pool.id;
+    let sqrtPriceX96 = BigInt.fromI32(3432);
 
-    let event = createEvent(eventParams);
+    let amount0 = BigInt.fromI32(100);
+    let amount1 = BigInt.fromI32(200);
+
+    let event = newMockEvent();
     let v3PoolSetters = new V3PoolSettersMock();
 
-    handleV3PoolSwapImpl(event, v3PoolSetters);
+    handleV3PoolSwapImpl(event, pool, new TokenMock(), new TokenMock(), amount0, amount1, sqrtPriceX96, v3PoolSetters);
 
     assert.assertTrue(
       v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls.length > 0,
       "setPricesForV3PoolWhitelistedTokens have not been called",
     );
 
-    assert.assertTrue(
-      v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls[0].poolSqrtPriceX96 == event.params.sqrtPriceX96,
+    assert.bigIntEquals(
+      v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls[0].poolSqrtPriceX96,
+      sqrtPriceX96,
       "sqrtPriceX96 is not the same",
     );
 
-    assert.assertTrue(
-      v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls[0].poolEntity.id == event.address,
+    assert.bytesEquals(
+      v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls[0].poolEntity.id,
+      pool.id,
       "Pool is not the same",
     );
 
-    assert.assertTrue(
-      v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls[0].poolToken0Entity.id == pool.token0,
+    assert.bytesEquals(
+      v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls[0].poolToken0Entity.id,
+      pool.token0,
       "Token0 is not the same",
     );
 
-    assert.assertTrue(
-      v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls[0].poolToken1Entity.id == pool.token1,
+    assert.bytesEquals(
+      v3PoolSetters.setPricesForV3PoolWhitelistedTokensCalls[0].poolToken1Entity.id,
+      pool.token1,
       "Token1 is not the same",
     );
   });
@@ -106,25 +60,24 @@ describe("v3-pool-swap", () => {
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
 
-    let eventParams = new SwapEventParams();
     let poolToken0TVLBefore = BigDecimal.fromString("325672.43");
     let amount0 = BigInt.fromI32(200).times(BigInt.fromI32(10).pow(token0.decimals as u8));
+    let amount1 = BigInt.fromI32(0);
+    let sqrtPriceX96 = BigInt.fromI32(3432);
+
     pool.token0 = token0.id;
     pool.totalValueLockedToken0 = poolToken0TVLBefore;
     pool.save();
 
-    eventParams.pool = Address.fromBytes(pool.id);
-    eventParams.amount0 = amount0;
+    let event = newMockEvent();
 
-    let event = createEvent(eventParams);
-
-    handleV3PoolSwap(createEvent(eventParams));
+    handleV3PoolSwap(event, pool, token0, new TokenMock(), amount0, amount1, sqrtPriceX96);
 
     assert.fieldEquals(
       "Pool",
-      event.address.toHexString(),
+      pool.id.toHexString(),
       "totalValueLockedToken0",
-      poolToken0TVLBefore.plus(formatFromTokenAmount(eventParams.amount0, token0)).toString(),
+      poolToken0TVLBefore.plus(formatFromTokenAmount(amount0, token0)).toString(),
     );
   });
 
@@ -133,28 +86,26 @@ describe("v3-pool-swap", () => {
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
 
-    let eventParams = new SwapEventParams();
     let poolToken0TVLBefore = BigDecimal.fromString("325672.43");
     let amount0 = BigInt.fromI32(200)
       .times(BigInt.fromI32(10).pow(token0.decimals as u8))
       .neg();
+    let amount1 = BigInt.fromI32(0);
+    let sqrtPriceX96 = BigInt.fromI32(3432);
 
     pool.token0 = token0.id;
     pool.totalValueLockedToken0 = poolToken0TVLBefore;
     pool.save();
 
-    eventParams.pool = Address.fromBytes(pool.id);
-    eventParams.amount0 = amount0;
+    let event = newMockEvent();
 
-    let event = createEvent(eventParams);
-
-    handleV3PoolSwap(createEvent(eventParams));
+    handleV3PoolSwap(event, pool, token0, new TokenMock(), amount0, amount1, sqrtPriceX96);
 
     assert.fieldEquals(
       "Pool",
-      event.address.toHexString(),
+      pool.id.toHexString(),
       "totalValueLockedToken0",
-      poolToken0TVLBefore.minus(formatFromTokenAmount(eventParams.amount0.abs(), token0)).toString(),
+      poolToken0TVLBefore.minus(formatFromTokenAmount(amount0.abs(), token0)).toString(),
     );
   });
 
@@ -163,26 +114,24 @@ describe("v3-pool-swap", () => {
     let pool = PoolMock.loadMock();
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
 
-    let eventParams = new SwapEventParams();
     let poolToken1TVLBefore = BigDecimal.fromString("121320.43");
+    let amount0 = BigInt.fromI32(0);
     let amount1 = BigInt.fromI32(98762).times(BigInt.fromI32(10).pow(token1.decimals as u8));
+    let sqrtPriceX96 = BigInt.fromI32(3432);
 
     pool.token1 = token1.id;
     pool.totalValueLockedToken1 = poolToken1TVLBefore;
     pool.save();
 
-    eventParams.pool = Address.fromBytes(pool.id);
-    eventParams.amount1 = amount1;
+    let event = newMockEvent();
 
-    let event = createEvent(eventParams);
-
-    handleV3PoolSwap(createEvent(eventParams));
+    handleV3PoolSwap(event, pool, new TokenMock(), token1, amount0, amount1, sqrtPriceX96);
 
     assert.fieldEquals(
       "Pool",
-      event.address.toHexString(),
+      pool.id.toHexString(),
       "totalValueLockedToken1",
-      poolToken1TVLBefore.plus(formatFromTokenAmount(eventParams.amount1, token1)).toString(),
+      poolToken1TVLBefore.plus(formatFromTokenAmount(amount1, token1)).toString(),
     );
   });
 
@@ -191,33 +140,31 @@ describe("v3-pool-swap", () => {
     let pool = PoolMock.loadMock();
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
 
-    let eventParams = new SwapEventParams();
     let poolToken1TVLBefore = BigDecimal.fromString("121320.43");
+    let amount0 = BigInt.fromI32(0);
     let amount1 = BigInt.fromI32(98762)
       .times(BigInt.fromI32(10).pow(token1.decimals as u8))
       .neg();
+    let sqrtPriceX96 = BigInt.fromI32(3432);
 
     pool.token1 = token1.id;
     pool.totalValueLockedToken1 = poolToken1TVLBefore;
     pool.save();
 
-    eventParams.pool = Address.fromBytes(pool.id);
-    eventParams.amount1 = amount1;
+    let event = newMockEvent();
 
-    let event = createEvent(eventParams);
-
-    handleV3PoolSwap(createEvent(eventParams));
+    handleV3PoolSwap(event, pool, new TokenMock(), token1, amount0, amount1, sqrtPriceX96);
 
     assert.fieldEquals(
       "Pool",
-      event.address.toHexString(),
+      pool.id.toHexString(),
       "totalValueLockedToken1",
-      poolToken1TVLBefore.minus(formatFromTokenAmount(eventParams.amount1.abs(), token1)).toString(),
+      poolToken1TVLBefore.minus(formatFromTokenAmount(amount1.abs(), token1)).toString(),
     );
   });
 
   test(`When the handler is called, it should update the pool usd tvl after changing the tokens tvls`, () => {
-    let pool = PoolMock.loadMock();
+    let pool = new PoolMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
     token0.usdPrice = BigDecimal.fromString("3278");
@@ -226,7 +173,6 @@ describe("v3-pool-swap", () => {
     token0.save();
     token1.save();
 
-    let eventParams = new SwapEventParams();
     let poolToken0TVLBefore = BigDecimal.fromString("91821.43");
     let poolToken1TVLBefore = BigDecimal.fromString("121320.43");
 
@@ -234,6 +180,7 @@ describe("v3-pool-swap", () => {
     let amount1 = BigInt.fromI32(87532)
       .times(BigInt.fromI32(10).pow(token1.decimals as u8))
       .neg();
+    let sqrtPriceX96 = BigInt.fromI32(3432);
 
     pool.token1 = token1.id;
     pool.token0 = token0.id;
@@ -242,24 +189,18 @@ describe("v3-pool-swap", () => {
     pool.totalValueLockedToken1 = poolToken1TVLBefore;
     pool.save();
 
-    eventParams.pool = Address.fromBytes(pool.id);
-    eventParams.amount1 = amount1;
-    eventParams.amount0 = amount0;
+    let event = newMockEvent();
 
-    let event = createEvent(eventParams);
-
-    handleV3PoolSwap(createEvent(eventParams));
+    handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96);
 
     assert.fieldEquals(
       "Pool",
-      event.address.toHexString(),
+      pool.id.toHexString(),
       "totalValueLockedUSD",
       poolToken0TVLBefore
-        .plus(formatFromTokenAmount(eventParams.amount0, token1))
+        .plus(formatFromTokenAmount(amount0, token1))
         .times(token0.usdPrice)
-        .plus(
-          poolToken1TVLBefore.minus(formatFromTokenAmount(eventParams.amount1.abs(), token1)).times(token1.usdPrice),
-        )
+        .plus(poolToken1TVLBefore.minus(formatFromTokenAmount(amount1.abs(), token1)).times(token1.usdPrice))
         .toString(),
     );
   });
@@ -267,17 +208,17 @@ describe("v3-pool-swap", () => {
   test(`When the user swap token0 by token1,
     the feesToken0 field in the pool hourly data
     should be updated, suming up the swap fee`, () => {
-    let eventParams = new SwapEventParams();
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
 
-    eventParams.amount0 = BigInt.fromI32(32).times(BigInt.fromI32(10).pow(token0.decimals as u8));
-    eventParams.amount1 = BigInt.fromI32(199)
+    let amount0 = BigInt.fromI32(32).times(BigInt.fromI32(10).pow(token0.decimals as u8));
+    let amount1 = BigInt.fromI32(199)
       .times(BigInt.fromI32(10).pow(token1.decimals as u8))
       .neg(); // by making this negative, we can simulate a swap of token0 by token1, as token1 have benn removed from the pool
 
-    let event = createEvent(eventParams);
+    let sqrtPriceX96 = BigInt.fromI32(3432);
+    let event = newMockEvent();
     let poolHourlyData = new PoolHourlyDataMock();
     let currentFees = BigDecimal.fromString("12.3");
 
@@ -289,19 +230,14 @@ describe("v3-pool-swap", () => {
     poolHourlyData.feesToken0 = currentFees;
     poolHourlyData.save();
 
-    handleV3PoolSwap(event);
+    handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96);
 
     assert.fieldEquals(
       "PoolHourlyData",
       getPoolHourlyDataId(event.block.timestamp, pool).toHexString(),
       "feesToken0",
       currentFees
-        .plus(
-          formatFromTokenAmount(
-            eventParams.amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
-            token0,
-          ),
-        )
+        .plus(formatFromTokenAmount(amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)), token0))
         .toString(),
     );
   });
@@ -309,17 +245,18 @@ describe("v3-pool-swap", () => {
   test(`When the user swap token1 by token0,
     the feesToken1 field in the pool hourly data
     should be updated, suming up the swap fee`, () => {
-    let eventParams = new SwapEventParams();
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
 
-    eventParams.amount1 = BigInt.fromI32(21785).times(BigInt.fromI32(10).pow(token1.decimals as u8));
-    eventParams.amount0 = BigInt.fromI32(199)
+    let amount1 = BigInt.fromI32(21785).times(BigInt.fromI32(10).pow(token1.decimals as u8));
+    let amount0 = BigInt.fromI32(199)
       .times(BigInt.fromI32(10).pow(token0.decimals as u8))
       .neg(); // by making this negative, we can simulate a swap of token1 by token0, as token0 have benn removed from the pool
 
-    let event = createEvent(eventParams);
+    let sqrtPriceX96 = BigInt.fromI32(3432);
+
+    let event = newMockEvent();
     let poolHourlyData = new PoolHourlyDataMock();
     let currentFees = BigDecimal.fromString("1832.3");
 
@@ -331,19 +268,14 @@ describe("v3-pool-swap", () => {
     poolHourlyData.feesToken1 = currentFees;
     poolHourlyData.save();
 
-    handleV3PoolSwap(event);
+    handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96);
 
     assert.fieldEquals(
       "PoolHourlyData",
       getPoolHourlyDataId(event.block.timestamp, pool).toHexString(),
       "feesToken1",
       currentFees
-        .plus(
-          formatFromTokenAmount(
-            eventParams.amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
-            token1,
-          ),
-        )
+        .plus(formatFromTokenAmount(amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)), token1))
         .toString(),
     );
   });
@@ -351,7 +283,6 @@ describe("v3-pool-swap", () => {
   test(`When the user swap token0 by token1,
     the feesUSD field in the pool hourly data
     should be updated, suming up the swap fee`, () => {
-    let eventParams = new SwapEventParams();
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
@@ -362,17 +293,18 @@ describe("v3-pool-swap", () => {
     token0.save();
     token1.save();
 
-    eventParams.amount0 = BigInt.fromI32(190).times(BigInt.fromI32(10).pow(token0.decimals as u8));
+    let amount0 = BigInt.fromI32(190).times(BigInt.fromI32(10).pow(token0.decimals as u8));
 
-    eventParams.amount1 = BigInt.fromI32(2)
+    let amount1 = BigInt.fromI32(2)
       .times(BigInt.fromI32(10).pow(token1.decimals as u8))
       .neg();
 
-    let event = createEvent(eventParams);
+    let event = newMockEvent();
     let poolHourlyData = new PoolHourlyDataMock();
     let currentFeesToken0 = BigDecimal.fromString("2112.3");
     let currentFeesToken1 = BigDecimal.fromString("2.3");
     let currentUSDFees = currentFeesToken0.times(token0.usdPrice).plus(currentFeesToken1.times(token1.usdPrice));
+    let sqrtPriceX96 = BigInt.fromI32(3432);
 
     pool.feeTier = 1000;
     pool.token0 = token0.id;
@@ -385,11 +317,11 @@ describe("v3-pool-swap", () => {
     poolHourlyData.save();
 
     let token0ExpectedSwapFee = formatFromTokenAmount(
-      eventParams.amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
       token0,
     );
 
-    handleV3PoolSwap(event);
+    handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96);
 
     assert.fieldEquals(
       "PoolHourlyData",
@@ -406,7 +338,6 @@ describe("v3-pool-swap", () => {
   test(`When the user swap token1 by token0,
     the feesUSD field in the pool hourly data
     should be updated, suming up the swap fee`, () => {
-    let eventParams = new SwapEventParams();
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
@@ -417,17 +348,18 @@ describe("v3-pool-swap", () => {
     token0.save();
     token1.save();
 
-    eventParams.amount0 = BigInt.fromI32(189269)
+    let amount0 = BigInt.fromI32(189269)
       .times(BigInt.fromI32(10).pow(token0.decimals as u8))
       .neg();
 
-    eventParams.amount1 = BigInt.fromI32(198621).times(BigInt.fromI32(10).pow(token1.decimals as u8));
+    let amount1 = BigInt.fromI32(198621).times(BigInt.fromI32(10).pow(token1.decimals as u8));
 
-    let event = createEvent(eventParams);
+    let event = newMockEvent();
     let poolHourlyData = new PoolHourlyDataMock();
     let currentFeesToken0 = BigDecimal.fromString("21023896.3");
     let currentFeesToken1 = BigDecimal.fromString("32987.3");
     let currentUSDFees = currentFeesToken0.times(token0.usdPrice).plus(currentFeesToken1.times(token1.usdPrice));
+    let sqrtPriceX96 = BigInt.fromI32(3432);
 
     pool.feeTier = 50;
     pool.token0 = token0.id;
@@ -440,11 +372,11 @@ describe("v3-pool-swap", () => {
     poolHourlyData.save();
 
     let token1ExpectedSwapFee = formatFromTokenAmount(
-      eventParams.amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
       token1,
     );
 
-    handleV3PoolSwap(event);
+    handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96);
 
     assert.fieldEquals(
       "PoolHourlyData",
@@ -459,7 +391,6 @@ describe("v3-pool-swap", () => {
 
   test(`When the user swaps token1 by token0 multiple times in less than 1 hour,
     it should update the same pool hourly data id`, () => {
-    let eventParams = new SwapEventParams();
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
@@ -470,19 +401,20 @@ describe("v3-pool-swap", () => {
     token0.save();
     token1.save();
 
-    eventParams.amount0 = BigInt.fromI32(189269)
+    let amount0 = BigInt.fromI32(189269)
       .times(BigInt.fromI32(10).pow(token0.decimals as u8))
       .neg();
 
-    eventParams.amount1 = BigInt.fromI32(198621).times(BigInt.fromI32(10).pow(token1.decimals as u8));
+    let amount1 = BigInt.fromI32(198621).times(BigInt.fromI32(10).pow(token1.decimals as u8));
 
-    let event = createEvent(eventParams);
+    let event = newMockEvent();
     let poolHourlyData = new PoolHourlyDataMock();
     let currentFeesToken0 = BigDecimal.fromString("21023896.3");
     let currentFeesToken1 = BigDecimal.fromString("32987.3");
     let currentUSDFees = currentFeesToken0.times(token0.usdPrice).plus(currentFeesToken1.times(token1.usdPrice));
     let currentHourlyId = getPoolHourlyDataId(event.block.timestamp, pool).toHexString();
     let swapTimes = 4;
+    let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
 
     pool.feeTier = 50;
     pool.token0 = token0.id;
@@ -495,12 +427,12 @@ describe("v3-pool-swap", () => {
     poolHourlyData.save();
 
     let token1ExpectedSwapFee = formatFromTokenAmount(
-      eventParams.amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
       token1,
     );
 
     for (let i = 0; i < swapTimes; i++) {
-      handleV3PoolSwap(event);
+      handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96);
     }
 
     assert.fieldEquals(
@@ -509,10 +441,9 @@ describe("v3-pool-swap", () => {
       "feesToken1",
       currentFeesToken1
         .plus(
-          formatFromTokenAmount(
-            event.params.amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
-            token0,
-          ).times(BigDecimal.fromString(swapTimes.toString())),
+          formatFromTokenAmount(amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)), token0).times(
+            BigDecimal.fromString(swapTimes.toString()),
+          ),
         )
         .toString(),
     );
@@ -534,7 +465,6 @@ describe("v3-pool-swap", () => {
 
   test(`When the user swaps token0 by token1 multiple times in less than 1 hour,
     it should update the same pool hourly data id`, () => {
-    let eventParams = new SwapEventParams();
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
@@ -545,19 +475,20 @@ describe("v3-pool-swap", () => {
     token0.save();
     token1.save();
 
-    eventParams.amount0 = BigInt.fromI32(1765).times(BigInt.fromI32(10).pow(token0.decimals as u8));
+    let amount0 = BigInt.fromI32(1765).times(BigInt.fromI32(10).pow(token0.decimals as u8));
 
-    eventParams.amount1 = BigInt.fromI32(12)
+    let amount1 = BigInt.fromI32(12)
       .times(BigInt.fromI32(10).pow(token1.decimals as u8))
       .neg();
 
-    let event = createEvent(eventParams);
+    let event = newMockEvent();
     let poolHourlyData = new PoolHourlyDataMock();
     let currentFeesToken0 = BigDecimal.fromString("21023896.3");
     let currentFeesToken1 = BigDecimal.fromString("32987.3");
     let currentUSDFees = currentFeesToken0.times(token0.usdPrice).plus(currentFeesToken1.times(token1.usdPrice));
     let currentHourlyId = getPoolHourlyDataId(event.block.timestamp, pool).toHexString();
     let swapTimes = 5;
+    let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
 
     pool.feeTier = 500;
     pool.token0 = token0.id;
@@ -570,12 +501,12 @@ describe("v3-pool-swap", () => {
     poolHourlyData.save();
 
     let token0ExpectedSwapFee = formatFromTokenAmount(
-      eventParams.amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
       token0,
     );
 
     for (let i = 0; i < swapTimes; i++) {
-      handleV3PoolSwap(event);
+      handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96);
     }
 
     assert.fieldEquals(
@@ -584,10 +515,9 @@ describe("v3-pool-swap", () => {
       "feesToken0",
       currentFeesToken0
         .plus(
-          formatFromTokenAmount(
-            event.params.amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
-            token0,
-          ).times(BigDecimal.fromString(swapTimes.toString())),
+          formatFromTokenAmount(amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)), token0).times(
+            BigDecimal.fromString(swapTimes.toString()),
+          ),
         )
         .toString(),
     );
@@ -610,7 +540,6 @@ describe("v3-pool-swap", () => {
   test(`When the user swaps token0 by token1 multiple times with more than 1 hour from
       each other, it should update differents pool hourly data entities(as it
       is a new hour, it should create a new entity for each hour and update it)`, () => {
-    let eventParams = new SwapEventParams();
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
@@ -621,13 +550,15 @@ describe("v3-pool-swap", () => {
     token0.save();
     token1.save();
 
-    eventParams.amount0 = BigInt.fromI32(1765).times(BigInt.fromI32(10).pow(token0.decimals as u8));
+    let amount0 = BigInt.fromI32(1765).times(BigInt.fromI32(10).pow(token0.decimals as u8));
 
-    eventParams.amount1 = BigInt.fromI32(12)
+    let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
+
+    let amount1 = BigInt.fromI32(12)
       .times(BigInt.fromI32(10).pow(token1.decimals as u8))
       .neg();
 
-    let event = createEvent(eventParams);
+    let event = newMockEvent();
 
     let hourIds: Bytes[] = [];
     let swapTimes = 5;
@@ -647,14 +578,15 @@ describe("v3-pool-swap", () => {
       );
 
       hourIds.push(Bytes.fromHexString(currentHourlyId));
-      handleV3PoolSwap(event);
+
+      handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96);
 
       assert.fieldEquals(
         "PoolHourlyData",
         currentHourlyId,
         "feesToken0",
         formatFromTokenAmount(
-          event.params.amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+          amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
           token0,
         ).toString(),
       );
@@ -664,7 +596,6 @@ describe("v3-pool-swap", () => {
   test(`When the user swaps token1 by token0 multiple times with more than 1 hour from
     each other, it should update differents pool hourly data entities(as it
     is a new hour, it should create a new entity for each hour and update it)`, () => {
-    let eventParams = new SwapEventParams();
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
@@ -675,14 +606,13 @@ describe("v3-pool-swap", () => {
     token0.save();
     token1.save();
 
-    eventParams.amount0 = BigInt.fromI32(1)
+    let amount0 = BigInt.fromI32(1)
       .times(BigInt.fromI32(10).pow(token0.decimals as u8))
       .neg();
 
-    eventParams.amount1 = BigInt.fromI32(89632).times(BigInt.fromI32(10).pow(token1.decimals as u8));
-
-    let event = createEvent(eventParams);
-
+    let amount1 = BigInt.fromI32(89632).times(BigInt.fromI32(10).pow(token1.decimals as u8));
+    let event = newMockEvent();
+    let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
     let hourIds: Bytes[] = [];
     let swapTimes = 5;
 
@@ -701,14 +631,15 @@ describe("v3-pool-swap", () => {
       );
 
       hourIds.push(Bytes.fromHexString(currentHourlyId));
-      handleV3PoolSwap(event);
+
+      handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96);
 
       assert.fieldEquals(
         "PoolHourlyData",
         currentHourlyId,
         "feesToken1",
         formatFromTokenAmount(
-          event.params.amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+          amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
           token1,
         ).toString(),
       );
@@ -717,11 +648,14 @@ describe("v3-pool-swap", () => {
 
   test(`When the handler is called, it should call 'setPoolDailyDataTVL'
     to update the pool daily tvl with the correct params`, () => {
-    let event = createEvent();
+    let event = newMockEvent();
     let pool = PoolMock.loadMock();
+    let sqrtPriceX96 = BigInt.fromI32(3432);
+    let amount0 = BigInt.fromI32(200);
+    let amount1 = BigInt.fromI32(100);
     let v3PoolSetters = new V3PoolSettersMock();
 
-    handleV3PoolSwapImpl(event, v3PoolSetters);
+    handleV3PoolSwapImpl(event, pool, new TokenMock(), new TokenMock(), amount0, amount1, sqrtPriceX96, v3PoolSetters);
 
     assert.assertTrue(v3PoolSetters.setPoolDailyDataTVLCalls.length > 0, "setPoolDailyDataTVL not called");
 
@@ -731,7 +665,6 @@ describe("v3-pool-swap", () => {
 
   test(`When the user swaps token0 by token1 multiple times with less than 1 day from
     each other, it should update the same pool daily data entity`, () => {
-    let eventParams = new SwapEventParams();
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
@@ -742,19 +675,20 @@ describe("v3-pool-swap", () => {
     token0.save();
     token1.save();
 
-    eventParams.amount0 = BigInt.fromI32(1765).times(BigInt.fromI32(10).pow(token0.decimals as u8));
+    let amount0 = BigInt.fromI32(1765).times(BigInt.fromI32(10).pow(token0.decimals as u8));
 
-    eventParams.amount1 = BigInt.fromI32(12)
+    let amount1 = BigInt.fromI32(12)
       .times(BigInt.fromI32(10).pow(token1.decimals as u8))
       .neg();
 
-    let event = createEvent(eventParams);
+    let event = newMockEvent();
     let poolDailyData = new PoolDailyDataMock();
     let currentFeesToken0 = BigDecimal.fromString("1898.3");
     let currentFeesToken1 = BigDecimal.fromString("1.3");
     let currentUSDFees = currentFeesToken0.times(token0.usdPrice).plus(currentFeesToken1.times(token1.usdPrice));
     let currentDailyId = getPoolDailyDataId(event.block.timestamp, pool).toHexString();
     let swapTimes = 8;
+    let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
 
     pool.feeTier = 500;
     pool.token0 = token0.id;
@@ -767,13 +701,14 @@ describe("v3-pool-swap", () => {
     poolDailyData.save();
 
     let token0ExpectedSwapFee = formatFromTokenAmount(
-      eventParams.amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
       token0,
     );
 
     for (let i = 0; i < swapTimes; i++) {
       event.block.timestamp = event.block.timestamp.plus(BigInt.fromU32(ONE_HOUR_IN_SECONDS * 2));
-      handleV3PoolSwap(event);
+
+      handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96);
     }
 
     assert.fieldEquals(
@@ -782,10 +717,9 @@ describe("v3-pool-swap", () => {
       "feesToken0",
       currentFeesToken0
         .plus(
-          formatFromTokenAmount(
-            event.params.amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
-            token0,
-          ).times(BigDecimal.fromString(swapTimes.toString())),
+          formatFromTokenAmount(amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)), token0).times(
+            BigDecimal.fromString(swapTimes.toString()),
+          ),
         )
         .toString(),
     );
@@ -808,27 +742,26 @@ describe("v3-pool-swap", () => {
       "PoolDailyData",
       currentDailyId,
       "totalValueLockedToken0",
-      Pool.load(event.address)!.totalValueLockedToken0.toString(),
+      Pool.load(pool.id)!.totalValueLockedToken0.toString(),
     );
 
     assert.fieldEquals(
       "PoolDailyData",
       currentDailyId,
       "totalValueLockedToken1",
-      Pool.load(event.address)!.totalValueLockedToken1.toString(),
+      Pool.load(pool.id)!.totalValueLockedToken1.toString(),
     );
 
     assert.fieldEquals(
       "PoolDailyData",
       currentDailyId,
       "totalValueLockedUSD",
-      Pool.load(event.address)!.totalValueLockedUSD.toString(),
+      Pool.load(pool.id)!.totalValueLockedUSD.toString(),
     );
   });
 
   test(`When the user swaps token1 by token0 multiple times with less than 1 day from
     each other, it should update the same pool daily data entity`, () => {
-    let eventParams = new SwapEventParams();
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
@@ -839,19 +772,20 @@ describe("v3-pool-swap", () => {
     token0.save();
     token1.save();
 
-    eventParams.amount0 = BigInt.fromI32(1765)
+    let amount0 = BigInt.fromI32(1765)
       .times(BigInt.fromI32(10).pow(token0.decimals as u8))
       .neg();
 
-    eventParams.amount1 = BigInt.fromI32(12).times(BigInt.fromI32(10).pow(token1.decimals as u8));
+    let amount1 = BigInt.fromI32(12).times(BigInt.fromI32(10).pow(token1.decimals as u8));
 
-    let event = createEvent(eventParams);
+    let event = newMockEvent();
     let poolDailyData = new PoolDailyDataMock();
     let currentFeesToken0 = BigDecimal.fromString("1898.3");
     let currentFeesToken1 = BigDecimal.fromString("1.3");
     let currentUSDFees = currentFeesToken0.times(token0.usdPrice).plus(currentFeesToken1.times(token1.usdPrice));
     let currentDailyId = getPoolDailyDataId(event.block.timestamp, pool).toHexString();
     let swapTimes = 8;
+    let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
 
     pool.feeTier = 500;
     pool.token0 = token0.id;
@@ -864,13 +798,14 @@ describe("v3-pool-swap", () => {
     poolDailyData.save();
 
     let token1ExpectedSwapFee = formatFromTokenAmount(
-      eventParams.amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
       token0,
     );
 
     for (let i = 0; i < swapTimes; i++) {
       event.block.timestamp = event.block.timestamp.plus(BigInt.fromU32(ONE_HOUR_IN_SECONDS * 2));
-      handleV3PoolSwap(event);
+
+      handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96);
     }
 
     assert.fieldEquals(
@@ -879,10 +814,9 @@ describe("v3-pool-swap", () => {
       "feesToken1",
       currentFeesToken1
         .plus(
-          formatFromTokenAmount(
-            event.params.amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
-            token1,
-          ).times(BigDecimal.fromString(swapTimes.toString())),
+          formatFromTokenAmount(amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)), token1).times(
+            BigDecimal.fromString(swapTimes.toString()),
+          ),
         )
         .toString(),
     );
@@ -905,28 +839,27 @@ describe("v3-pool-swap", () => {
       "PoolDailyData",
       currentDailyId,
       "totalValueLockedToken0",
-      Pool.load(event.address)!.totalValueLockedToken0.toString(),
+      Pool.load(pool.id)!.totalValueLockedToken0.toString(),
     );
 
     assert.fieldEquals(
       "PoolDailyData",
       currentDailyId,
       "totalValueLockedToken1",
-      Pool.load(event.address)!.totalValueLockedToken1.toString(),
+      Pool.load(pool.id)!.totalValueLockedToken1.toString(),
     );
 
     assert.fieldEquals(
       "PoolDailyData",
       currentDailyId,
       "totalValueLockedUSD",
-      Pool.load(event.address)!.totalValueLockedUSD.toString(),
+      Pool.load(pool.id)!.totalValueLockedUSD.toString(),
     );
   });
 
   test(`When the user swaps token0 by token1 multiple times with more than 1 day from
     each other, it should update differents pool daily data entities(as it
     is a new day, it should create a new entity for each day and update it)`, () => {
-    let eventParams = new SwapEventParams();
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
@@ -937,14 +870,14 @@ describe("v3-pool-swap", () => {
     token0.save();
     token1.save();
 
-    eventParams.amount0 = BigInt.fromI32(1765).times(BigInt.fromI32(10).pow(token0.decimals as u8));
+    let amount0 = BigInt.fromI32(1765).times(BigInt.fromI32(10).pow(token0.decimals as u8));
 
-    eventParams.amount1 = BigInt.fromI32(12)
+    let amount1 = BigInt.fromI32(12)
       .times(BigInt.fromI32(10).pow(token1.decimals as u8))
       .neg();
 
-    let event = createEvent(eventParams);
-
+    let event = newMockEvent();
+    let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
     let dayIds: Bytes[] = [];
     let swapTimes = 5;
 
@@ -963,14 +896,15 @@ describe("v3-pool-swap", () => {
       );
 
       dayIds.push(Bytes.fromHexString(currentDayId));
-      handleV3PoolSwap(event);
+
+      handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96);
 
       assert.fieldEquals(
         "PoolDailyData",
         currentDayId,
         "feesToken0",
         formatFromTokenAmount(
-          event.params.amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+          amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
           token0,
         ).toString(),
       );
@@ -979,21 +913,21 @@ describe("v3-pool-swap", () => {
         "PoolDailyData",
         currentDayId,
         "totalValueLockedToken0",
-        Pool.load(event.address)!.totalValueLockedToken0.toString(),
+        Pool.load(pool.id)!.totalValueLockedToken0.toString(),
       );
 
       assert.fieldEquals(
         "PoolDailyData",
         currentDayId,
         "totalValueLockedToken1",
-        Pool.load(event.address)!.totalValueLockedToken1.toString(),
+        Pool.load(pool.id)!.totalValueLockedToken1.toString(),
       );
 
       assert.fieldEquals(
         "PoolDailyData",
         currentDayId,
         "totalValueLockedUSD",
-        Pool.load(event.address)!.totalValueLockedUSD.toString(),
+        Pool.load(pool.id)!.totalValueLockedUSD.toString(),
       );
     }
   });
@@ -1001,7 +935,6 @@ describe("v3-pool-swap", () => {
   test(`When the user swaps token1 by token0 multiple times with more than 1 day from
     each other, it should update differents pool daily data entities(as it
     is a new day, it should create a new entity for each day and update it)`, () => {
-    let eventParams = new SwapEventParams();
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
@@ -1012,16 +945,17 @@ describe("v3-pool-swap", () => {
     token0.save();
     token1.save();
 
-    eventParams.amount0 = BigInt.fromI32(1765)
+    let amount0 = BigInt.fromI32(1765)
       .times(BigInt.fromI32(10).pow(token0.decimals as u8))
       .neg();
 
-    eventParams.amount1 = BigInt.fromI32(12).times(BigInt.fromI32(10).pow(token1.decimals as u8));
+    let amount1 = BigInt.fromI32(12).times(BigInt.fromI32(10).pow(token1.decimals as u8));
 
-    let event = createEvent(eventParams);
+    let event = newMockEvent();
 
     let dayIds: Bytes[] = [];
     let swapTimes = 5;
+    let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
 
     pool.feeTier = 500;
     pool.token0 = token0.id;
@@ -1038,14 +972,15 @@ describe("v3-pool-swap", () => {
       );
 
       dayIds.push(Bytes.fromHexString(currentDayId));
-      handleV3PoolSwap(event);
+
+      handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96);
 
       assert.fieldEquals(
         "PoolDailyData",
         currentDayId,
         "feesToken1",
         formatFromTokenAmount(
-          event.params.amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+          amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
           token1,
         ).toString(),
       );
@@ -1054,21 +989,21 @@ describe("v3-pool-swap", () => {
         "PoolDailyData",
         currentDayId,
         "totalValueLockedToken0",
-        Pool.load(event.address)!.totalValueLockedToken0.toString(),
+        Pool.load(pool.id)!.totalValueLockedToken0.toString(),
       );
 
       assert.fieldEquals(
         "PoolDailyData",
         currentDayId,
         "totalValueLockedToken1",
-        Pool.load(event.address)!.totalValueLockedToken1.toString(),
+        Pool.load(pool.id)!.totalValueLockedToken1.toString(),
       );
 
       assert.fieldEquals(
         "PoolDailyData",
         currentDayId,
         "totalValueLockedUSD",
-        Pool.load(event.address)!.totalValueLockedUSD.toString(),
+        Pool.load(pool.id)!.totalValueLockedUSD.toString(),
       );
     }
   });

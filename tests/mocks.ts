@@ -25,7 +25,7 @@ export class TokenMock extends Token {
   }
 }
 
-export class ProotocolMock extends Protocol {
+export class ProtocolMock extends Protocol {
   mockId: string;
 
   constructor() {
@@ -45,7 +45,7 @@ export class ProotocolMock extends Protocol {
   }
 
   static loadMock(): Protocol {
-    return ProotocolMock.load(new ProotocolMock().id)!;
+    return ProtocolMock.load(new ProtocolMock().id)!;
   }
 }
 
@@ -65,7 +65,7 @@ export class PoolMock extends Pool {
     this.totalValueLockedToken0 = BigDecimal.fromString("0");
     this.totalValueLockedToken1 = BigDecimal.fromString("0");
     this.createdAtTimestamp = BigInt.fromI32(124);
-    this.protocol = new ProotocolMock().id;
+    this.protocol = new ProtocolMock().id;
 
     this.save();
   }

@@ -1,59 +1,10 @@
-import { Address, BigDecimal, BigInt, ethereum } from "@graphprotocol/graph-ts";
+import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { assert, beforeEach, clearStore, describe, newMockEvent, test } from "matchstick-as";
-import { Mint as MintEvent } from "../../../../generated/templates/UniswapV3Pool/UniswapV3Pool";
 import { getPoolDailyDataId } from "../../../../src/utils/pool-utils";
 import { formatFromTokenAmount } from "../../../../src/utils/token-utils";
-import { handleV3PoolMint } from "../../../../src/v3-pools/mappings/pool";
+
+import { handleV3PoolMint } from "../../../../src/v3-pools/mappings/pool/v3-pool-mint";
 import { PoolMock, TokenMock } from "../../../mocks";
-
-class MintEventParams {
-  pool: Address;
-  sender: Address;
-  owner: Address;
-  tickLower: i32;
-  tickUpper: i32;
-  amount: BigInt;
-  amount0: BigInt;
-  amount1: BigInt;
-
-  constructor() {
-    this.pool = Address.fromBytes(new PoolMock().id);
-    this.sender = Address.fromString("0x0000000000000000000000000000000000000001");
-    this.owner = Address.fromString("0x0000000000000000000000000000000000000001");
-    this.tickLower = 0;
-    this.tickUpper = 0;
-    this.amount = BigInt.fromI32(0);
-    this.amount0 = BigInt.fromI32(0);
-    this.amount1 = BigInt.fromI32(0);
-  }
-}
-
-function createEvent(params: MintEventParams = new MintEventParams()): MintEvent {
-  let mockEvent = newMockEvent();
-
-  let eventParams = [
-    new ethereum.EventParam("sender", ethereum.Value.fromAddress(params.sender)),
-    new ethereum.EventParam("owner", ethereum.Value.fromAddress(params.owner)),
-    new ethereum.EventParam("tickLower", ethereum.Value.fromI32(params.tickLower)),
-    new ethereum.EventParam("tickUpper", ethereum.Value.fromI32(params.tickUpper)),
-    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(params.amount)),
-    new ethereum.EventParam("amount0", ethereum.Value.fromUnsignedBigInt(params.amount0)),
-    new ethereum.EventParam("amount1", ethereum.Value.fromUnsignedBigInt(params.amount1)),
-  ];
-
-  let event = new MintEvent(
-    params.pool,
-    mockEvent.logIndex,
-    mockEvent.transactionLogIndex,
-    mockEvent.logType,
-    mockEvent.block,
-    mockEvent.transaction,
-    eventParams,
-    mockEvent.receipt,
-  );
-
-  return event;
-}
 
 describe("v3-pool-mint", () => {
   beforeEach(() => {
@@ -74,22 +25,19 @@ describe("v3-pool-mint", () => {
     let initialPoolToken0Tvl = BigDecimal.fromString("24");
 
     let pool = PoolMock.loadMock();
-    let eventParams = new MintEventParams();
+
     pool.totalValueLockedToken0 = initialPoolToken0Tvl;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
 
-    eventParams.amount0 = amount0In;
-    eventParams.pool = Address.fromBytes(pool.id);
+    let event = newMockEvent();
 
-    let event = createEvent(eventParams);
-
-    handleV3PoolMint(event);
+    handleV3PoolMint(event, pool, token0, token1, amount0In, BigInt.fromI32(0));
 
     assert.fieldEquals(
       "Pool",
-      event.address.toHexString(),
+      pool.id.toHexString(),
       "totalValueLockedToken0",
       initialPoolToken0Tvl.plus(formatFromTokenAmount(amount0In, token0)).toString(),
     );
@@ -109,22 +57,19 @@ describe("v3-pool-mint", () => {
     let initialPoolToken1Tvl = BigDecimal.fromString("98");
 
     let pool = PoolMock.loadMock();
-    let eventParams = new MintEventParams();
+
     pool.totalValueLockedToken1 = initialPoolToken1Tvl;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
 
-    eventParams.amount1 = amount1In;
-    eventParams.pool = Address.fromBytes(pool.id);
+    let event = newMockEvent();
 
-    let event = createEvent(eventParams);
-
-    handleV3PoolMint(event);
+    handleV3PoolMint(event, pool, token0, token1, BigInt.fromI32(0), amount1In);
 
     assert.fieldEquals(
       "Pool",
-      event.address.toHexString(),
+      pool.id.toHexString(),
       "totalValueLockedToken1",
       initialPoolToken1Tvl.plus(formatFromTokenAmount(amount1In, token0)).toString(),
     );
@@ -149,7 +94,7 @@ describe("v3-pool-mint", () => {
     let initialPoolToken1Tvl = BigDecimal.fromString("12");
 
     let pool = PoolMock.loadMock();
-    let eventParams = new MintEventParams();
+
     pool.totalValueLockedToken0 = initialPoolToken0Tvl;
     pool.totalValueLockedToken1 = initialPoolToken1Tvl;
 
@@ -157,17 +102,13 @@ describe("v3-pool-mint", () => {
     pool.token1 = token1.id;
     pool.save();
 
-    eventParams.amount0 = amount0In;
-    eventParams.amount1 = amount1In;
-    eventParams.pool = Address.fromBytes(pool.id);
+    let event = newMockEvent();
 
-    let event = createEvent(eventParams);
-
-    handleV3PoolMint(event);
+    handleV3PoolMint(event, pool, token0, token1, amount0In, amount1In);
 
     assert.fieldEquals(
       "Pool",
-      event.address.toHexString(),
+      pool.id.toHexString(),
       "totalValueLockedUSD",
       initialPoolToken0Tvl
         .plus(formatFromTokenAmount(amount0In, token0))
@@ -196,7 +137,6 @@ describe("v3-pool-mint", () => {
     let initialPoolToken1Tvl = BigDecimal.fromString("12");
 
     let pool = PoolMock.loadMock();
-    let eventParams = new MintEventParams();
     pool.totalValueLockedToken0 = initialPoolToken0Tvl;
     pool.totalValueLockedToken1 = initialPoolToken1Tvl;
 
@@ -204,13 +144,9 @@ describe("v3-pool-mint", () => {
     pool.token1 = token1.id;
     pool.save();
 
-    eventParams.amount0 = amount0In;
-    eventParams.amount1 = amount1In;
-    eventParams.pool = Address.fromBytes(pool.id);
+    let event = newMockEvent();
 
-    let event = createEvent(eventParams);
-
-    handleV3PoolMint(event);
+    handleV3PoolMint(event, pool, token0, token1, amount0In, amount1In);
 
     assert.fieldEquals(
       "PoolDailyData",
@@ -238,18 +174,15 @@ describe("v3-pool-mint", () => {
     let initialPoolToken0Tvl = BigDecimal.fromString("24");
 
     let pool = PoolMock.loadMock();
-    let eventParams = new MintEventParams();
+
     pool.totalValueLockedToken0 = initialPoolToken0Tvl;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
 
-    eventParams.amount0 = amount0In;
-    eventParams.pool = Address.fromBytes(pool.id);
+    let event = newMockEvent();
 
-    let event = createEvent(eventParams);
-
-    handleV3PoolMint(event);
+    handleV3PoolMint(event, pool, token0, token1, amount0In, BigInt.fromI32(0));
 
     assert.fieldEquals(
       "PoolDailyData",
@@ -273,18 +206,14 @@ describe("v3-pool-mint", () => {
     let initialPoolToken1Tvl = BigDecimal.fromString("98");
 
     let pool = PoolMock.loadMock();
-    let eventParams = new MintEventParams();
+
     pool.totalValueLockedToken1 = initialPoolToken1Tvl;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
 
-    eventParams.amount1 = amount1In;
-    eventParams.pool = Address.fromBytes(pool.id);
-
-    let event = createEvent(eventParams);
-
-    handleV3PoolMint(event);
+    let event = newMockEvent();
+    handleV3PoolMint(event, pool, token0, token1, BigInt.fromI32(0), amount1In);
 
     assert.fieldEquals(
       "PoolDailyData",

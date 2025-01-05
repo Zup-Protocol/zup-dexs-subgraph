@@ -1,28 +1,42 @@
-import { BigInt } from "@graphprotocol/graph-ts";
+import { BigInt, ethereum } from "@graphprotocol/graph-ts";
 import {
   PoolDailyData as PoolDailyDataEntity,
   Pool as PoolEntity,
   PoolHourlyData as PoolHourlyDataEntity,
   Token as TokenEntity,
 } from "../../../../generated/schema";
-import { Swap as SwapEvent } from "../../../../generated/templates/UniswapV3Pool/UniswapV3Pool";
+
 import { ZERO_BIG_DECIMAL, ZERO_BIG_INT } from "../../../utils/constants";
 import { getPoolDailyDataId, getPoolHourlyDataId } from "../../../utils/pool-utils";
 import { formatFromTokenAmount } from "../../../utils/token-utils";
 import { V3PoolSetters } from "../../utils/v3-pool-setters";
 
-export function handleV3PoolSwap(event: SwapEvent): void {
-  handleV3PoolSwapImpl(event);
+export function handleV3PoolSwap(
+  event: ethereum.Event,
+  poolEntity: PoolEntity,
+  token0Entity: TokenEntity,
+  token1Entity: TokenEntity,
+  amount0: BigInt,
+  amount1: BigInt,
+  sqrtPriceX96: BigInt,
+): void {
+  handleV3PoolSwapImpl(event, poolEntity, token0Entity, token1Entity, amount0, amount1, sqrtPriceX96);
 }
 
-export function handleV3PoolSwapImpl(event: SwapEvent, v3PoolSetters: V3PoolSetters = new V3PoolSetters()): void {
-  let poolEntity = PoolEntity.load(event.address)!;
-  let token0Entity = TokenEntity.load(poolEntity.token0)!;
-  let token1Entity = TokenEntity.load(poolEntity.token1)!;
-  let tokenAmount0Formatted = formatFromTokenAmount(event.params.amount0, token0Entity);
-  let tokenAmount1Formatted = formatFromTokenAmount(event.params.amount1, token1Entity);
+export function handleV3PoolSwapImpl(
+  event: ethereum.Event,
+  poolEntity: PoolEntity,
+  token0Entity: TokenEntity,
+  token1Entity: TokenEntity,
+  amount0: BigInt,
+  amount1: BigInt,
+  sqrtPriceX96: BigInt,
+  v3PoolSetters: V3PoolSetters = new V3PoolSetters(),
+): void {
+  let tokenAmount0Formatted = formatFromTokenAmount(amount0, token0Entity);
+  let tokenAmount1Formatted = formatFromTokenAmount(amount1, token1Entity);
 
-  v3PoolSetters.setPricesForV3PoolWhitelistedTokens(event.params.sqrtPriceX96, poolEntity, token0Entity, token1Entity);
+  v3PoolSetters.setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, poolEntity, token0Entity, token1Entity);
 
   poolEntity.totalValueLockedToken0 = poolEntity.totalValueLockedToken0.plus(tokenAmount0Formatted);
   poolEntity.totalValueLockedToken1 = poolEntity.totalValueLockedToken1.plus(tokenAmount1Formatted);
@@ -31,18 +45,23 @@ export function handleV3PoolSwapImpl(event: SwapEvent, v3PoolSetters: V3PoolSett
     .times(token0Entity.usdPrice)
     .plus(poolEntity.totalValueLockedToken1.times(token1Entity.usdPrice));
 
-  setHourlyData(event, poolEntity);
-  setDailyData(event, poolEntity, v3PoolSetters);
+  setHourlyData(event, token0Entity, token1Entity, poolEntity, amount0, amount1);
+  setDailyData(event, poolEntity, token0Entity, token1Entity, amount0, amount1, v3PoolSetters);
 
   poolEntity.save();
 }
 
-function setHourlyData(event: SwapEvent, pool: PoolEntity): void {
+function setHourlyData(
+  event: ethereum.Event,
+  token0: TokenEntity,
+  token1: TokenEntity,
+  pool: PoolEntity,
+  amount0: BigInt,
+  amount1: BigInt,
+): void {
   let hourlyPoolDataId = getPoolHourlyDataId(event.block.timestamp, pool);
   let poolHourlyDataEntity = PoolHourlyDataEntity.load(hourlyPoolDataId);
-  let userInputToken = findUserInputToken(event, pool);
-  let token0 = TokenEntity.load(pool.token0)!;
-  let token1 = TokenEntity.load(pool.token1)!;
+  let userInputToken = findUserInputToken(amount0, pool);
 
   if (poolHourlyDataEntity == null) {
     poolHourlyDataEntity = new PoolHourlyDataEntity(hourlyPoolDataId);
@@ -54,13 +73,13 @@ function setHourlyData(event: SwapEvent, pool: PoolEntity): void {
   }
 
   if (userInputToken.id == pool.token0) {
-    let feeAmountToken0 = getSwapFee(event.params.amount0, pool.feeTier);
+    let feeAmountToken0 = getSwapFee(amount0, pool.feeTier);
 
     poolHourlyDataEntity.feesToken0 = poolHourlyDataEntity.feesToken0.plus(
       formatFromTokenAmount(feeAmountToken0, userInputToken),
     );
   } else {
-    let feeAmountToken1 = getSwapFee(event.params.amount1, pool.feeTier);
+    let feeAmountToken1 = getSwapFee(amount1, pool.feeTier);
 
     poolHourlyDataEntity.feesToken1 = poolHourlyDataEntity.feesToken1.plus(
       formatFromTokenAmount(feeAmountToken1, userInputToken),
@@ -74,23 +93,29 @@ function setHourlyData(event: SwapEvent, pool: PoolEntity): void {
   poolHourlyDataEntity.save();
 }
 
-function setDailyData(event: SwapEvent, pool: PoolEntity, v3PoolSetters: V3PoolSetters): void {
+function setDailyData(
+  event: ethereum.Event,
+  pool: PoolEntity,
+  token0: TokenEntity,
+  token1: TokenEntity,
+  amount0: BigInt,
+  amount1: BigInt,
+  v3PoolSetters: V3PoolSetters,
+): void {
   v3PoolSetters.setPoolDailyDataTVL(event, pool);
 
   let dailyPoolDataId = getPoolDailyDataId(event.block.timestamp, pool);
   let poolDailyDataEntity = PoolDailyDataEntity.load(dailyPoolDataId)!; // adding ! here assuming [setPoolDailyDataTVL] created it if null
-  let userInputToken = findUserInputToken(event, pool);
-  let token0 = TokenEntity.load(pool.token0)!;
-  let token1 = TokenEntity.load(pool.token1)!;
+  let userInputToken = findUserInputToken(amount0, pool);
 
   if (userInputToken.id == pool.token0) {
-    let feeAmountToken0 = getSwapFee(event.params.amount0, pool.feeTier);
+    let feeAmountToken0 = getSwapFee(amount0, pool.feeTier);
 
     poolDailyDataEntity.feesToken0 = poolDailyDataEntity.feesToken0.plus(
       formatFromTokenAmount(feeAmountToken0, userInputToken),
     );
   } else {
-    let feeAmountToken1 = getSwapFee(event.params.amount1, pool.feeTier);
+    let feeAmountToken1 = getSwapFee(amount1, pool.feeTier);
 
     poolDailyDataEntity.feesToken1 = poolDailyDataEntity.feesToken1.plus(
       formatFromTokenAmount(feeAmountToken1, userInputToken),
@@ -108,8 +133,8 @@ function getSwapFee(tokenAmount: BigInt, poolFeeTier: i32): BigInt {
   return tokenAmount.times(BigInt.fromI32(poolFeeTier)).div(BigInt.fromU32(1000000));
 }
 
-function findUserInputToken(event: SwapEvent, pool: PoolEntity): TokenEntity {
-  if (event.params.amount0.lt(ZERO_BIG_INT)) return TokenEntity.load(pool.token1)!;
+function findUserInputToken(amount0: BigInt, pool: PoolEntity): TokenEntity {
+  if (amount0.lt(ZERO_BIG_INT)) return TokenEntity.load(pool.token1)!;
 
   return TokenEntity.load(pool.token0)!;
 }

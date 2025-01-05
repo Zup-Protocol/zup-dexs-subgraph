@@ -33,3 +33,5 @@ typechain-types
 
 # Hardhat files
 cache
+
+tests/.bin
