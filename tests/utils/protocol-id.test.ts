@@ -28,3 +28,10 @@ test("Zebra Id should be correct", () => {
 
   assert.stringEquals(actualId, expectedId);
 });
+
+test("SushiSwap Id should be correct", () => {
+  const expectedId = "sushi-swap";
+  const actualId = ProtocolId.sushiSwap;
+
+  assert.stringEquals(actualId, expectedId);
+});
