@@ -20,6 +20,15 @@ describe("`wrappedNativeAddress` should return the correct value for each networ
       Address.fromString("0x5300000000000000000000000000000000000004"),
     );
   });
+
+  test("Sepolia", () => {
+    dataSourceMock.setNetwork("sepolia");
+
+    assert.addressEquals(
+      Address.fromString(CurrentNetwork.wrappedNativeAddress),
+      Address.fromString("0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14"),
+    );
+  });
 });
 
 test(
@@ -55,6 +64,14 @@ describe("`stablecoinsAddresses` should return a correct list of stablecoins for
     assert.assertTrue(
       CurrentNetwork.stablecoinsAddresses.join() ==
         ["0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df", "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4"].join(),
+    );
+  });
+
+  test("Sepolia", () => {
+    dataSourceMock.setNetwork("sepolia");
+
+    assert.assertTrue(
+      CurrentNetwork.stablecoinsAddresses.join() == ["0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"].join(),
     );
   });
 });

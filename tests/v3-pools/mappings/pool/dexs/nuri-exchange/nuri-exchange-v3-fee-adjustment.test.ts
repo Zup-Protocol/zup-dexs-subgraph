@@ -1,8 +1,8 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
 import { assert, newMockEvent, test } from "matchstick-as";
-import { FeeAdjustment } from "../../../../../generated/templates/NuriExchangeV3Pool/NuriExchangeV3Pool";
-import { handleNuriExchangeV3PoolFeeAdjustment } from "../../../../../src/v3-pools/mappings/pool/dexs/nuri-exchange";
-import { PoolMock } from "../../../../mocks";
+import { FeeAdjustment } from "../../../../../../generated/templates/NuriExchangeV3Pool/NuriExchangeV3Pool";
+import { handleNuriExchangeV3PoolFeeAdjustment } from "../../../../../../src/v3-pools/mappings/pool/dexs/nuri-exchange";
+import { PoolMock } from "../../../../../mocks";
 
 function createEvent(pool: Address, newFee: i32 = 3): FeeAdjustment {
   let mockEvent = newMockEvent();

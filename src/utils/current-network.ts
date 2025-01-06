@@ -3,6 +3,7 @@ import { dataSource } from "@graphprotocol/graph-ts";
 // Networks are defined like const variables because unfortunately enums are not supported in subgraphs
 const MAINNET_NETWORK_NAME = "mainnet";
 const SCROLL_NETWORK_NAME = "scroll";
+const SEPOLIA_NETWORK_NAME = "sepolia";
 
 export abstract class CurrentNetwork {
   private static unsupportedNetworkError: Error = new Error("Unsupported network: " + dataSource.network());
@@ -10,6 +11,7 @@ export abstract class CurrentNetwork {
   static get wrappedNativeAddress(): string {
     if (dataSource.network() == MAINNET_NETWORK_NAME) return "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
     if (dataSource.network() == SCROLL_NETWORK_NAME) return "0x5300000000000000000000000000000000000004";
+    if (dataSource.network() == SEPOLIA_NETWORK_NAME) return "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14";
 
     throw CurrentNetwork.unsupportedNetworkError;
   }
@@ -30,6 +32,12 @@ export abstract class CurrentNetwork {
       return [
         "0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df", // USDT
         "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4", // USDC
+      ];
+    }
+
+    if (dataSource.network() == SEPOLIA_NETWORK_NAME) {
+      return [
+        "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238", // USDC
       ];
     }
 
