@@ -1,16 +1,15 @@
 import { UniswapV3Pool as UniswapV3PoolTemplate } from "../../../../../generated/templates";
-import { PoolCreated as PoolCreatedEvent } from "../../../../../generated/UniswapV3Factory/UniswapV3Factory";
+import { PoolCreated } from "../../../../../generated/ZebraProtocolV3Factory/UniswapV3Factory";
 import { ProtocolId } from "../../../../utils/protocol-id";
-
 import { getOrCreateProtocol } from "../../../../utils/protocol-utils";
-import { handleV3PoolCreated } from "./../v3-factory";
+import { handleV3PoolCreated } from "../v3-factory";
 
-export function handleUniswapV3PoolCreated(event: PoolCreatedEvent): void {
+export function handleZebraProtocolV3PoolCreated(event: PoolCreated): void {
   let protocolEntity = getOrCreateProtocol(
-    ProtocolId.uniswap,
-    "Uniswap",
-    "https://uniswap.org",
-    "https://raw.githubusercontent.com/trustwallet/assets/refs/heads/master/dapps/app.uniswap.org.png",
+    ProtocolId.zebra,
+    "Zebra",
+    "https://zebra.xyz",
+    "https://icons.llamao.fi/icons/protocols/zebra",
   );
 
   handleV3PoolCreated(

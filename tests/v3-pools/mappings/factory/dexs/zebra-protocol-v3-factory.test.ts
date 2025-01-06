@@ -1,9 +1,10 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
 import { assert, beforeEach, clearStore, createMockedFunction, describe, newMockEvent, test } from "matchstick-as";
-import { PoolCreated } from "../../../../../generated/PancakeSwapV3Factory/PancakeSwapV3Factory";
+import { PoolCreated } from "../../../../../generated/ZebraProtocolV3Factory/UniswapV3Factory";
 
 import { ProtocolId } from "../../../../../src/utils/protocol-id";
-import { handlePancakeSwapV3PoolCreated } from "../../../../../src/v3-pools/mappings/factory/dexs/pancakeswap-v3-factory";
+import { handleZebraProtocolV3PoolCreated } from "../../../../../src/v3-pools/mappings/factory/dexs/zebra-protocol-v3-factory";
+
 export class PoolCreatedEventParams {
   token0: Address;
   token1: Address;
@@ -64,27 +65,22 @@ export function createEvent(params: PoolCreatedEventParams = new PoolCreatedEven
   return event;
 }
 
-describe("pancakeswap-v3-factory", () => {
+describe("zebra-v3-factory", () => {
   beforeEach(() => {
     clearStore();
   });
 
   test(`When the handler is called and there
-        isn't an already PancakeSwap created protocol, it
+        isn't an already zebra created protocol, it
         should create one with the correct values
         and assign it to the pool`, () => {
     let event = createEvent();
-    handlePancakeSwapV3PoolCreated(event);
+    handleZebraProtocolV3PoolCreated(event);
 
-    assert.fieldEquals("Protocol", ProtocolId.pancakeSwap, "name", "PancakeSwap");
-    assert.fieldEquals("Protocol", ProtocolId.pancakeSwap, "url", "https://pancakeswap.finance");
-    assert.fieldEquals(
-      "Protocol",
-      ProtocolId.pancakeSwap,
-      "logo",
-      "https://raw.githubusercontent.com/trustwallet/assets/refs/heads/master/dapps/exchange.pancakeswap.finance.png",
-    );
+    assert.fieldEquals("Protocol", ProtocolId.zebra, "name", "Zebra");
+    assert.fieldEquals("Protocol", ProtocolId.zebra, "url", "https://zebra.xyz");
+    assert.fieldEquals("Protocol", ProtocolId.zebra, "logo", "https://icons.llamao.fi/icons/protocols/zebra");
 
-    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.pancakeSwap);
+    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.zebra);
   });
 });

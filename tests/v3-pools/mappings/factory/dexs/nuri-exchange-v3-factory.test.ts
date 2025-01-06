@@ -1,7 +1,8 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
 import { assert, beforeEach, clearStore, createMockedFunction, describe, newMockEvent, test } from "matchstick-as";
 import { PoolCreated } from "../../../../../generated/NuriExchangeV3Factory/NuriExchangeV3Factory";
-import { NURI_EXCHANGE_ID } from "../../../../../src/utils/constants";
+
+import { ProtocolId } from "../../../../../src/utils/protocol-id";
 import { handleNuriExchangeV3PoolCreated } from "../../../../../src/v3-pools/mappings/factory/dexs/nuri-exchange-v3-factory";
 
 export class PoolCreatedEventParams {
@@ -76,23 +77,14 @@ describe("nuri-cl-factory", () => {
     let event = createEvent();
 
     handleNuriExchangeV3PoolCreated(event);
-    assert.fieldEquals("Protocol", NURI_EXCHANGE_ID, "name", "Nuri Exchange");
-    assert.fieldEquals("Protocol", NURI_EXCHANGE_ID, "url", "https://www.nuri.exchange/");
+    assert.fieldEquals("Protocol", ProtocolId.nuriExchange, "name", "Nuri Exchange");
+    assert.fieldEquals("Protocol", ProtocolId.nuriExchange, "url", "https://www.nuri.exchange/");
     assert.fieldEquals(
       "Protocol",
-      NURI_EXCHANGE_ID,
+      ProtocolId.nuriExchange,
       "logo",
       "https://www.nuri.exchange/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Femission.081c7921.png&w=64&q=75",
     );
-    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", NURI_EXCHANGE_ID);
-  });
-
-  test(`When the handler is called and the pool assigned protocol id
-    is not the Nuri Exchange one, it should be updated to the Nuri Exchange one`, () => {
-    let event = createEvent(); // assuming it will assign an empty string to the protocol
-
-    handleNuriExchangeV3PoolCreated(event);
-
-    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", NURI_EXCHANGE_ID);
+    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.nuriExchange);
   });
 });

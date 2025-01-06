@@ -1,7 +1,7 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
 import { assert, beforeEach, clearStore, createMockedFunction, describe, newMockEvent, test } from "matchstick-as";
 import { PoolCreated } from "../../../../../generated/UniswapV3Factory/UniswapV3Factory";
-import { UNISWAP_ID } from "../../../../../src/utils/constants";
+import { ProtocolId } from "../../../../../src/utils/protocol-id";
 import { handleUniswapV3PoolCreated } from "../../../../../src/v3-pools/mappings/factory/dexs/uniswap-v3-factory";
 
 export class PoolCreatedEventParams {
@@ -76,24 +76,15 @@ describe("uniswap-v3-factory", () => {
     let event = createEvent();
     handleUniswapV3PoolCreated(event);
 
-    assert.fieldEquals("Protocol", UNISWAP_ID, "name", "Uniswap");
-    assert.fieldEquals("Protocol", UNISWAP_ID, "url", "https://uniswap.org");
+    assert.fieldEquals("Protocol", ProtocolId.uniswap, "name", "Uniswap");
+    assert.fieldEquals("Protocol", ProtocolId.uniswap, "url", "https://uniswap.org");
     assert.fieldEquals(
       "Protocol",
-      UNISWAP_ID,
+      ProtocolId.uniswap,
       "logo",
       "https://raw.githubusercontent.com/trustwallet/assets/refs/heads/master/dapps/app.uniswap.org.png",
     );
 
-    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", UNISWAP_ID);
-  });
-
-  test(`When the handler is called and the pool assigned protocol id
-    is not the Uniswap one, it should be updated to the Uniswap one`, () => {
-    let event = createEvent(); // assuming it will assign an empty string to the protocol
-
-    handleUniswapV3PoolCreated(event);
-
-    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", UNISWAP_ID);
+    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.uniswap);
   });
 });
