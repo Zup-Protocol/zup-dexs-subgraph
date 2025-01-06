@@ -71,6 +71,28 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address,indexed address,indexed uint24,int24,address)
           handler: handleSushiSwapV3PoolCreated
+  - kind: ethereum
+    name: UniswapV3Factory
+    network: scroll
+    source:
+      address: "0x70C62C8b8e801124A4Aa81ce07b637A3e83cb919"
+      abi: UniswapV3Factory
+      startBlock: 1367
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v3-pools/mappings/factory/dexs/oku-trade-v3-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: UniswapV3Factory
+          file: "../abis/factories/UniswapV3Factory.json"
+        - name: "ERC20"
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PoolCreated(indexed address,indexed address,indexed uint24,int24,address)
+          handler: handleOkuTradeV3PoolCreated
 
 templates:
   - kind: ethereum/contract

@@ -35,3 +35,10 @@ test("SushiSwap Id should be correct", () => {
 
   assert.stringEquals(actualId, expectedId);
 });
+
+test("OkuTrade Id should be correct", () => {
+  const expectedId = "oku-trade";
+  const actualId = ProtocolId.okuTrade;
+
+  assert.stringEquals(actualId, expectedId);
+});
