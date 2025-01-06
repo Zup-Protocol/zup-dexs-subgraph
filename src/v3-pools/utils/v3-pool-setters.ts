@@ -55,11 +55,17 @@ export class V3PoolSetters {
         poolToken1Entity.usdPrice = poolPrices.token0PerToken1;
         poolToken1Entity.save();
 
+        poolToken0Entity.usdPrice = poolPrices.token1PerToken0.times(poolToken1Entity.usdPrice);
+        poolToken0Entity.save();
+
         return;
       }
 
       poolToken0Entity.usdPrice = poolPrices.token1PerToken0;
       poolToken0Entity.save();
+
+      poolToken1Entity.usdPrice = poolPrices.token0PerToken1.times(poolToken0Entity.usdPrice);
+      poolToken1Entity.save();
 
       return;
     }

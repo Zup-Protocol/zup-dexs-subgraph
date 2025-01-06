@@ -123,7 +123,8 @@ test(`When calling 'setPoolDailyDataTVL' and a PoolDailyData entity
 });
 
 test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of
-    token0 stable and token1 non-stable it should correctly set the token1 price`, () => {
+    token0 stable and token1 non-stable it should correctly set the token1
+    and the token0 price`, () => {
   let sqrtPriceX96 = BigInt.fromString("132117387656662503710917528654277782");
   let stableToken = new TokenMock(Address.fromString(CurrentNetwork.stablecoinsAddresses[0]));
   stableToken.decimals = 6;
@@ -142,10 +143,12 @@ test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of
   new V3PoolSettersMock().setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, pool, stableToken, nonStableToken);
 
   assert.fieldEquals("Token", nonStableToken.id.toHexString(), "usdPrice", "0.3596161703425394429455590507159066");
+  assert.fieldEquals("Token", stableToken.id.toHexString(), "usdPrice", "1");
 });
 
 test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of
-    token0 non-stable and token1 stable it should correctly set the token0 price`, () => {
+    token0 non-stable and token1 stable it should correctly set the token0
+    and token1 price`, () => {
   let sqrtPriceX96 = BigInt.fromString("2422644741646880465971970308851");
   let stableToken = new TokenMock(Address.fromString(CurrentNetwork.stablecoinsAddresses[0]));
   stableToken.decimals = 6;
@@ -164,6 +167,7 @@ test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of
   new V3PoolSettersMock().setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, pool, nonStableToken, stableToken);
 
   assert.fieldEquals("Token", nonStableToken.id.toHexString(), "usdPrice", "93501.87063469230918451445286994512");
+  assert.fieldEquals("Token", stableToken.id.toHexString(), "usdPrice", "1");
 });
 
 test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of 
