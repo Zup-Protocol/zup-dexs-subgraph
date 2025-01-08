@@ -2,6 +2,14 @@
 
 This is the primary subgraph used by the Zup Protocol to calculate yields. It aggregates data from all protocols supported by Zup across different networks. For each network, it includes all Zup-supported DEXs in a single subgraph.
 
+### Table of Contents
+
+1. [Dependencies](#dependencies)
+2. [Installation](#installation)
+3. [Running tests](#running-tests)
+4. [Adding a new network](#adding-a-new-network)
+5. [Adding a new DEX](#adding-a-new-dex)
+
 ## Dependencies
 
 - **Node.js**
@@ -39,3 +47,20 @@ To add a new network to the subgraph, you need to do a few things:
 2. Add a new constant with the network name (following the [Network CLI Name](https://thegraph.com/docs/en/supported-networks/) from the Graph) in [current-network.ts](./src/utils/current-network.ts) for the new network.
 3. Add a new entry for each function defined in [current-network.ts](./src/utils/current-network.ts) that needs to be overriden for the new network.
 4. Add new scripts in [package.json](./package.json) for the new network (following the pattern `[script]:networkname`), to make it easier to deploy, generate code and build the subgraph.
+
+## Adding a new DEX
+
+To add a new DEX to the subgraph, you need to do a few things:
+
+1. Modify the manifest of the networks that should support the new DEX in [subgraph-manifests](./subgraph-manifests):
+
+- The Factory contract of the DEX must be included in the manifest, at the `dataSources` section, following the same pattern as the other DEXs.
+- In case that the new DEX events or code is a little different from the UniswapV3 original one, a new template for this must be added in the subgraph manifest, with the correct events and handlers. You should also create personalized handlers for this new DEX, to handle events emitted by this personalized template, following the pattern of the other ones at [v3-pools/mappings/factory/dexs](./src/v3-pools//mappings//pool/dexs/) (WARNING:
+  DON'T FORGET TO IMPORT THE EVENT FROM THE SAME DEX AS THE HANDLER, IMPORTING OTHER DEX EVENT CAN CAUSE BUGS)
+
+2. Create a factory handler specific for the new DEX in [v3-pools/mappings/factory/dexs](./src/v3-pools/mappings/factory/dexs), following the pattern of the other ones (WARNING: Be sure to import the correct event from the same DEX, importing other DEX event can cause bugs)
+
+3. Modify the root subgraph manifest [subgraph.yaml](./subgraph.yaml) to include the new DEX in the subgraph, so tests can be ran without any compilation error, this is simply copying and pasting the newly added config from the others manifests, but changing the network to `mainnet`
+   and changing the path of the handlers and files
+
+4. Code tests for this nex DEX handlers if possible :)
