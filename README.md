@@ -55,8 +55,11 @@ To add a new DEX to the subgraph, you need to do a few things:
 1. Modify the manifest of the networks that should support the new DEX in [subgraph-manifests](./subgraph-manifests):
 
 - The Factory contract of the DEX must be included in the manifest, at the `dataSources` section, following the same pattern as the other DEXs.
-- In case that the new DEX events or code is a little different from the UniswapV3 original one, a new template for this must be added in the subgraph manifest, with the correct events and handlers. You should also create personalized handlers for this new DEX, to handle events emitted by this personalized template, following the pattern of the other ones at [v3-pools/mappings/factory/dexs](./src/v3-pools//mappings//pool/dexs/) (WARNING:
-  DON'T FORGET TO IMPORT THE EVENT FROM THE SAME DEX AS THE HANDLER, IMPORTING OTHER DEX EVENT CAN CAUSE BUGS)
+- In case that the new DEX events or code is a little different from the UniswapV3 original one, some additional things are required:
+  - You should add its ABI in the [abis](./abis/) folder. For the Pool and the Factory.
+  - A new template for this DEX must be added in the subgraph manifest, with the correct events and handlers.
+  - You should create personalized handlers for this new DEX, to handle events emitted by this personalized template, following the pattern of the other ones at [v3-pools/mappings/factory/dexs](./src/v3-pools//mappings//pool/dexs/) (WARNING:
+    DON'T FORGET TO IMPORT THE EVENT FROM THE SAME DEX AS THE HANDLER, IMPORTING OTHER DEX EVENT CAN CAUSE BUGS).
 
 2. Create a factory handler specific for the new DEX in [v3-pools/mappings/factory/dexs](./src/v3-pools/mappings/factory/dexs), following the pattern of the other ones (WARNING: Be sure to import the correct event from the same DEX, importing other DEX event can cause bugs)
 
