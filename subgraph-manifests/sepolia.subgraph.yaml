@@ -4,11 +4,11 @@ indexerHints:
   prune: never
 schema:
   file: ../schema.graphql
-features:
-  - grafting
-graft:
-  base: QmXxRquetgeyYfLQH1thuSt7w5zym7Ln6ASJtEzeC63TCW
-  block: 7434494
+# features:
+#   - grafting
+# graft:
+#   base: QmXxRquetgeyYfLQH1thuSt7w5zym7Ln6ASJtEzeC63TCW
+#   block: 7434494
 dataSources:
   - kind: ethereum
     name: UniswapV3Factory
@@ -16,8 +16,8 @@ dataSources:
     source:
       address: "0x0227628f3F023bb0B980b67D528571c95c6DaC1c"
       abi: UniswapV3Factory
-      startBlock: 7434795 # Grafting indexing start
-      # 3518270 Original Block
+      startBlock: 3518270 # Original Block
+      #  7434795 # Grafting indexing start
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -39,8 +39,8 @@ dataSources:
     source:
       address: "0x0BFbCF9fa4f9C56B0F40a671Ad40E0805A091865"
       abi: PancakeSwapV3Factory
-      startBlock: 7434795 # Grafting indexing start
-      # 5188217 Original Block
+      startBlock: 5188217 # Original Block
+      # 7434795 # Grafting indexing start
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
