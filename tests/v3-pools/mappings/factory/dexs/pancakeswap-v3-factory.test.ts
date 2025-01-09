@@ -1,5 +1,14 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { assert, beforeEach, clearStore, createMockedFunction, describe, newMockEvent, test } from "matchstick-as";
+import {
+  assert,
+  beforeEach,
+  clearStore,
+  createMockedFunction,
+  dataSourceMock,
+  describe,
+  newMockEvent,
+  test,
+} from "matchstick-as";
 import { PoolCreated } from "../../../../../generated/PancakeSwapV3Factory/PancakeSwapV3Factory";
 
 import { ProtocolId } from "../../../../../src/utils/protocol-id";
@@ -86,5 +95,47 @@ describe("pancakeswap-v3-factory", () => {
     );
 
     assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.pancakeSwap);
+  });
+
+  test(`When the handler is called and the network is scroll, the position manager address should be correct`, () => {
+    dataSourceMock.setNetwork("scroll");
+
+    let event = createEvent();
+    handlePancakeSwapV3PoolCreated(event);
+
+    assert.fieldEquals(
+      "Protocol",
+      ProtocolId.pancakeSwap,
+      "positionManager",
+      Address.fromString("0x46A15B0b27311cedF172AB29E4f4766fbE7F4364").toHexString(),
+    );
+  });
+
+  test(`When the handler is called and the network is mainnet, the position manager address should be correct`, () => {
+    dataSourceMock.setNetwork("mainnet");
+
+    let event = createEvent();
+    handlePancakeSwapV3PoolCreated(event);
+
+    assert.fieldEquals(
+      "Protocol",
+      ProtocolId.pancakeSwap,
+      "positionManager",
+      Address.fromString("0x46A15B0b27311cedF172AB29E4f4766fbE7F4364").toHexString(),
+    );
+  });
+
+  test(`When the handler is called and the network is sepolia, the position manager address should be correct`, () => {
+    dataSourceMock.setNetwork("sepolia");
+
+    let event = createEvent();
+    handlePancakeSwapV3PoolCreated(event);
+
+    assert.fieldEquals(
+      "Protocol",
+      ProtocolId.pancakeSwap,
+      "positionManager",
+      Address.fromString("0x46A15B0b27311cedF172AB29E4f4766fbE7F4364").toHexString(),
+    );
   });
 });

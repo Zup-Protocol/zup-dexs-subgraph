@@ -1,5 +1,14 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { assert, beforeEach, clearStore, createMockedFunction, describe, newMockEvent, test } from "matchstick-as";
+import {
+  assert,
+  beforeEach,
+  clearStore,
+  createMockedFunction,
+  dataSourceMock,
+  describe,
+  newMockEvent,
+  test,
+} from "matchstick-as";
 import { PoolCreated } from "../../../../../generated/UniswapV3Factory/UniswapV3Factory";
 import { ProtocolId } from "../../../../../src/utils/protocol-id";
 import { handleUniswapV3PoolCreated } from "../../../../../src/v3-pools/mappings/factory/dexs/uniswap-v3-factory";
@@ -86,5 +95,47 @@ describe("uniswap-v3-factory", () => {
     );
 
     assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.uniswap);
+  });
+
+  test(`When the handler is called and the network is scroll, the position manager address should be correct`, () => {
+    dataSourceMock.setNetwork("scroll");
+
+    let event = createEvent();
+    handleUniswapV3PoolCreated(event);
+
+    assert.fieldEquals(
+      "Protocol",
+      ProtocolId.uniswap,
+      "positionManager",
+      Address.fromString("0xB39002E4033b162fAc607fc3471E205FA2aE5967").toHexString(),
+    );
+  });
+
+  test(`When the handler is called and the network is mainnet, the position manager address should be correct`, () => {
+    dataSourceMock.setNetwork("mainnet");
+
+    let event = createEvent();
+    handleUniswapV3PoolCreated(event);
+
+    assert.fieldEquals(
+      "Protocol",
+      ProtocolId.uniswap,
+      "positionManager",
+      Address.fromString("0xC36442b4a4522E871399CD717aBDD847Ab11FE88").toHexString(),
+    );
+  });
+
+  test(`When the handler is called and the network is sepolia, the position manager address should be correct`, () => {
+    dataSourceMock.setNetwork("sepolia");
+
+    let event = createEvent();
+    handleUniswapV3PoolCreated(event);
+
+    assert.fieldEquals(
+      "Protocol",
+      ProtocolId.uniswap,
+      "positionManager",
+      Address.fromString("0x1238536071E1c677A632429e3655c799b22cDA52").toHexString(),
+    );
   });
 });

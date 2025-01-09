@@ -1,5 +1,14 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { assert, beforeEach, clearStore, createMockedFunction, describe, newMockEvent, test } from "matchstick-as";
+import {
+  assert,
+  beforeEach,
+  clearStore,
+  createMockedFunction,
+  dataSourceMock,
+  describe,
+  newMockEvent,
+  test,
+} from "matchstick-as";
 import { PoolCreated } from "../../../../../generated/NuriExchangeV3Factory/NuriExchangeV3Factory";
 
 import { ProtocolId } from "../../../../../src/utils/protocol-id";
@@ -74,6 +83,8 @@ describe("nuri-cl-factory", () => {
         isn't an already Nuri Exchange created protocol, it
         should create one with the correct values
         and assign it to the pool`, () => {
+    dataSourceMock.setNetwork("scroll");
+
     let event = createEvent();
 
     handleNuriExchangeV3PoolCreated(event);
@@ -86,5 +97,19 @@ describe("nuri-cl-factory", () => {
       "https://www.nuri.exchange/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Femission.081c7921.png&w=64&q=75",
     );
     assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.nuriExchange);
+  });
+
+  test(`When the handler is called and the network is scroll, the position manager address should be correct`, () => {
+    dataSourceMock.setNetwork("scroll");
+
+    let event = createEvent();
+    handleNuriExchangeV3PoolCreated(event);
+
+    assert.fieldEquals(
+      "Protocol",
+      ProtocolId.nuriExchange,
+      "positionManager",
+      Address.fromString("0xAAA78E8C4241990B4ce159E105dA08129345946A").toHexString(),
+    );
   });
 });

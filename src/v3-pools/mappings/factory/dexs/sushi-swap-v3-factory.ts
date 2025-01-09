@@ -1,5 +1,6 @@
 import { PoolCreated as PoolCreatedEvent } from "../../../../../generated/SushiSwapV3Factory/UniswapV3Factory";
 import { UniswapV3Pool as UniswapV3PoolTemplate } from "../../../../../generated/templates";
+import { PositionManagerAddress } from "../../../../utils/position-manager-address";
 import { ProtocolId } from "../../../../utils/protocol-id";
 import { getOrCreateProtocol } from "../../../../utils/protocol-utils";
 import { handleV3PoolCreated } from "../v3-factory";
@@ -10,6 +11,7 @@ export function handleSushiSwapV3PoolCreated(event: PoolCreatedEvent): void {
     "SushiSwap",
     "https://sushi.com/",
     "https://raw.githubusercontent.com/trustwallet/assets/refs/heads/master/dapps/app.sushi.com.png",
+    PositionManagerAddress.sushiSwap,
   );
 
   handleV3PoolCreated(

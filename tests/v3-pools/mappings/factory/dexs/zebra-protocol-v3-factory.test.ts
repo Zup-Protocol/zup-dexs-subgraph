@@ -1,5 +1,14 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { assert, beforeEach, clearStore, createMockedFunction, describe, newMockEvent, test } from "matchstick-as";
+import {
+  assert,
+  beforeEach,
+  clearStore,
+  createMockedFunction,
+  dataSourceMock,
+  describe,
+  newMockEvent,
+  test,
+} from "matchstick-as";
 import { PoolCreated } from "../../../../../generated/ZebraProtocolV3Factory/UniswapV3Factory";
 
 import { ProtocolId } from "../../../../../src/utils/protocol-id";
@@ -74,6 +83,8 @@ describe("zebra-v3-factory", () => {
         isn't an already zebra created protocol, it
         should create one with the correct values
         and assign it to the pool`, () => {
+    dataSourceMock.setNetwork("scroll");
+
     let event = createEvent();
     handleZebraProtocolV3PoolCreated(event);
 
@@ -82,5 +93,19 @@ describe("zebra-v3-factory", () => {
     assert.fieldEquals("Protocol", ProtocolId.zebra, "logo", "https://icons.llamao.fi/icons/protocols/zebra");
 
     assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.zebra);
+  });
+
+  test(`When the handler is called and the network is scroll, the position manager address should be correct`, () => {
+    dataSourceMock.setNetwork("scroll");
+
+    let event = createEvent();
+    handleZebraProtocolV3PoolCreated(event);
+
+    assert.fieldEquals(
+      "Protocol",
+      ProtocolId.zebra,
+      "positionManager",
+      Address.fromString("0x349B654dcbce53943C8e87F914F62ae9526C6681").toHexString(),
+    );
   });
 });

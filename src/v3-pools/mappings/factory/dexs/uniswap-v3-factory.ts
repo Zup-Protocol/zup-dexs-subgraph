@@ -1,5 +1,6 @@
 import { UniswapV3Pool as UniswapV3PoolTemplate } from "../../../../../generated/templates";
 import { PoolCreated as PoolCreatedEvent } from "../../../../../generated/UniswapV3Factory/UniswapV3Factory";
+import { PositionManagerAddress } from "../../../../utils/position-manager-address";
 import { ProtocolId } from "../../../../utils/protocol-id";
 
 import { getOrCreateProtocol } from "../../../../utils/protocol-utils";
@@ -11,6 +12,7 @@ export function handleUniswapV3PoolCreated(event: PoolCreatedEvent): void {
     "Uniswap",
     "https://uniswap.org",
     "https://raw.githubusercontent.com/trustwallet/assets/refs/heads/master/dapps/app.uniswap.org.png",
+    PositionManagerAddress.uniswap,
   );
 
   handleV3PoolCreated(

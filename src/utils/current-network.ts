@@ -1,9 +1,5 @@
 import { dataSource } from "@graphprotocol/graph-ts";
-
-// Networks are defined like const variables because unfortunately enums are not supported in subgraphs
-const MAINNET_NETWORK_NAME = "mainnet";
-const SCROLL_NETWORK_NAME = "scroll";
-const SEPOLIA_NETWORK_NAME = "sepolia";
+import { MAINNET_NETWORK_NAME, SCROLL_NETWORK_NAME, SEPOLIA_NETWORK_NAME } from "./constants";
 
 export abstract class CurrentNetwork {
   private static unsupportedNetworkError: Error = new Error("Unsupported network: " + dataSource.network());

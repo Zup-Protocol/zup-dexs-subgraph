@@ -46,7 +46,9 @@ To add a new network to the subgraph, you need to do a few things:
 1. Add a new subgraph manifest in [subgraph-manifests](./subgraph-manifests) for the intended network with the DEXs supported in that network.
 2. Add a new constant with the network name (following the [Network CLI Name](https://thegraph.com/docs/en/supported-networks/) from the Graph) in [current-network.ts](./src/utils/current-network.ts) for the new network.
 3. Add a new entry for each function defined in [current-network.ts](./src/utils/current-network.ts) that needs to be overriden for the new network.
-4. Add new scripts in [package.json](./package.json) for the new network (following the pattern `[script]:networkname`), to make it easier to deploy, generate code and build the subgraph.
+4. Modify the functions in [utils/position-manager-address.ts](./src/utils/position-manager-address.ts) to return the position manager address of
+   each DEX supported in the new network.
+5. Add new scripts in [package.json](./package.json) for the new network (following the pattern `[script]:networkname`), to make it easier to deploy, generate code and build the subgraph.
 
 ## Adding a new DEX
 
@@ -63,7 +65,10 @@ To add a new DEX to the subgraph, you need to do a few things:
 
 2. Create a factory handler specific for the new DEX in [v3-pools/mappings/factory/dexs](./src/v3-pools/mappings/factory/dexs), following the pattern of the other ones (WARNING: Be sure to import the correct event from the same DEX, importing other DEX event can cause bugs)
 
-3. Modify the root subgraph manifest [subgraph.yaml](./subgraph.yaml) to include the new DEX in the subgraph, so tests can be ran without any compilation error, this is simply copying and pasting the newly added config from the others manifests, but changing the network to `mainnet`
+3. Create a new function in [utils/position-manager-address.ts](./src/utils/position-manager-address.ts) to return the address of the position
+   manager for this new DEX for each network and attach it to its handler
+
+4. Modify the root subgraph manifest [subgraph.yaml](./subgraph.yaml) to include the new DEX in the subgraph, so tests can be ran without any compilation error, this is simply copying and pasting the newly added config from the others manifests, but changing the network to `mainnet`
    and changing the path of the handlers and files
 
-4. Code tests for this nex DEX handlers if possible :)
+5. Code tests for this nex DEX handlers if possible :)

@@ -45,4 +45,5 @@ type Protocol @entity(immutable: true) {
   name: String!
   logo: String!
   url: String!
+  positionManager: Bytes!
 }

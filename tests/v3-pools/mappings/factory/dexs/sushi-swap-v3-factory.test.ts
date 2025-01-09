@@ -1,5 +1,14 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { assert, beforeEach, clearStore, createMockedFunction, describe, newMockEvent, test } from "matchstick-as";
+import {
+  assert,
+  beforeEach,
+  clearStore,
+  createMockedFunction,
+  dataSourceMock,
+  describe,
+  newMockEvent,
+  test,
+} from "matchstick-as";
 import { PoolCreated } from "../../../../../generated/SushiSwapV3Factory/UniswapV3Factory";
 import { ProtocolId } from "../../../../../src/utils/protocol-id";
 import { handleSushiSwapV3PoolCreated } from "../../../../../src/v3-pools/mappings/factory/dexs/sushi-swap-v3-factory";
@@ -86,5 +95,33 @@ describe("sushi-v3-factory", () => {
     );
 
     assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.sushiSwap);
+  });
+
+  test(`When the handler is called and the network is scroll, the position manager address should be correct`, () => {
+    dataSourceMock.setNetwork("scroll");
+
+    let event = createEvent();
+    handleSushiSwapV3PoolCreated(event);
+
+    assert.fieldEquals(
+      "Protocol",
+      ProtocolId.sushiSwap,
+      "positionManager",
+      Address.fromString("0x0389879e0156033202C44BF784ac18fC02edeE4f").toHexString(),
+    );
+  });
+
+  test(`When the handler is called and the network is mainnet, the position manager address should be correct`, () => {
+    dataSourceMock.setNetwork("mainnet");
+
+    let event = createEvent();
+    handleSushiSwapV3PoolCreated(event);
+
+    assert.fieldEquals(
+      "Protocol",
+      ProtocolId.sushiSwap,
+      "positionManager",
+      Address.fromString("0x2214A42d8e2A1d20635c2cb0664422c528B6A432").toHexString(),
+    );
   });
 });

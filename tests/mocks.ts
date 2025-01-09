@@ -36,6 +36,7 @@ export class ProtocolMock extends Protocol {
     this.name = "Mock Protocol";
     this.logo = "mock-logo";
     this.url = "mock-url";
+    this.positionManager = Address.fromString("0x0000000000000000000000000000000000000001");
 
     this.save();
   }
