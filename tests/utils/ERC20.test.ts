@@ -22,3 +22,16 @@ test("when calling `safe_decimals` it should return the token decimals got from 
 
   assert.i32Equals(result, expectedDecimals);
 });
+
+test(`when calling 'safe_decimals' and the token decimals is very weird (like a really big number)
+  it should return 0 to not cause any error`, () => {
+  const erc20 = ERC20.bind(Address.fromString("0x0000000000000000000000000000000000000000"));
+
+  createMockedFunction(erc20._address, "decimals", "decimals():(uint8)").returns([
+    ethereum.Value.fromI32(I32.MAX_VALUE),
+  ]);
+
+  let result = erc20.safe_decimals();
+
+  assert.i32Equals(result, 0);
+});
