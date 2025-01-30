@@ -242,3 +242,58 @@ test(`when calling 'setPricesForV3PoolWhitelistedTokens' with a pool of token0
   assert.fieldEquals("Token", token0.id.toHexString(), "usdPrice", "1.00202533202543717719096334135079");
   assert.fieldEquals("Token", token1.id.toHexString(), "usdPrice", "0.9979787616533174007690719676506302");
 });
+
+test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of token0
+  that is not mapped, and a token1 that is not mapped, but the token0 has its usd
+  price set by some reason, the token1 usd price should be set based on the token0 price.
+  While the token0 usd price should remain unchanged`, () => {
+  let token0UsdPrice = BigDecimal.fromString("103017.8940225187751271430272797843");
+  let sqrtPriceX96 = BigInt.fromString("79141063853680822898128351609");
+  let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000001"));
+  token0.decimals = 8;
+  token0.usdPrice = token0UsdPrice;
+  token0.save();
+
+  let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
+  token1.decimals = 8;
+  token1.save();
+
+  let pool = new PoolMock();
+
+  pool.token0 = token0.id;
+  pool.token1 = token1.id;
+  pool.save();
+
+  new V3PoolSettersMock().setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, pool, token0, token1);
+
+  assert.fieldEquals("Token", token0.id.toHexString(), "usdPrice", token0UsdPrice.toString());
+  assert.fieldEquals("Token", token1.id.toHexString(), "usdPrice", "103244.7713883273314787832311543079");
+});
+
+test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of token0
+  that is not mapped, and a token1 that is not mapped, but the token1 has its usd
+  price set by some reason, the token0 usd price should be set based on the token1 price.
+  While the token1 usd price should remain unchanged`, () => {
+  let token1UsdPrice = BigDecimal.fromString("1.002");
+  let sqrtPriceX96 = BigInt.fromString("58252955171373273082115870408");
+  let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000001"));
+  token0.decimals = 18;
+
+  token0.save();
+
+  let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
+  token1.decimals = 18;
+  token1.usdPrice = token1UsdPrice;
+  token1.save();
+
+  let pool = new PoolMock();
+
+  pool.token0 = token0.id;
+  pool.token1 = token1.id;
+  pool.save();
+
+  new V3PoolSettersMock().setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, pool, token0, token1);
+
+  assert.fieldEquals("Token", token0.id.toHexString(), "usdPrice", "0.5416820920078591274742823691740816");
+  assert.fieldEquals("Token", token1.id.toHexString(), "usdPrice", token1UsdPrice.toString());
+});
