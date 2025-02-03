@@ -27,6 +27,9 @@ describe("", () => {
       ethereum.Value.fromI32(expectedToken0Decimals),
     ]);
 
+    createMockedFunction(token0Address, "name", "name():(string)").returns([ethereum.Value.fromString("Token Mock 1")]);
+    createMockedFunction(token0Address, "symbol", "symbol():(string)").returns([ethereum.Value.fromString("MOCK0")]);
+
     handleV3PoolCreated(
       event,
       Address.fromBytes(pool.id),
@@ -56,6 +59,11 @@ describe("", () => {
     createMockedFunction(token1Address, "decimals", "decimals():(uint8)").returns([
       ethereum.Value.fromI32(expectedToken1Decimals),
     ]);
+
+    createMockedFunction(token0Address, "name", "name():(string)").returns([ethereum.Value.fromString("Token Mock 1")]);
+    createMockedFunction(token1Address, "name", "name():(string)").returns([ethereum.Value.fromString("Token Mock 0")]);
+    createMockedFunction(token0Address, "symbol", "symbol():(string)").returns([ethereum.Value.fromString("MOCK0")]);
+    createMockedFunction(token1Address, "symbol", "symbol():(string)").returns([ethereum.Value.fromString("MOCK1")]);
 
     handleV3PoolCreated(
       event,
@@ -125,6 +133,11 @@ describe("", () => {
     let pool = new PoolMock();
     let fee = 3000;
     let tickSpacing = 10;
+
+    createMockedFunction(token0Address, "name", "name():(string)").returns([ethereum.Value.fromString("Token Mock 1")]);
+    createMockedFunction(token1Address, "name", "name():(string)").returns([ethereum.Value.fromString("Token Mock 0")]);
+    createMockedFunction(token0Address, "symbol", "symbol():(string)").returns([ethereum.Value.fromString("MOCK0")]);
+    createMockedFunction(token1Address, "symbol", "symbol():(string)").returns([ethereum.Value.fromString("MOCK1")]);
 
     createMockedFunction(token0Address, "decimals", "decimals():(uint8)").reverts();
 
@@ -373,5 +386,153 @@ describe("", () => {
     );
 
     assert.fieldEquals("Pool", result.id.toHexString(), "id", Address.fromBytes(pool.id).toHexString());
+  });
+
+  test(`When the handler is called, and the token0 entity has not been created yet, it should create it
+    with totalValuePooledUsd set to 0`, () => {
+    let event = newMockEvent();
+    let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000019"));
+    let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000009"));
+    let pool = new PoolMock();
+    let fee = 3000;
+    let tickSpacing = 10;
+
+    handleV3PoolCreated(
+      event,
+      Address.fromBytes(pool.id),
+      Address.fromBytes(token0.id),
+      Address.fromBytes(token1.id),
+      fee,
+      tickSpacing,
+      new ProtocolMock(),
+    );
+
+    assert.fieldEquals("Token", Address.fromBytes(token0.id).toHexString(), "totalValuePooledUsd", "0");
+  });
+
+  test(`When the handler is called, and the token1 entity has not been created yet, it should create it
+    with totalValuePooledUsd set to 0`, () => {
+    let event = newMockEvent();
+    let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000019"));
+    let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000009"));
+    let pool = new PoolMock();
+    let fee = 3000;
+    let tickSpacing = 10;
+
+    handleV3PoolCreated(
+      event,
+      Address.fromBytes(pool.id),
+      Address.fromBytes(token0.id),
+      Address.fromBytes(token1.id),
+      fee,
+      tickSpacing,
+      new ProtocolMock(),
+    );
+
+    assert.fieldEquals("Token", Address.fromBytes(token1.id).toHexString(), "totalValuePooledUsd", "0");
+  });
+
+  test(`when the handler is called and the token0 entity has not been created yet,
+    it should get the symbol from the token0 contract`, () => {
+    let event = newMockEvent();
+    let token0Address = Address.fromString("0x0000000000000000000000000000000000000019");
+    let token1Address = Address.fromString("0x0000000000000000000000000000000000000009");
+    let pool = new PoolMock();
+    let fee = 3000;
+    let tickSpacing = 10;
+    let tokenSymbol = "MOCK-21";
+
+    createMockedFunction(token0Address, "symbol", "symbol():(string)").returns([
+      ethereum.Value.fromString(tokenSymbol),
+    ]);
+
+    handleV3PoolCreated(
+      event,
+      Address.fromBytes(pool.id),
+      token0Address,
+      token1Address,
+      fee,
+      tickSpacing,
+      new ProtocolMock(),
+    );
+
+    assert.fieldEquals("Token", token0Address.toHexString(), "symbol", tokenSymbol);
+  });
+
+  test(`when the handler is called and the token1 entity has not been created yet,
+    it should get the symbol from the token1 contract`, () => {
+    let event = newMockEvent();
+    let token0Address = Address.fromString("0x0000000000000000000000000000000000000019");
+    let token1Address = Address.fromString("0x0000000000000000000000000000000000000009");
+    let pool = new PoolMock();
+    let fee = 3000;
+    let tickSpacing = 10;
+    let tokenSymbol = "MOCK-987361";
+
+    createMockedFunction(token1Address, "symbol", "symbol():(string)").returns([
+      ethereum.Value.fromString(tokenSymbol),
+    ]);
+
+    handleV3PoolCreated(
+      event,
+      Address.fromBytes(pool.id),
+      token0Address,
+      token1Address,
+      fee,
+      tickSpacing,
+      new ProtocolMock(),
+    );
+
+    assert.fieldEquals("Token", token1Address.toHexString(), "symbol", tokenSymbol);
+  });
+
+  test(`when the handler is called and the token0 entity has not been created yet,
+    it should get the name from the token0 contract`, () => {
+    let event = newMockEvent();
+    let token0Address = Address.fromString("0x0000000000000000000000000000000000000019");
+    let token1Address = Address.fromString("0x0000000000000000000000000000000000000009");
+    let pool = new PoolMock();
+    let fee = 3000;
+    let tickSpacing = 10;
+    let tokenName = "Token Mock 1";
+
+    createMockedFunction(token0Address, "name", "name():(string)").returns([ethereum.Value.fromString(tokenName)]);
+
+    handleV3PoolCreated(
+      event,
+      Address.fromBytes(pool.id),
+      token0Address,
+      token1Address,
+      fee,
+      tickSpacing,
+      new ProtocolMock(),
+    );
+
+    assert.fieldEquals("Token", token0Address.toHexString(), "name", tokenName);
+  });
+
+  test(`when the handler is called and the token1 entity has not been created yet,
+    it should get the name from the token1 contract`, () => {
+    let event = newMockEvent();
+    let token0Address = Address.fromString("0x0000000000000000000000000000000000000019");
+    let token1Address = Address.fromString("0x0000000000000000000000000000000000000009");
+    let pool = new PoolMock();
+    let fee = 3000;
+    let tickSpacing = 10;
+    let tokenName = "Token Mock 2";
+
+    createMockedFunction(token1Address, "name", "name():(string)").returns([ethereum.Value.fromString(tokenName)]);
+
+    handleV3PoolCreated(
+      event,
+      Address.fromBytes(pool.id),
+      token0Address,
+      token1Address,
+      fee,
+      tickSpacing,
+      new ProtocolMock(),
+    );
+
+    assert.fieldEquals("Token", token1Address.toHexString(), "name", tokenName);
   });
 });

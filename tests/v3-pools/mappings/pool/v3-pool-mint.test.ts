@@ -1,8 +1,8 @@
 import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { assert, beforeEach, clearStore, describe, newMockEvent, test } from "matchstick-as";
+import { Token } from "../../../../generated/schema";
 import { getPoolDailyDataId } from "../../../../src/utils/pool-utils";
 import { formatFromTokenAmount } from "../../../../src/utils/token-utils";
-
 import { handleV3PoolMint } from "../../../../src/v3-pools/mappings/pool/v3-pool-mint";
 import { PoolMock, TokenMock } from "../../../mocks";
 
@@ -40,6 +40,74 @@ describe("v3-pool-mint", () => {
       pool.id.toHexString(),
       "totalValueLockedToken0",
       initialPoolToken0Tvl.plus(formatFromTokenAmount(amount0In, token0)).toString(),
+    );
+  });
+
+  test(`When the handler is called, it should sum the token0 pooled usd value by the
+    amount passed in the event`, () => {
+    let currentPooledToken0USD = BigDecimal.fromString("98.2");
+    let amount0In = BigDecimal.fromString("12.3");
+    let token0UsdPrice = BigDecimal.fromString("1200");
+    let event = newMockEvent();
+    let pool = new PoolMock();
+
+    let token0 = Token.load(pool.token0)!;
+    let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000221"));
+
+    token0.usdPrice = token0UsdPrice;
+    token0.totalValuePooledUsd = currentPooledToken0USD;
+    token0.save();
+
+    let amount0InBigInt = BigInt.fromString(
+      amount0In.times(BigDecimal.fromString((10 ** token0.decimals).toString())).toString(),
+    );
+
+    pool.token0 = token0.id;
+    pool.token1 = token1.id;
+
+    pool.save();
+
+    handleV3PoolMint(event, pool, token0, token1, amount0InBigInt, BigInt.fromI32(0));
+
+    assert.fieldEquals(
+      "Token",
+      token0.id.toHexString(),
+      "totalValuePooledUsd",
+      currentPooledToken0USD.plus(amount0In.times(token0UsdPrice)).toString(),
+    );
+  });
+
+  test(`When the handler is called, it should deduct the token1 pooled usd value by the
+    amount passed in the event`, () => {
+    let currentPooledToken1USD = BigDecimal.fromString("7212.2");
+    let amount1In = BigDecimal.fromString("942.75");
+    let token1UsdPrice = BigDecimal.fromString("10");
+    let event = newMockEvent();
+    let pool = new PoolMock();
+
+    let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000221"));
+    let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000122"));
+
+    token1.usdPrice = token1UsdPrice;
+    token1.totalValuePooledUsd = currentPooledToken1USD;
+    token1.save();
+
+    let amount1InBigInt = BigInt.fromString(
+      amount1In.times(BigDecimal.fromString((10 ** token1.decimals).toString())).toString(),
+    );
+
+    pool.token0 = token0.id;
+    pool.token1 = token1.id;
+
+    pool.save();
+
+    handleV3PoolMint(event, pool, token0, token1, BigInt.fromI32(0), amount1InBigInt);
+
+    assert.fieldEquals(
+      "Token",
+      token1.id.toHexString(),
+      "totalValuePooledUsd",
+      currentPooledToken1USD.plus(amount1In.times(token1UsdPrice)).toString(),
     );
   });
 

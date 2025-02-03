@@ -21,4 +21,28 @@ export class ERC20 extends ethereum.SmartContract {
 
     return result.value[0].toI32();
   }
+
+  safe_symbol(): string {
+    let result = super.tryCall("symbol", "symbol():(string)", []);
+
+    if (result.reverted) {
+      log.error("Error getting symbol on ERC20 contract at address {}", [this._address.toHexString()]);
+
+      return "";
+    }
+
+    return result.value[0].toString();
+  }
+
+  safe_name(): string {
+    let result = super.tryCall("name", "name():(string)", []);
+
+    if (result.reverted) {
+      log.error("Error getting name on ERC20 contract at address {}", [this._address.toHexString()]);
+
+      return "";
+    }
+
+    return result.value[0].toString();
+  }
 }

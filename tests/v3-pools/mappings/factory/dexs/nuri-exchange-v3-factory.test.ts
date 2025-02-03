@@ -71,6 +71,11 @@ export function createEvent(params: PoolCreatedEventParams = new PoolCreatedEven
     ethereum.Value.fromI32(token1Decimals),
   ]);
 
+  createMockedFunction(params.token0, "name", "name():(string)").returns([ethereum.Value.fromString("Token Mock 0")]);
+  createMockedFunction(params.token1, "name", "name():(string)").returns([ethereum.Value.fromString("Token Mock 1")]);
+  createMockedFunction(params.token0, "symbol", "symbol():(string)").returns([ethereum.Value.fromString("MOCK0")]);
+  createMockedFunction(params.token1, "symbol", "symbol():(string)").returns([ethereum.Value.fromString("MOCK1")]);
+
   return event;
 }
 

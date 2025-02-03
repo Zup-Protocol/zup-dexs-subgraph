@@ -41,6 +41,14 @@ export function handleV3PoolSwapImpl(
   poolEntity.totalValueLockedToken0 = poolEntity.totalValueLockedToken0.plus(tokenAmount0Formatted);
   poolEntity.totalValueLockedToken1 = poolEntity.totalValueLockedToken1.plus(tokenAmount1Formatted);
 
+  token0Entity.totalValuePooledUsd = token0Entity.totalValuePooledUsd.plus(
+    tokenAmount0Formatted.times(token0Entity.usdPrice),
+  );
+
+  token1Entity.totalValuePooledUsd = token1Entity.totalValuePooledUsd.plus(
+    tokenAmount1Formatted.times(token1Entity.usdPrice),
+  );
+
   poolEntity.totalValueLockedUSD = poolEntity.totalValueLockedToken0
     .times(token0Entity.usdPrice)
     .plus(poolEntity.totalValueLockedToken1.times(token1Entity.usdPrice));
@@ -49,6 +57,8 @@ export function handleV3PoolSwapImpl(
   setDailyData(event, poolEntity, token0Entity, token1Entity, amount0, amount1, v3PoolSetters);
 
   poolEntity.save();
+  token0Entity.save();
+  token1Entity.save();
 }
 
 function setHourlyData(

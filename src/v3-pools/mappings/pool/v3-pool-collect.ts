@@ -29,6 +29,14 @@ export function handleV3PoolCollectImpl(
   poolEntity.totalValueLockedToken0 = poolEntity.totalValueLockedToken0.minus(formattedToken0CollectedAmount);
   poolEntity.totalValueLockedToken1 = poolEntity.totalValueLockedToken1.minus(formattedToken1CollectAmount);
 
+  token0Entity.totalValuePooledUsd = token0Entity.totalValuePooledUsd.minus(
+    formattedToken0CollectedAmount.times(token0Entity.usdPrice),
+  );
+
+  token1Entity.totalValuePooledUsd = token1Entity.totalValuePooledUsd.minus(
+    formattedToken1CollectAmount.times(token1Entity.usdPrice),
+  );
+
   poolEntity.totalValueLockedUSD = poolEntity.totalValueLockedToken0
     .times(token0Entity.usdPrice)
     .plus(poolEntity.totalValueLockedToken1.times(token1Entity.usdPrice));
@@ -36,4 +44,6 @@ export function handleV3PoolCollectImpl(
   v3PoolSetters.setPoolDailyDataTVL(event, poolEntity);
 
   poolEntity.save();
+  token0Entity.save();
+  token1Entity.save();
 }

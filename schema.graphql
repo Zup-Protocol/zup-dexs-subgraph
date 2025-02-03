@@ -2,6 +2,9 @@ type Token @entity {
   id: Bytes!
   usdPrice: BigDecimal!
   decimals: Int!
+  totalValuePooledUsd: BigDecimal!
+  symbol: String!
+  name: String!
 }
 
 type Pool @entity {

@@ -19,15 +19,24 @@ export function handleV3PoolCreated(
 
   if (token0Entity == null) {
     token0Entity = new TokenEntity(token0Address);
+    let tokenContract = ERC20.bind(token0Address);
 
-    token0Entity.decimals = ERC20.bind(token0Address).safe_decimals();
+    token0Entity.decimals = tokenContract.safe_decimals();
+    token0Entity.symbol = tokenContract.safe_symbol();
+    token0Entity.name = tokenContract.safe_name();
     token0Entity.usdPrice = ZERO_BIG_DECIMAL;
+    token0Entity.totalValuePooledUsd = ZERO_BIG_DECIMAL;
   }
 
   if (token1Entity == null) {
     token1Entity = new TokenEntity(token1Address);
-    token1Entity.decimals = ERC20.bind(token1Address).safe_decimals();
+    let tokenContract = ERC20.bind(token1Address);
+
+    token1Entity.decimals = tokenContract.safe_decimals();
+    token1Entity.symbol = tokenContract.safe_symbol();
+    token1Entity.name = tokenContract.safe_name();
     token1Entity.usdPrice = ZERO_BIG_DECIMAL;
+    token1Entity.totalValuePooledUsd = ZERO_BIG_DECIMAL;
   }
 
   poolEntity.token0 = token0Address;

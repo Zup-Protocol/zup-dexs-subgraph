@@ -13,6 +13,9 @@ export class TokenMock extends Token {
     this.mockId = id;
     this.decimals = 8;
     this.usdPrice = BigDecimal.fromString("0");
+    this.totalValuePooledUsd = BigDecimal.fromString("0");
+    this.name = "Mock Token";
+    this.symbol = "MOCK";
 
     this.save();
   }

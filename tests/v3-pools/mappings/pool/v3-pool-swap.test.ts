@@ -1007,4 +1007,74 @@ describe("v3-pool-swap", () => {
       );
     }
   });
+
+  test(`when the user swaps token1 for token0, the token0 pooled usd amount should decrease
+   by the amount swapped, as it is taken from the pool`, () => {
+    let event = newMockEvent();
+    let pool = new PoolMock();
+    let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
+    let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
+    let currentToken0PooledUsdAmount = BigDecimal.fromString("839168271.32");
+    let token0UsdPrice = BigDecimal.fromString("12.32");
+
+    pool.token0 = token0.id;
+    pool.token1 = token1.id;
+    pool.save();
+
+    token0.usdPrice = token0UsdPrice;
+    token0.totalValuePooledUsd = currentToken0PooledUsdAmount;
+    token0.save();
+
+    let amount0BigInt = BigInt.fromI32(1765)
+      .times(BigInt.fromI32(10).pow(token0.decimals as u8))
+      .neg();
+    let amount1BigInt = BigInt.fromI32(12).times(BigInt.fromI32(10).pow(token1.decimals as u8));
+    let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
+
+    handleV3PoolSwap(event, pool, token0, token1, amount0BigInt, amount1BigInt, sqrtPriceX96);
+
+    assert.fieldEquals(
+      "Token",
+      token0.id.toHexString(),
+      "totalValuePooledUsd",
+      currentToken0PooledUsdAmount
+        .minus(formatFromTokenAmount(amount0BigInt, token0).times(token0.usdPrice!).neg())
+        .toString(),
+    );
+  });
+
+  test(`when the user swaps token0 for token1, the token1 pooled usd amount should decrease
+    by the amount swapped, as it is taken from the pool`, () => {
+    let event = newMockEvent();
+    let pool = new PoolMock();
+    let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
+    let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
+    let currentToken1PooledUsdAmount = BigDecimal.fromString("2121.32");
+    let token1UsdPrice = BigDecimal.fromString("1200.32");
+
+    pool.token0 = token0.id;
+    pool.token1 = token1.id;
+    pool.save();
+
+    token1.usdPrice = token1UsdPrice;
+    token1.totalValuePooledUsd = currentToken1PooledUsdAmount;
+    token0.save();
+
+    let amount1BigInt = BigInt.fromI32(3134)
+      .times(BigInt.fromI32(10).pow(token1.decimals as u8))
+      .neg();
+    let amount0BigInt = BigInt.fromI32(12).times(BigInt.fromI32(10).pow(token1.decimals as u8));
+    let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
+
+    handleV3PoolSwap(event, pool, token0, token1, amount0BigInt, amount1BigInt, sqrtPriceX96);
+
+    assert.fieldEquals(
+      "Token",
+      token1.id.toHexString(),
+      "totalValuePooledUsd",
+      currentToken1PooledUsdAmount
+        .minus(formatFromTokenAmount(amount1BigInt, token0).times(token1.usdPrice!).neg())
+        .toString(),
+    );
+  });
 });

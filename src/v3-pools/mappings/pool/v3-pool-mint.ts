@@ -30,10 +30,20 @@ export function handleV3PoolMintImpl(
   poolEntity.totalValueLockedToken0 = poolEntity.totalValueLockedToken0.plus(token0FormattedAmount);
   poolEntity.totalValueLockedToken1 = poolEntity.totalValueLockedToken1.plus(token1FormattedAmount);
 
+  token0Entity.totalValuePooledUsd = token0Entity.totalValuePooledUsd.plus(
+    token0FormattedAmount.times(token0Entity.usdPrice),
+  );
+
+  token1Entity.totalValuePooledUsd = token1Entity.totalValuePooledUsd.plus(
+    token1FormattedAmount.times(token1Entity.usdPrice),
+  );
+
   poolEntity.totalValueLockedUSD = poolEntity.totalValueLockedToken0
     .times(token0Entity.usdPrice)
     .plus(poolEntity.totalValueLockedToken1.times(token1Entity.usdPrice));
 
   v3PoolSetters.setPoolDailyDataTVL(event, poolEntity);
   poolEntity.save();
+  token0Entity.save();
+  token1Entity.save();
 }

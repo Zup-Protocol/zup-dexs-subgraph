@@ -1,5 +1,6 @@
-import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { assert, beforeEach, clearStore, describe, newMockEvent, test } from "matchstick-as";
+import { Token } from "../../../../generated/schema";
 import { formatFromTokenAmount } from "../../../../src/utils/token-utils";
 import {
   handleV3PoolProtocolCollect,
@@ -121,5 +122,74 @@ describe("v3-pool-collect-protocol", () => {
     assert.assertTrue(v3PoolSetters.setPoolDailyDataTVLCalls.length > 0, "setPoolDailyDataTVL not called");
     assert.bytesEquals(v3PoolSetters.setPoolDailyDataTVLCalls[0].poolEntity.id, pool.id, "pool is not the same");
     assert.bytesEquals(v3PoolSetters.setPoolDailyDataTVLCalls[0].event.address, event.address, "event is not the same");
+  });
+
+  test(`When the handler is called, it should deduct the token0 pooled usd value by the
+    amount passed in the event`, () => {
+    let currentPooledToken0USD = BigDecimal.fromString("98.2");
+    let amount0Out = BigDecimal.fromString("12.3");
+    let token0UsdPrice = BigDecimal.fromString("1200");
+    let event = newMockEvent();
+    let pool = new PoolMock();
+
+    let token0 = Token.load(pool.token0)!;
+    let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000221"));
+
+    token0.usdPrice = token0UsdPrice;
+    token0.totalValuePooledUsd = currentPooledToken0USD;
+    token0.save();
+
+    let amount0OutBigInt = BigInt.fromString(
+      amount0Out.times(BigDecimal.fromString((10 ** token0.decimals).toString())).toString(),
+    );
+
+    pool.token0 = token0.id;
+    pool.token1 = token1.id;
+
+    pool.save();
+
+    handleV3PoolProtocolCollect(event, pool, token0, token1, amount0OutBigInt, BigInt.fromI32(0));
+
+    assert.fieldEquals(
+      "Token",
+      token0.id.toHexString(),
+      "totalValuePooledUsd",
+      currentPooledToken0USD.minus(amount0Out.times(token0UsdPrice)).toString(),
+    );
+  });
+
+  test(`When the handler is called, it should deduct the token1 pooled usd value by the
+    amount passed in the event`, () => {
+    let currentPooledToken1USD = BigDecimal.fromString("7212.2");
+    let amount1Out = BigDecimal.fromString("942.75");
+    let token1UsdPrice = BigDecimal.fromString("10");
+
+    let event = newMockEvent();
+    let pool = new PoolMock();
+
+    let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000221"));
+    let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000122"));
+
+    token1.usdPrice = token1UsdPrice;
+    token1.totalValuePooledUsd = currentPooledToken1USD;
+    token1.save();
+
+    let amount1OutBigInt = BigInt.fromString(
+      amount1Out.times(BigDecimal.fromString((10 ** token1.decimals).toString())).toString(),
+    );
+
+    pool.token0 = token0.id;
+    pool.token1 = token1.id;
+
+    pool.save();
+
+    handleV3PoolProtocolCollect(event, pool, token0, token1, BigInt.fromI32(0), amount1OutBigInt);
+
+    assert.fieldEquals(
+      "Token",
+      token1.id.toHexString(),
+      "totalValuePooledUsd",
+      currentPooledToken1USD.minus(amount1Out.times(token1UsdPrice)).toString(),
+    );
   });
 });
