@@ -26,6 +26,7 @@ export function handleV3PoolCreated(
     token0Entity.name = tokenContract.safe_name();
     token0Entity.usdPrice = ZERO_BIG_DECIMAL;
     token0Entity.totalValuePooledUsd = ZERO_BIG_DECIMAL;
+    token0Entity.totalTokenPooledAmount = ZERO_BIG_DECIMAL;
   }
 
   if (token1Entity == null) {
@@ -37,6 +38,7 @@ export function handleV3PoolCreated(
     token1Entity.name = tokenContract.safe_name();
     token1Entity.usdPrice = ZERO_BIG_DECIMAL;
     token1Entity.totalValuePooledUsd = ZERO_BIG_DECIMAL;
+    token1Entity.totalTokenPooledAmount = ZERO_BIG_DECIMAL;
   }
 
   poolEntity.token0 = token0Address;

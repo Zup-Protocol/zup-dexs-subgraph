@@ -126,17 +126,19 @@ describe("v3-pool-collect-protocol", () => {
 
   test(`When the handler is called, it should deduct the token0 pooled usd value by the
     amount passed in the event`, () => {
-    let currentPooledToken0USD = BigDecimal.fromString("98.2");
+    let currentPooledTokenAmount = BigDecimal.fromString("321.7");
     let amount0Out = BigDecimal.fromString("12.3");
     let token0UsdPrice = BigDecimal.fromString("1200");
     let event = newMockEvent();
     let pool = new PoolMock();
+    let currentPooledToken0USD = currentPooledTokenAmount.times(token0UsdPrice);
 
     let token0 = Token.load(pool.token0)!;
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000221"));
 
     token0.usdPrice = token0UsdPrice;
     token0.totalValuePooledUsd = currentPooledToken0USD;
+    token0.totalTokenPooledAmount = currentPooledTokenAmount;
     token0.save();
 
     let amount0OutBigInt = BigInt.fromString(
@@ -160,9 +162,10 @@ describe("v3-pool-collect-protocol", () => {
 
   test(`When the handler is called, it should deduct the token1 pooled usd value by the
     amount passed in the event`, () => {
-    let currentPooledToken1USD = BigDecimal.fromString("7212.2");
+    let currentPooledToken1Amount = BigDecimal.fromString("100.2");
     let amount1Out = BigDecimal.fromString("942.75");
     let token1UsdPrice = BigDecimal.fromString("10");
+    let currentPooledToken1USD = currentPooledToken1Amount.times(token1UsdPrice);
 
     let event = newMockEvent();
     let pool = new PoolMock();
@@ -172,6 +175,7 @@ describe("v3-pool-collect-protocol", () => {
 
     token1.usdPrice = token1UsdPrice;
     token1.totalValuePooledUsd = currentPooledToken1USD;
+    token1.totalTokenPooledAmount = currentPooledToken1Amount;
     token1.save();
 
     let amount1OutBigInt = BigInt.fromString(

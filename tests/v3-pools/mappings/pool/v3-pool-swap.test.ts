@@ -1014,8 +1014,9 @@ describe("v3-pool-swap", () => {
     let pool = new PoolMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
-    let currentToken0PooledUsdAmount = BigDecimal.fromString("839168271.32");
+    let currentPooledTokenAmount = BigDecimal.fromString("321.7");
     let token0UsdPrice = BigDecimal.fromString("12.32");
+    let currentToken0PooledUsdAmount = currentPooledTokenAmount.times(token0UsdPrice);
 
     pool.token0 = token0.id;
     pool.token1 = token1.id;
@@ -1023,6 +1024,7 @@ describe("v3-pool-swap", () => {
 
     token0.usdPrice = token0UsdPrice;
     token0.totalValuePooledUsd = currentToken0PooledUsdAmount;
+    token0.totalTokenPooledAmount = currentPooledTokenAmount;
     token0.save();
 
     let amount0BigInt = BigInt.fromI32(1765)
@@ -1049,8 +1051,9 @@ describe("v3-pool-swap", () => {
     let pool = new PoolMock();
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000012"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000002"));
-    let currentToken1PooledUsdAmount = BigDecimal.fromString("2121.32");
     let token1UsdPrice = BigDecimal.fromString("1200.32");
+    let currentPooledTokenAmount = BigDecimal.fromString("321.7");
+    let currentToken1PooledUsdAmount = currentPooledTokenAmount.times(token1UsdPrice);
 
     pool.token0 = token0.id;
     pool.token1 = token1.id;
@@ -1058,6 +1061,7 @@ describe("v3-pool-swap", () => {
 
     token1.usdPrice = token1UsdPrice;
     token1.totalValuePooledUsd = currentToken1PooledUsdAmount;
+    token1.totalTokenPooledAmount = currentPooledTokenAmount;
     token0.save();
 
     let amount1BigInt = BigInt.fromI32(3134)

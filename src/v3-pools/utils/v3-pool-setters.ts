@@ -93,18 +93,14 @@ export class V3PoolSetters {
       return;
     }
 
-    // trying to set the tokens prices guessing one of the tokens has a usd price set,
-    // so the other one can be calculated. Otherwise, the usd price cannot be calculated
-    {
-      if (poolToken1Entity.usdPrice != ZERO_BIG_DECIMAL) {
-        poolToken0Entity.usdPrice = poolPrices.token1PerToken0.times(poolToken1Entity.usdPrice);
-        poolToken0Entity.save();
-      }
+    if (poolToken1Entity.usdPrice != ZERO_BIG_DECIMAL) {
+      poolToken0Entity.usdPrice = poolPrices.token1PerToken0.times(poolToken1Entity.usdPrice);
+      poolToken0Entity.save();
+    }
 
-      if (poolToken0Entity.usdPrice != ZERO_BIG_DECIMAL) {
-        poolToken1Entity.usdPrice = poolPrices.token0PerToken1.times(poolToken0Entity.usdPrice);
-        poolToken1Entity.save();
-      }
+    if (poolToken0Entity.usdPrice != ZERO_BIG_DECIMAL) {
+      poolToken1Entity.usdPrice = poolPrices.token0PerToken1.times(poolToken0Entity.usdPrice);
+      poolToken1Entity.save();
     }
   }
 }

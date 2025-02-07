@@ -41,17 +41,15 @@ export function handleV3PoolSwapImpl(
   poolEntity.totalValueLockedToken0 = poolEntity.totalValueLockedToken0.plus(tokenAmount0Formatted);
   poolEntity.totalValueLockedToken1 = poolEntity.totalValueLockedToken1.plus(tokenAmount1Formatted);
 
-  token0Entity.totalValuePooledUsd = token0Entity.totalValuePooledUsd.plus(
-    tokenAmount0Formatted.times(token0Entity.usdPrice),
-  );
-
-  token1Entity.totalValuePooledUsd = token1Entity.totalValuePooledUsd.plus(
-    tokenAmount1Formatted.times(token1Entity.usdPrice),
-  );
-
   poolEntity.totalValueLockedUSD = poolEntity.totalValueLockedToken0
     .times(token0Entity.usdPrice)
     .plus(poolEntity.totalValueLockedToken1.times(token1Entity.usdPrice));
+
+  token0Entity.totalTokenPooledAmount = token0Entity.totalTokenPooledAmount.plus(tokenAmount0Formatted);
+  token1Entity.totalTokenPooledAmount = token1Entity.totalTokenPooledAmount.plus(tokenAmount1Formatted);
+
+  token0Entity.totalValuePooledUsd = token0Entity.totalTokenPooledAmount.times(token0Entity.usdPrice);
+  token1Entity.totalValuePooledUsd = token1Entity.totalTokenPooledAmount.times(token1Entity.usdPrice);
 
   setHourlyData(event, token0Entity, token1Entity, poolEntity, amount0, amount1);
   setDailyData(event, poolEntity, token0Entity, token1Entity, amount0, amount1, v3PoolSetters);

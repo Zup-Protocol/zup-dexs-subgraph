@@ -29,13 +29,11 @@ export function handleV3PoolCollectImpl(
   poolEntity.totalValueLockedToken0 = poolEntity.totalValueLockedToken0.minus(formattedToken0CollectedAmount);
   poolEntity.totalValueLockedToken1 = poolEntity.totalValueLockedToken1.minus(formattedToken1CollectAmount);
 
-  token0Entity.totalValuePooledUsd = token0Entity.totalValuePooledUsd.minus(
-    formattedToken0CollectedAmount.times(token0Entity.usdPrice),
-  );
+  token0Entity.totalTokenPooledAmount = token0Entity.totalTokenPooledAmount.minus(formattedToken0CollectedAmount);
+  token1Entity.totalTokenPooledAmount = token1Entity.totalTokenPooledAmount.minus(formattedToken1CollectAmount);
 
-  token1Entity.totalValuePooledUsd = token1Entity.totalValuePooledUsd.minus(
-    formattedToken1CollectAmount.times(token1Entity.usdPrice),
-  );
+  token0Entity.totalValuePooledUsd = token0Entity.totalTokenPooledAmount.times(token0Entity.usdPrice);
+  token1Entity.totalValuePooledUsd = token1Entity.totalTokenPooledAmount.times(token1Entity.usdPrice);
 
   poolEntity.totalValueLockedUSD = poolEntity.totalValueLockedToken0
     .times(token0Entity.usdPrice)
