@@ -90,16 +90,16 @@ describe("uniswap-v3-factory", () => {
     let event = createEvent();
     handleUniswapV3PoolCreated(event);
 
-    assert.fieldEquals("Protocol", ProtocolId.uniswap, "name", "Uniswap");
-    assert.fieldEquals("Protocol", ProtocolId.uniswap, "url", "https://uniswap.org");
+    assert.fieldEquals("Protocol", ProtocolId.uniswapV3, "name", "Uniswap V3");
+    assert.fieldEquals("Protocol", ProtocolId.uniswapV3, "url", "https://uniswap.org");
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.uniswap,
+      ProtocolId.uniswapV3,
       "logo",
       "https://raw.githubusercontent.com/trustwallet/assets/refs/heads/master/dapps/app.uniswap.org.png",
     );
 
-    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.uniswap);
+    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.uniswapV3);
   });
 
   test(`When the handler is called and the network is scroll, the position manager address should be correct`, () => {
@@ -110,7 +110,7 @@ describe("uniswap-v3-factory", () => {
 
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.uniswap,
+      ProtocolId.uniswapV3,
       "positionManager",
       Address.fromString("0xB39002E4033b162fAc607fc3471E205FA2aE5967").toHexString(),
     );
@@ -124,7 +124,7 @@ describe("uniswap-v3-factory", () => {
 
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.uniswap,
+      ProtocolId.uniswapV3,
       "positionManager",
       Address.fromString("0xC36442b4a4522E871399CD717aBDD847Ab11FE88").toHexString(),
     );
@@ -138,7 +138,7 @@ describe("uniswap-v3-factory", () => {
 
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.uniswap,
+      ProtocolId.uniswapV3,
       "positionManager",
       Address.fromString("0x1238536071E1c677A632429e3655c799b22cDA52").toHexString(),
     );

@@ -93,15 +93,15 @@ describe("nuri-cl-factory", () => {
     let event = createEvent();
 
     handleNuriExchangeV3PoolCreated(event);
-    assert.fieldEquals("Protocol", ProtocolId.nuriExchange, "name", "Nuri Exchange");
-    assert.fieldEquals("Protocol", ProtocolId.nuriExchange, "url", "https://www.nuri.exchange/");
+    assert.fieldEquals("Protocol", ProtocolId.nuriExchangeV3, "name", "Nuri Exchange V3");
+    assert.fieldEquals("Protocol", ProtocolId.nuriExchangeV3, "url", "https://www.nuri.exchange/");
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.nuriExchange,
+      ProtocolId.nuriExchangeV3,
       "logo",
       "https://www.nuri.exchange/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Femission.081c7921.png&w=64&q=75",
     );
-    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.nuriExchange);
+    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.nuriExchangeV3);
   });
 
   test(`When the handler is called and the network is scroll, the position manager address should be correct`, () => {
@@ -112,7 +112,7 @@ describe("nuri-cl-factory", () => {
 
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.nuriExchange,
+      ProtocolId.nuriExchangeV3,
       "positionManager",
       Address.fromString("0xAAA78E8C4241990B4ce159E105dA08129345946A").toHexString(),
     );

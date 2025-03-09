@@ -2,6 +2,7 @@
   "name": "zup-dexs-subgraph",
   "description": "The Zup Protocol Subgraph with protocol supported DEXs",
   "license": "MIT",
+  "version": "1.0.5",
   "engines": {
     "node": ">=20.11.1"
   },

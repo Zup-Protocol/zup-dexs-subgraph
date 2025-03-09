@@ -93,11 +93,11 @@ describe("zebra-v3-factory", () => {
     let event = createEvent();
     handleZebraProtocolV3PoolCreated(event);
 
-    assert.fieldEquals("Protocol", ProtocolId.zebra, "name", "Zebra");
-    assert.fieldEquals("Protocol", ProtocolId.zebra, "url", "https://zebra.xyz");
-    assert.fieldEquals("Protocol", ProtocolId.zebra, "logo", "https://icons.llamao.fi/icons/protocols/zebra");
+    assert.fieldEquals("Protocol", ProtocolId.zebraV3, "name", "Zebra V3");
+    assert.fieldEquals("Protocol", ProtocolId.zebraV3, "url", "https://zebra.xyz");
+    assert.fieldEquals("Protocol", ProtocolId.zebraV3, "logo", "https://icons.llamao.fi/icons/protocols/zebra");
 
-    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.zebra);
+    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.zebraV3);
   });
 
   test(`When the handler is called and the network is scroll, the position manager address should be correct`, () => {
@@ -108,7 +108,7 @@ describe("zebra-v3-factory", () => {
 
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.zebra,
+      ProtocolId.zebraV3,
       "positionManager",
       Address.fromString("0x349B654dcbce53943C8e87F914F62ae9526C6681").toHexString(),
     );

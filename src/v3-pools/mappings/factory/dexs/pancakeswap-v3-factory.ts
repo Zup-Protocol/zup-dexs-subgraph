@@ -7,8 +7,8 @@ import { handleV3PoolCreated } from "./../v3-factory";
 
 export function handlePancakeSwapV3PoolCreated(event: PoolCreatedEvent): void {
   let protocolEntity = getOrCreateProtocol(
-    ProtocolId.pancakeSwap,
-    "PancakeSwap",
+    ProtocolId.pancakeSwapV3,
+    "PancakeSwap V3",
     "https://pancakeswap.finance",
     "https://raw.githubusercontent.com/trustwallet/assets/refs/heads/master/dapps/exchange.pancakeswap.finance.png",
     PositionManagerAddress.pancakeSwap,

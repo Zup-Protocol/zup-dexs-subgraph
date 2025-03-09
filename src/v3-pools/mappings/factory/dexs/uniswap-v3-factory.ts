@@ -8,8 +8,8 @@ import { handleV3PoolCreated } from "./../v3-factory";
 
 export function handleUniswapV3PoolCreated(event: PoolCreatedEvent): void {
   let protocolEntity = getOrCreateProtocol(
-    ProtocolId.uniswap,
-    "Uniswap",
+    ProtocolId.uniswapV3,
+    "Uniswap V3",
     "https://uniswap.org",
     "https://raw.githubusercontent.com/trustwallet/assets/refs/heads/master/dapps/app.uniswap.org.png",
     PositionManagerAddress.uniswap,

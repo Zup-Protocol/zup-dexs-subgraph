@@ -90,16 +90,16 @@ describe("oku-trade-v3-factory", () => {
     let event = createEvent();
     handleOkuTradeV3PoolCreated(event);
 
-    assert.fieldEquals("Protocol", ProtocolId.okuTrade, "name", "Oku");
-    assert.fieldEquals("Protocol", ProtocolId.okuTrade, "url", "https://oku.trade/");
+    assert.fieldEquals("Protocol", ProtocolId.okuTradeV3, "name", "Oku V3");
+    assert.fieldEquals("Protocol", ProtocolId.okuTradeV3, "url", "https://oku.trade/");
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.okuTrade,
+      ProtocolId.okuTradeV3,
       "logo",
       "https://img.cryptorank.io/coins/oku_trade1715355283566.png",
     );
 
-    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.okuTrade);
+    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.okuTradeV3);
   });
 
   test(`When the handler is called and the network is scroll, the position manager address should be correct`, () => {
@@ -110,7 +110,7 @@ describe("oku-trade-v3-factory", () => {
 
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.okuTrade,
+      ProtocolId.okuTradeV3,
       "positionManager",
       Address.fromString("0xB39002E4033b162fAc607fc3471E205FA2aE5967").toHexString(),
     );
@@ -124,7 +124,7 @@ describe("oku-trade-v3-factory", () => {
 
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.okuTrade,
+      ProtocolId.okuTradeV3,
       "positionManager",
       Address.fromString("0xC36442b4a4522E871399CD717aBDD847Ab11FE88").toHexString(),
     );
@@ -138,7 +138,7 @@ describe("oku-trade-v3-factory", () => {
 
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.okuTrade,
+      ProtocolId.okuTradeV3,
       "positionManager",
       Address.fromString("0x1238536071E1c677A632429e3655c799b22cDA52").toHexString(),
     );

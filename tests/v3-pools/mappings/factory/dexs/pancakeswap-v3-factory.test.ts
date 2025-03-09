@@ -90,16 +90,16 @@ describe("pancakeswap-v3-factory", () => {
     let event = createEvent();
     handlePancakeSwapV3PoolCreated(event);
 
-    assert.fieldEquals("Protocol", ProtocolId.pancakeSwap, "name", "PancakeSwap");
-    assert.fieldEquals("Protocol", ProtocolId.pancakeSwap, "url", "https://pancakeswap.finance");
+    assert.fieldEquals("Protocol", ProtocolId.pancakeSwapV3, "name", "PancakeSwap V3");
+    assert.fieldEquals("Protocol", ProtocolId.pancakeSwapV3, "url", "https://pancakeswap.finance");
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.pancakeSwap,
+      ProtocolId.pancakeSwapV3,
       "logo",
       "https://raw.githubusercontent.com/trustwallet/assets/refs/heads/master/dapps/exchange.pancakeswap.finance.png",
     );
 
-    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.pancakeSwap);
+    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.pancakeSwapV3);
   });
 
   test(`When the handler is called and the network is scroll, the position manager address should be correct`, () => {
@@ -110,7 +110,7 @@ describe("pancakeswap-v3-factory", () => {
 
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.pancakeSwap,
+      ProtocolId.pancakeSwapV3,
       "positionManager",
       Address.fromString("0x46A15B0b27311cedF172AB29E4f4766fbE7F4364").toHexString(),
     );
@@ -124,7 +124,7 @@ describe("pancakeswap-v3-factory", () => {
 
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.pancakeSwap,
+      ProtocolId.pancakeSwapV3,
       "positionManager",
       Address.fromString("0x46A15B0b27311cedF172AB29E4f4766fbE7F4364").toHexString(),
     );
@@ -138,7 +138,7 @@ describe("pancakeswap-v3-factory", () => {
 
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.pancakeSwap,
+      ProtocolId.pancakeSwapV3,
       "positionManager",
       Address.fromString("0x46A15B0b27311cedF172AB29E4f4766fbE7F4364").toHexString(),
     );

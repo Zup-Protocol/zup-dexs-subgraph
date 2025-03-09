@@ -7,8 +7,8 @@ import { handleV3PoolCreated } from "../v3-factory";
 
 export function handleOkuTradeV3PoolCreated(event: PoolCreated): void {
   let protocolEntity = getOrCreateProtocol(
-    ProtocolId.okuTrade,
-    "Oku",
+    ProtocolId.okuTradeV3,
+    "Oku V3",
     "https://oku.trade/",
     "https://img.cryptorank.io/coins/oku_trade1715355283566.png",
     PositionManagerAddress.uniswap,

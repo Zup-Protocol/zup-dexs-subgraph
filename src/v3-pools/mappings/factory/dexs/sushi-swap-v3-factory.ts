@@ -7,8 +7,8 @@ import { handleV3PoolCreated } from "../v3-factory";
 
 export function handleSushiSwapV3PoolCreated(event: PoolCreatedEvent): void {
   let protocolEntity = getOrCreateProtocol(
-    ProtocolId.sushiSwap,
-    "SushiSwap",
+    ProtocolId.sushiSwapV3,
+    "SushiSwap V3",
     "https://sushi.com/",
     "https://raw.githubusercontent.com/trustwallet/assets/refs/heads/master/dapps/app.sushi.com.png",
     PositionManagerAddress.sushiSwap,

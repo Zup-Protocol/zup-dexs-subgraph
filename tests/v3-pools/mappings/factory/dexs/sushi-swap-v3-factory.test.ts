@@ -90,16 +90,16 @@ describe("sushi-v3-factory", () => {
     let event = createEvent();
     handleSushiSwapV3PoolCreated(event);
 
-    assert.fieldEquals("Protocol", ProtocolId.sushiSwap, "name", "SushiSwap");
-    assert.fieldEquals("Protocol", ProtocolId.sushiSwap, "url", "https://sushi.com/");
+    assert.fieldEquals("Protocol", ProtocolId.sushiSwapV3, "name", "SushiSwap V3");
+    assert.fieldEquals("Protocol", ProtocolId.sushiSwapV3, "url", "https://sushi.com/");
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.sushiSwap,
+      ProtocolId.sushiSwapV3,
       "logo",
       "https://raw.githubusercontent.com/trustwallet/assets/refs/heads/master/dapps/app.sushi.com.png",
     );
 
-    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.sushiSwap);
+    assert.fieldEquals("Pool", event.params.pool.toHexString(), "protocol", ProtocolId.sushiSwapV3);
   });
 
   test(`When the handler is called and the network is scroll, the position manager address should be correct`, () => {
@@ -110,7 +110,7 @@ describe("sushi-v3-factory", () => {
 
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.sushiSwap,
+      ProtocolId.sushiSwapV3,
       "positionManager",
       Address.fromString("0x0389879e0156033202C44BF784ac18fC02edeE4f").toHexString(),
     );
@@ -124,7 +124,7 @@ describe("sushi-v3-factory", () => {
 
     assert.fieldEquals(
       "Protocol",
-      ProtocolId.sushiSwap,
+      ProtocolId.sushiSwapV3,
       "positionManager",
       Address.fromString("0x2214A42d8e2A1d20635c2cb0664422c528B6A432").toHexString(),
     );

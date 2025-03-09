@@ -7,8 +7,8 @@ import { handleV3PoolCreated } from "../v3-factory";
 
 export function handleZebraProtocolV3PoolCreated(event: PoolCreated): void {
   let protocolEntity = getOrCreateProtocol(
-    ProtocolId.zebra,
-    "Zebra",
+    ProtocolId.zebraV3,
+    "Zebra V3",
     "https://zebra.xyz",
     "https://icons.llamao.fi/icons/protocols/zebra",
     PositionManagerAddress.zebra,
