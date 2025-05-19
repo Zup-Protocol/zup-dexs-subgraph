@@ -1,6 +1,7 @@
 import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { assert, test } from "matchstick-as";
 import {
+  BASE_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
   SCROLL_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
@@ -26,4 +27,8 @@ test("'SCROLL_NETWORK_NAME' should return 'scroll'", () => {
 
 test("'SEPOLIA_NETWORK_NAME' should return 'sepolia'", () => {
   assert.assertTrue(SEPOLIA_NETWORK_NAME == "sepolia");
+});
+
+test("BASE_NETWORK_NAME should return 'base'", () => {
+  assert.assertTrue(BASE_NETWORK_NAME == "base");
 });

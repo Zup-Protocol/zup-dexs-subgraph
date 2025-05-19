@@ -1,6 +1,6 @@
 import { PoolCreated as PoolCreatedEvent } from "../../../../../generated/NuriExchangeV3Factory/NuriExchangeV3Factory";
 import { NuriExchangeV3Pool } from "../../../../../generated/templates";
-import { PositionManagerAddress } from "../../../../utils/position-manager-address";
+import { V3PositionManagerAddress } from "../../../../utils/position-manager-address";
 import { ProtocolId } from "../../../../utils/protocol-id";
 import { getOrCreateProtocol } from "../../../../utils/protocol-utils";
 import { handleV3PoolCreated } from "./../v3-factory";
@@ -11,7 +11,7 @@ export function handleNuriExchangeV3PoolCreated(event: PoolCreatedEvent): void {
     "Nuri Exchange V3",
     "https://www.nuri.exchange/",
     "https://www.nuri.exchange/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Femission.081c7921.png&w=64&q=75",
-    PositionManagerAddress.nuriExchange,
+    V3PositionManagerAddress.nuriExchange,
   );
 
   handleV3PoolCreated(

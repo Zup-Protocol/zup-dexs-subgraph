@@ -11,3 +11,5 @@ export const MAINNET_NETWORK_NAME = "mainnet";
 export const SCROLL_NETWORK_NAME = "scroll";
 
 export const SEPOLIA_NETWORK_NAME = "sepolia";
+
+export const BASE_NETWORK_NAME = "base";

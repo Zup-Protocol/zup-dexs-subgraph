@@ -29,6 +29,15 @@ describe("`wrappedNativeAddress` should return the correct value for each networ
       Address.fromString("0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14"),
     );
   });
+
+  test("Base", () => {
+    dataSourceMock.setNetwork("base");
+
+    assert.addressEquals(
+      Address.fromString(CurrentNetwork.wrappedNativeAddress),
+      Address.fromString("0x4200000000000000000000000000000000000006"),
+    );
+  });
 });
 
 test(
@@ -72,6 +81,20 @@ describe("`stablecoinsAddresses` should return a correct list of stablecoins for
 
     assert.assertTrue(
       CurrentNetwork.stablecoinsAddresses.join() == ["0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"].join(),
+    );
+  });
+
+  test("Base", () => {
+    dataSourceMock.setNetwork("base");
+
+    assert.assertTrue(
+      CurrentNetwork.stablecoinsAddresses.join() ==
+        [
+          "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2",
+          "0x820c137fa70c8691f0e44dc420a5e53c168921dc",
+          "0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA",
+        ].join(),
     );
   });
 });

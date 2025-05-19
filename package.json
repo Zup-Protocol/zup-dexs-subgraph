@@ -9,7 +9,8 @@
   "manifests": {
     "mainnet": "subgraph-manifests/mainnet.subgraph.yaml",
     "scroll": "subgraph-manifests/scroll.subgraph.yaml",
-    "sepolia": "subgraph-manifests/sepolia.subgraph.yaml"
+    "sepolia": "subgraph-manifests/sepolia.subgraph.yaml",
+    "base": "subgraph-manifests/base.subgraph.yaml"
   },
   "commands": {
     "deploystudio": "graph deploy --node https://api.studio.thegraph.com/deploy/",
@@ -22,17 +23,21 @@
     "codegen:mainnet": "$npm_package_commands_codegen $npm_package_manifests_mainnet",
     "codegen:scroll": "$npm_package_commands_codegen $npm_package_manifests_scroll",
     "codegen:sepolia": "$npm_package_commands_codegen $npm_package_manifests_sepolia",
+    "codegen:base": "$npm_package_commands_codegen $npm_package_manifests_base",
     "build:sepolia": "$npm_package_commands_build $npm_package_manifests_sepolia",
     "build:mainnet": "$npm_package_commands_build $npm_package_manifests_mainnet",
     "build:scroll": "$npm_package_commands_build $npm_package_manifests_scroll",
-    "deploy:mainnet": "$npm_package_commands_deploystudio zup-dexs-ethereum $npm_package_manifests_mainnet",
-    "deploy:scroll": "$npm_package_commands_deploystudio zup-dexs-scroll $npm_package_manifests_scroll",
-    "deploy:sepolia": "$npm_package_commands_deploystudio zup-dexs-sepolia $npm_package_manifests_sepolia",
+    "build:base": "$npm_package_commands_build $npm_package_manifests_base",
+    "deploy:mainnet": "$npm_package_commands_deploystudio zup-dexs-ethereum $npm_package_manifests_mainnet --version-label=$npm_package_version",
+    "deploy:scroll": "$npm_package_commands_deploystudio zup-dexs-scroll $npm_package_manifests_scroll --version-label=$npm_package_version",
+    "deploy:sepolia": "$npm_package_commands_deploystudio zup-dexs-sepolia $npm_package_manifests_sepolia --version-label=$npm_package_version",
+    "deploy:base": "$npm_package_commands_deploystudio zup-dexs-base $npm_package_manifests_base --version-label=$npm_package_version",
     "remove-local": "graph remove --node http://localhost:8020/ zup-dexs-subgraph",
     "create-local": "graph create --node http://localhost:8020/ zup-dexs-subgraph",
     "deploy-local:scroll": "$npm_package_commands_deploylocal $npm_package_manifests_scroll",
     "deploy-local:mainnet": "$npm_package_commands_deploylocal $npm_package_manifests_mainnet",
     "deploy-local:sepolia": "$npm_package_commands_deploylocal $npm_package_manifests_sepolia",
+    "deploy-local:base": "$npm_package_commands_deploylocal $npm_package_manifests_base",
     "test": "graph codegen && graph test && rm -rf generated",
     "prepare": "husky"
   },

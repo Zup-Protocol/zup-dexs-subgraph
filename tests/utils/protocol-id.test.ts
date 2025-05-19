@@ -42,3 +42,24 @@ test("OkuTrade V3 Id should be correct", () => {
 
   assert.stringEquals(actualId, expectedId);
 });
+
+test("BaseSwap V3 Id should be correct", () => {
+  const expectedId = "base-swap-v3";
+  const actualId = ProtocolId.baseSwapV3;
+
+  assert.stringEquals(actualId, expectedId);
+});
+
+test("AlienBase V3 Id should be correct", () => {
+  const expectedId = "alien-base-v3";
+  const actualId = ProtocolId.alienBaseV3;
+
+  assert.stringEquals(actualId, expectedId);
+});
+
+test("Aerodrome V3 Id should be correct", () => {
+  const expectedId = "aerodrome-v3";
+  const actualId = ProtocolId.aerodromeV3;
+
+  assert.stringEquals(actualId, expectedId);
+});

@@ -1,5 +1,5 @@
 import { dataSource } from "@graphprotocol/graph-ts";
-import { MAINNET_NETWORK_NAME, SCROLL_NETWORK_NAME, SEPOLIA_NETWORK_NAME } from "./constants";
+import { BASE_NETWORK_NAME, MAINNET_NETWORK_NAME, SCROLL_NETWORK_NAME, SEPOLIA_NETWORK_NAME } from "./constants";
 
 export abstract class CurrentNetwork {
   private static unsupportedNetworkError: Error = new Error("Unsupported network: " + dataSource.network());
@@ -8,6 +8,7 @@ export abstract class CurrentNetwork {
     if (dataSource.network() == MAINNET_NETWORK_NAME) return "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
     if (dataSource.network() == SCROLL_NETWORK_NAME) return "0x5300000000000000000000000000000000000004";
     if (dataSource.network() == SEPOLIA_NETWORK_NAME) return "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14";
+    if (dataSource.network() == BASE_NETWORK_NAME) return "0x4200000000000000000000000000000000000006";
 
     throw CurrentNetwork.unsupportedNetworkError;
   }
@@ -34,6 +35,15 @@ export abstract class CurrentNetwork {
     if (dataSource.network() == SEPOLIA_NETWORK_NAME) {
       return [
         "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238", // USDC
+      ];
+    }
+
+    if (dataSource.network() == BASE_NETWORK_NAME) {
+      return [
+        "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", // USDC
+        "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2", // USDT
+        "0x820c137fa70c8691f0e44dc420a5e53c168921dc", // USDS
+        "0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA", // USDbC
       ];
     }
 
