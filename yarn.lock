@@ -4023,6 +4023,11 @@ typescript-eslint@^8.18.1:
     "@typescript-eslint/parser" "8.18.1"
     "@typescript-eslint/utils" "8.18.1"
 
+typescript@^5.8.3:
+  version "5.8.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.8.3.tgz#92f8a3e5e3cf497356f4178c34cd65a7f5e8440e"
+  integrity sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==
+
 uint8arrays@^3.0.0:
   version "3.1.1"
   resolved "https://registry.npmmirror.com/uint8arrays/-/uint8arrays-3.1.1.tgz#2d8762acce159ccd9936057572dade9459f65ae0"
