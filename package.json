@@ -2,7 +2,7 @@
   "name": "zup-dexs-subgraph",
   "description": "The Zup Protocol Subgraph with protocol supported DEXs",
   "license": "MIT",
-  "version": "1.0.5",
+  "version": "1.1.14",
   "engines": {
     "node": ">=20.11.1"
   },
@@ -10,7 +10,8 @@
     "mainnet": "subgraph-manifests/mainnet.subgraph.yaml",
     "scroll": "subgraph-manifests/scroll.subgraph.yaml",
     "sepolia": "subgraph-manifests/sepolia.subgraph.yaml",
-    "base": "subgraph-manifests/base.subgraph.yaml"
+    "base": "subgraph-manifests/base.subgraph.yaml",
+    "unichain": "subgraph-manifests/unichain.subgraph.yaml"
   },
   "commands": {
     "deploystudio": "graph deploy --node https://api.studio.thegraph.com/deploy/",
@@ -24,13 +25,16 @@
     "codegen:scroll": "$npm_package_commands_codegen $npm_package_manifests_scroll",
     "codegen:sepolia": "$npm_package_commands_codegen $npm_package_manifests_sepolia",
     "codegen:base": "$npm_package_commands_codegen $npm_package_manifests_base",
+    "codegen:unichain": "$npm_package_commands_codegen $npm_package_manifests_unichain",
     "build:sepolia": "$npm_package_commands_build $npm_package_manifests_sepolia",
     "build:mainnet": "$npm_package_commands_build $npm_package_manifests_mainnet",
     "build:scroll": "$npm_package_commands_build $npm_package_manifests_scroll",
     "build:base": "$npm_package_commands_build $npm_package_manifests_base",
+    "build:unichain": "$npm_package_commands_build $npm_package_manifests_unichain",
     "deploy:mainnet": "$npm_package_commands_deploystudio zup-dexs-ethereum $npm_package_manifests_mainnet --version-label=$npm_package_version",
     "deploy:scroll": "$npm_package_commands_deploystudio zup-dexs-scroll $npm_package_manifests_scroll --version-label=$npm_package_version",
     "deploy:sepolia": "$npm_package_commands_deploystudio zup-dexs-sepolia $npm_package_manifests_sepolia --version-label=$npm_package_version",
+    "deploy:unichain": "$npm_package_commands_deploystudio zup-dexs-unichain $npm_package_manifests_unichain --version-label=$npm_package_version",
     "deploy:base": "$npm_package_commands_deploystudio zup-dexs-base $npm_package_manifests_base --version-label=$npm_package_version",
     "remove-local": "graph remove --node http://localhost:8020/ zup-dexs-subgraph",
     "create-local": "graph create --node http://localhost:8020/ zup-dexs-subgraph",

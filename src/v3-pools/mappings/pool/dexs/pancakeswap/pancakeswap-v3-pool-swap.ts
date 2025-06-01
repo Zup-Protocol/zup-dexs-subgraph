@@ -1,3 +1,4 @@
+import { BigInt } from "@graphprotocol/graph-ts";
 import { Pool as PoolEntity, Token as TokenEntity } from "../../../../../../generated/schema";
 import { Swap as SwapEvent } from "../../../../../../generated/templates/PancakeSwapV3Pool/PancakeSwapV3Pool";
 import { handleV3PoolSwap } from "../../v3-pool-swap";
@@ -15,5 +16,6 @@ export function handlePancakeSwapV3PoolSwap(event: SwapEvent): void {
     event.params.amount0,
     event.params.amount1,
     event.params.sqrtPriceX96,
+    BigInt.fromI32(event.params.tick),
   );
 }

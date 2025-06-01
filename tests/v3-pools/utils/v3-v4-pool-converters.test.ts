@@ -1,7 +1,7 @@
 import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { assert, test } from "matchstick-as";
 import { Token } from "../../../generated/schema";
-import { sqrtPriceX96toPrice } from "../../../src/v3-pools/utils/v3-pool-converters";
+import { sqrtPriceX96toPrice } from "../../../src/v3-pools/utils/v3-v4-pool-converters";
 
 test(`When passing a SqrtPriceX96 to 'sqrtPriceX96toPrice'
     it should return the pool token prices based on each other

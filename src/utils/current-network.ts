@@ -1,5 +1,12 @@
 import { dataSource } from "@graphprotocol/graph-ts";
-import { BASE_NETWORK_NAME, MAINNET_NETWORK_NAME, SCROLL_NETWORK_NAME, SEPOLIA_NETWORK_NAME } from "./constants";
+import {
+  BASE_NETWORK_NAME,
+  MAINNET_NETWORK_NAME,
+  SCROLL_NETWORK_NAME,
+  SEPOLIA_NETWORK_NAME,
+  UNICHAIN_NETWORK_NAME,
+} from "./constants";
+import { NativeToken } from "./types/native-token";
 
 export abstract class CurrentNetwork {
   private static unsupportedNetworkError: Error = new Error("Unsupported network: " + dataSource.network());
@@ -9,6 +16,17 @@ export abstract class CurrentNetwork {
     if (dataSource.network() == SCROLL_NETWORK_NAME) return "0x5300000000000000000000000000000000000004";
     if (dataSource.network() == SEPOLIA_NETWORK_NAME) return "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14";
     if (dataSource.network() == BASE_NETWORK_NAME) return "0x4200000000000000000000000000000000000006";
+    if (dataSource.network() == UNICHAIN_NETWORK_NAME) return "0x4200000000000000000000000000000000000006";
+
+    throw CurrentNetwork.unsupportedNetworkError;
+  }
+
+  static nativeToken(): NativeToken {
+    if (dataSource.network() == MAINNET_NETWORK_NAME) return new NativeToken("ETH", 18, "Ether");
+    if (dataSource.network() == SCROLL_NETWORK_NAME) return new NativeToken("ETH", 18, "Ether");
+    if (dataSource.network() == SEPOLIA_NETWORK_NAME) return new NativeToken("ETH", 18, "Ether");
+    if (dataSource.network() == BASE_NETWORK_NAME) return new NativeToken("ETH", 18, "Ether");
+    if (dataSource.network() == UNICHAIN_NETWORK_NAME) return new NativeToken("ETH", 18, "Ether");
 
     throw CurrentNetwork.unsupportedNetworkError;
   }
@@ -44,6 +62,13 @@ export abstract class CurrentNetwork {
         "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2", // USDT
         "0x820c137fa70c8691f0e44dc420a5e53c168921dc", // USDS
         "0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA", // USDbC
+      ];
+    }
+
+    if (dataSource.network() == UNICHAIN_NETWORK_NAME) {
+      return [
+        "0x078D782b760474a361dDA0AF3839290b0EF57AD6", // USDC
+        "0x9151434b16b9763660705744891fA906F660EcC5", // USDT0
       ];
     }
 

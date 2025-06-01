@@ -63,3 +63,10 @@ test("Aerodrome V3 Id should be correct", () => {
 
   assert.stringEquals(actualId, expectedId);
 });
+
+test("Uniswap V4 Id should be correct", () => {
+  const expectedId = "uniswap-v4";
+  const actualId = ProtocolId.uniswapV4;
+
+  assert.stringEquals(actualId, expectedId);
+});

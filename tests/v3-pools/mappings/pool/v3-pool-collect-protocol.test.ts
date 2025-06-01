@@ -6,7 +6,7 @@ import {
   handleV3PoolProtocolCollect,
   handleV3PoolProtocolCollectImpl,
 } from "../../../../src/v3-pools/mappings/pool/v3-pool-protocol-collect";
-import { PoolMock, TokenMock, V3PoolSettersMock } from "../../../mocks";
+import { PoolMock, TokenMock, V3V4PoolSettersMock } from "../../../mocks";
 
 describe("v3-pool-collect-protocol", () => {
   beforeEach(() => {
@@ -102,7 +102,7 @@ describe("v3-pool-collect-protocol", () => {
     let pool = new PoolMock();
     let token0 = new TokenMock();
     let token1 = new TokenMock();
-    let v3PoolSetters = new V3PoolSettersMock();
+    let v3PoolSetters = new V3V4PoolSettersMock();
     let amount1 = BigInt.fromI32(98216);
     let amount0 = BigInt.fromI32(1552);
     let currentTotalValueLockedToken1 = BigInt.fromI32(128715276).times(BigInt.fromI32(10).pow(token1.decimals as u8));

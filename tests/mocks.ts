@@ -2,7 +2,8 @@ import { Address, BigDecimal, BigInt, Bytes, ethereum } from "@graphprotocol/gra
 import { Pool, PoolDailyData, PoolHourlyData, Protocol, Token } from "../generated/schema";
 import { ZERO_BIG_DECIMAL } from "../src/utils/constants";
 import { getPoolDailyDataId, getPoolHourlyDataId } from "../src/utils/pool-utils";
-import { V3PoolSetters } from "../src/v3-pools/utils/v3-pool-setters";
+import { PoolType } from "../src/utils/types/pool-type";
+import { V3V4PoolSetters } from "../src/v3-pools/utils/v3-v4-pool-setters";
 
 export class TokenMock extends Token {
   mockId: Address;
@@ -32,8 +33,7 @@ export class TokenMock extends Token {
 export class ProtocolMock extends Protocol {
   mockId: string;
 
-  constructor() {
-    let id = "mock-protocol";
+  constructor(id: string = "mock-protocol") {
     super(id);
 
     this.mockId = id;
@@ -71,6 +71,9 @@ export class PoolMock extends Pool {
     this.totalValueLockedToken1 = BigDecimal.fromString("0");
     this.createdAtTimestamp = BigInt.fromI32(124);
     this.protocol = new ProtocolMock().id;
+    this.tick = BigInt.fromI32(98675689);
+    this.sqrtPriceX96 = BigInt.fromI32(1579);
+    this.type = PoolType.V3;
 
     this.save();
   }
@@ -107,8 +110,8 @@ class V3PoolSettersSetPoolDailyDataTVLCallsParams {
   }
 }
 
-export class V3PoolSettersMock extends V3PoolSetters {
-  setPricesForV3PoolWhitelistedTokensCalls: V3PoolSettersSetPricesForV3PoolWhitelistedTokensParams[] = [];
+export class V3V4PoolSettersMock extends V3V4PoolSetters {
+  setPricesForPoolWhitelistedTokensCalls: V3PoolSettersSetPricesForV3PoolWhitelistedTokensParams[] = [];
   setPoolDailyDataTVLCalls: V3PoolSettersSetPoolDailyDataTVLCallsParams[] = [];
 
   setPoolDailyDataTVL(event: ethereum.Event, poolEntity: Pool): void {
@@ -117,14 +120,14 @@ export class V3PoolSettersMock extends V3PoolSetters {
     this.setPoolDailyDataTVLCalls.push(new V3PoolSettersSetPoolDailyDataTVLCallsParams(event, poolEntity));
   }
 
-  setPricesForV3PoolWhitelistedTokens(
+  setPricesForPoolWhitelistedTokens(
     poolSqrtPriceX96: BigInt,
     poolEntity: Pool,
     poolToken0Entity: Token,
     poolToken1Entity: Token,
   ): void {
-    super.setPricesForV3PoolWhitelistedTokens(poolSqrtPriceX96, poolEntity, poolToken0Entity, poolToken1Entity);
-    this.setPricesForV3PoolWhitelistedTokensCalls.push(
+    super.setPricesForPoolWhitelistedTokens(poolSqrtPriceX96, poolEntity, poolToken0Entity, poolToken1Entity);
+    this.setPricesForPoolWhitelistedTokensCalls.push(
       new V3PoolSettersSetPricesForV3PoolWhitelistedTokensParams(
         poolSqrtPriceX96,
         poolEntity,

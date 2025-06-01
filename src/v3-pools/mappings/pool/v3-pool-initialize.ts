@@ -1,15 +1,16 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import { Pool as PoolEntity, Token as TokenEntity } from "../../../../generated/schema";
 
-import { V3PoolSetters } from "../../utils/v3-pool-setters";
+import { V3V4PoolSetters } from "../../utils/v3-v4-pool-setters";
 
 export function handleV3PoolInitialize(
   poolEntity: PoolEntity,
   poolToken0Entity: TokenEntity,
   poolToken1Entity: TokenEntity,
   sqrtPriceX96: BigInt,
+  tick: BigInt,
 ): void {
-  handleV3PoolInitializeImpl(poolEntity, poolToken0Entity, poolToken1Entity, sqrtPriceX96, new V3PoolSetters());
+  handleV3PoolInitializeImpl(poolEntity, poolToken0Entity, poolToken1Entity, sqrtPriceX96, tick, new V3V4PoolSetters());
 }
 
 export function handleV3PoolInitializeImpl(
@@ -17,9 +18,12 @@ export function handleV3PoolInitializeImpl(
   poolToken0Entity: TokenEntity,
   poolToken1Entity: TokenEntity,
   sqrtPriceX96: BigInt,
-  v3PoolSetters: V3PoolSetters = new V3PoolSetters(),
+  tick: BigInt,
+  v3PoolSetters: V3V4PoolSetters = new V3V4PoolSetters(),
 ): void {
-  v3PoolSetters.setPricesForV3PoolWhitelistedTokens(sqrtPriceX96, poolEntity, poolToken0Entity, poolToken1Entity);
+  v3PoolSetters.setPricesForPoolWhitelistedTokens(sqrtPriceX96, poolEntity, poolToken0Entity, poolToken1Entity);
+  poolEntity.sqrtPriceX96 = sqrtPriceX96;
+  poolEntity.tick = tick;
 
   poolEntity.save();
 }

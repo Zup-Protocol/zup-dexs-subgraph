@@ -1,7 +1,7 @@
 import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { Pool, Token } from "../../generated/schema";
 
-import { ONE_HOUR_IN_SECONDS } from "./constants";
+import { ONE_HOUR_IN_SECONDS, ZERO_ADDRESS } from "./constants";
 import { CurrentNetwork } from "./current-network";
 import { areEqual } from "./string-utils";
 
@@ -40,6 +40,15 @@ export function isWrappedNativePool(pool: Pool): boolean {
   return false;
 }
 
+export function isNativePool(pool: Pool): boolean {
+  let isToken0Native = areEqual(pool.token0.toHexString(), ZERO_ADDRESS);
+  let isToken1Native = areEqual(pool.token1.toHexString(), ZERO_ADDRESS);
+
+  if (isToken0Native || isToken1Native) return true;
+
+  return false;
+}
+
 export function findStableToken(pool: Pool): Token {
   assert(
     isStablePool(pool) || isVariableWithStablePool(pool),
@@ -64,6 +73,16 @@ export function findWrappedNative(pool: Pool): Token {
   let isToken0WrappedNative = areEqual(pool.token0.toHexString(), CurrentNetwork.wrappedNativeAddress);
 
   if (isToken0WrappedNative) return new Token(pool.token0);
+
+  return new Token(pool.token1);
+}
+
+export function findNativeToken(pool: Pool): Token {
+  assert(isNativePool(pool), "Pool does not have an native asset, no native token can be found");
+
+  let isToken0Native = areEqual(pool.token0.toHexString(), ZERO_ADDRESS);
+
+  if (isToken0Native) return new Token(pool.token0);
 
   return new Token(pool.token1);
 }

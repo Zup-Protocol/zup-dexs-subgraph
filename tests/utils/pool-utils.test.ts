@@ -3,14 +3,17 @@ import { assert, test } from "matchstick-as";
 import { Pool, Token } from "../../generated/schema";
 import { CurrentNetwork } from "../../src/utils/current-network";
 import {
+  findNativeToken,
   findStableToken,
   findWrappedNative,
   getPoolDailyDataId,
   getPoolHourlyDataId,
+  isNativePool,
   isStablePool,
   isVariableWithStablePool,
   isWrappedNativePool,
 } from "../../src/utils/pool-utils";
+import { PoolMock, TokenMock } from "../mocks";
 
 test(`When a pool has the token 0 as stablecoin,
     and token 1 as not-stablecoin,
@@ -278,3 +281,85 @@ test(`'getPoolDailyDataId' should return different ids for passed timestamps mor
 
   assert.assertTrue(!(id1 == id2), "id1 and id2 should be different");
 });
+
+test("When calling 'isNativePool' and the pool token 0 is native(has zero address), it should return true", () => {
+  let pool = new PoolMock();
+  pool.token0 = Address.fromHexString("0x0000000000000000000000000000000000000000");
+  pool.token1 = Address.fromHexString("0x0000000000000000000000000000000000000021");
+
+  pool.save();
+
+  let result = isNativePool(pool);
+
+  assert.assertTrue(result);
+});
+
+test("When calling 'isNativePool' and the pool token 1 is native(has zero address), it should return true", () => {
+  let pool = new PoolMock();
+  pool.token1 = Address.fromHexString("0x0000000000000000000000000000000000000000");
+  pool.token0 = Address.fromHexString("0x0000000000000000000000000000000000000021");
+
+  pool.save();
+
+  let result = isNativePool(pool);
+
+  assert.assertTrue(result);
+});
+
+test("When calling 'isNativePool' and none of the tokens in the pool are native(has zero address), it should return false", () => {
+  let pool = new PoolMock();
+  pool.token1 = Address.fromHexString("0x0000000000000000000000000000000000000022");
+  pool.token0 = Address.fromHexString("0x0000000000000000000000000000000000000021");
+
+  pool.save();
+
+  let result = isNativePool(pool);
+
+  assert.assertTrue(!result, "isNativePool should return false");
+});
+
+test("When calling 'findNativeToken' and the token 1 is the native token(has zero address), it should return it", () => {
+  let pool = new PoolMock();
+  let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000000"));
+
+  token1.name = "NATIVE_TOKEN";
+  pool.token1 = token1.id;
+  pool.token0 = Address.fromHexString("0x0000000000000000000000000000000000000021");
+
+  token1.save();
+  pool.save();
+
+  let result = findNativeToken(pool);
+
+  assert.fieldEquals("Token", result.id.toHexString(), "name", token1.name);
+});
+
+test("When calling 'findNativeToken' and the token 0 is the native token(has zero address), it should return it", () => {
+  let pool = new PoolMock();
+  let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000000"));
+
+  token0.name = "NATIVE_TOKEN";
+  pool.token0 = token0.id;
+  pool.token1 = Address.fromHexString("0x0000000000000000000000000000000000000021");
+
+  token0.save();
+  pool.save();
+
+  let result = findNativeToken(pool);
+
+  assert.fieldEquals("Token", result.id.toHexString(), "name", token0.name);
+});
+
+test(
+  "When calling `findNativeToken` but there are no native tokens in the pool, it should assert",
+  () => {
+    let pool = new PoolMock();
+    pool.token0 = Address.fromHexString("0x0000000000000000000000000000000000000021");
+    pool.token1 = Address.fromHexString("0x0000000000000000000000000000000000000022");
+
+    pool.save();
+
+    findNativeToken(pool);
+  },
+  true, // should throw flag
+);

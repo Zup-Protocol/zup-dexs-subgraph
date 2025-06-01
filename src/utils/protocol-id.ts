@@ -8,4 +8,5 @@ export abstract class ProtocolId {
   static okuTradeV3: string = "oku-trade-v3";
   static baseSwapV3: string = "base-swap-v3";
   static alienBaseV3: string = "alien-base-v3";
+  static uniswapV4: string = "uniswap-v4";
 }

@@ -1,8 +1,9 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
 
-import { Pool as PoolEntity, Protocol as ProtocolEntity, Token as TokenEntity } from "../../../../generated/schema";
-import { ZERO_BIG_DECIMAL } from "../../../utils/constants";
-import { ERC20 } from "../../../utils/ERC20";
+import { Pool as PoolEntity, Protocol as ProtocolEntity } from "../../../../generated/schema";
+import { ZERO_BIG_DECIMAL, ZERO_BIG_INT } from "../../../utils/constants";
+import { getOrCreateTokenEntity } from "../../../utils/token-utils";
+import { PoolType } from "../../../utils/types/pool-type";
 
 export function handleV3PoolCreated(
   event: ethereum.Event,
@@ -13,33 +14,9 @@ export function handleV3PoolCreated(
   tickSpacing: u32,
   protocol: ProtocolEntity,
 ): PoolEntity {
-  let token0Entity = TokenEntity.load(token0Address);
-  let token1Entity = TokenEntity.load(token1Address);
+  let token0Entity = getOrCreateTokenEntity(token0Address);
+  let token1Entity = getOrCreateTokenEntity(token1Address);
   let poolEntity = new PoolEntity(poolAddress);
-
-  if (token0Entity == null) {
-    token0Entity = new TokenEntity(token0Address);
-    let tokenContract = ERC20.bind(token0Address);
-
-    token0Entity.decimals = tokenContract.safe_decimals();
-    token0Entity.symbol = tokenContract.safe_symbol();
-    token0Entity.name = tokenContract.safe_name();
-    token0Entity.usdPrice = ZERO_BIG_DECIMAL;
-    token0Entity.totalValuePooledUsd = ZERO_BIG_DECIMAL;
-    token0Entity.totalTokenPooledAmount = ZERO_BIG_DECIMAL;
-  }
-
-  if (token1Entity == null) {
-    token1Entity = new TokenEntity(token1Address);
-    let tokenContract = ERC20.bind(token1Address);
-
-    token1Entity.decimals = tokenContract.safe_decimals();
-    token1Entity.symbol = tokenContract.safe_symbol();
-    token1Entity.name = tokenContract.safe_name();
-    token1Entity.usdPrice = ZERO_BIG_DECIMAL;
-    token1Entity.totalValuePooledUsd = ZERO_BIG_DECIMAL;
-    token1Entity.totalTokenPooledAmount = ZERO_BIG_DECIMAL;
-  }
 
   poolEntity.token0 = token0Address;
   poolEntity.token1 = token1Address;
@@ -50,6 +27,9 @@ export function handleV3PoolCreated(
   poolEntity.totalValueLockedToken1 = ZERO_BIG_DECIMAL;
   poolEntity.createdAtTimestamp = event.block.timestamp;
   poolEntity.protocol = protocol.id;
+  poolEntity.type = PoolType.V3;
+  poolEntity.sqrtPriceX96 = ZERO_BIG_INT;
+  poolEntity.tick = ZERO_BIG_INT;
 
   poolEntity.save();
   token0Entity.save();

@@ -535,4 +535,67 @@ describe("", () => {
 
     assert.fieldEquals("Token", token1Address.toHexString(), "name", tokenName);
   });
+
+  test(`When the handler is called, it should assign the correct pool type to the pool`, () => {
+    let event = newMockEvent();
+    let token0Address = Address.fromString("0x0000000000000000000000000000000000000019");
+    let token1Address = Address.fromString("0x0000000000000000000000000000000000000009");
+    let pool = new PoolMock();
+    let fee = 3000;
+    let tickSpacing = 10;
+
+    handleV3PoolCreated(
+      event,
+      Address.fromBytes(pool.id),
+      token0Address,
+      token1Address,
+      fee,
+      tickSpacing,
+      new ProtocolMock(),
+    );
+
+    assert.fieldEquals("Pool", pool.id.toHexString(), "type", "V3");
+  });
+
+  test(`When the handler is called, it should assign 0 to the squaredPrice`, () => {
+    let event = newMockEvent();
+    let token0Address = Address.fromString("0x0000000000000000000000000000000000000019");
+    let token1Address = Address.fromString("0x0000000000000000000000000000000000000009");
+    let pool = new PoolMock();
+    let fee = 3000;
+    let tickSpacing = 10;
+
+    handleV3PoolCreated(
+      event,
+      Address.fromBytes(pool.id),
+      token0Address,
+      token1Address,
+      fee,
+      tickSpacing,
+      new ProtocolMock(),
+    );
+
+    assert.fieldEquals("Pool", pool.id.toHexString(), "sqrtPriceX96", "0");
+  });
+
+  test(`When the handler is called, it should assign 0 to the tick`, () => {
+    let event = newMockEvent();
+    let token0Address = Address.fromString("0x0000000000000000000000000000000000000019");
+    let token1Address = Address.fromString("0x0000000000000000000000000000000000000009");
+    let pool = new PoolMock();
+    let fee = 3000;
+    let tickSpacing = 10;
+
+    handleV3PoolCreated(
+      event,
+      Address.fromBytes(pool.id),
+      token0Address,
+      token1Address,
+      fee,
+      tickSpacing,
+      new ProtocolMock(),
+    );
+
+    assert.fieldEquals("Pool", pool.id.toHexString(), "tick", "0");
+  });
 });

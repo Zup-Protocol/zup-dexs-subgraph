@@ -38,6 +38,15 @@ describe("`wrappedNativeAddress` should return the correct value for each networ
       Address.fromString("0x4200000000000000000000000000000000000006"),
     );
   });
+
+  test("Unichain", () => {
+    dataSourceMock.setNetwork("unichain");
+
+    assert.addressEquals(
+      Address.fromString(CurrentNetwork.wrappedNativeAddress),
+      Address.fromString("0x4200000000000000000000000000000000000006"),
+    );
+  });
 });
 
 test(
@@ -97,6 +106,15 @@ describe("`stablecoinsAddresses` should return a correct list of stablecoins for
         ].join(),
     );
   });
+
+  test("Unichain", () => {
+    dataSourceMock.setNetwork("unichain");
+
+    assert.assertTrue(
+      CurrentNetwork.stablecoinsAddresses.join() ==
+        ["0x078D782b760474a361dDA0AF3839290b0EF57AD6", "0x9151434b16b9763660705744891fA906F660EcC5"].join(),
+    );
+  });
 });
 
 test(
@@ -108,3 +126,45 @@ test(
   },
   true, // should throw flag
 );
+
+describe("`NativeToken` should return a correct native token object for each network", () => {
+  test("Mainnet", () => {
+    dataSourceMock.setNetwork("mainnet");
+
+    assert.stringEquals(CurrentNetwork.nativeToken().symbol, "ETH");
+    assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
+    assert.stringEquals(CurrentNetwork.nativeToken().name, "Ether");
+  });
+
+  test("Scroll", () => {
+    dataSourceMock.setNetwork("scroll");
+
+    assert.stringEquals(CurrentNetwork.nativeToken().symbol, "ETH");
+    assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
+    assert.stringEquals(CurrentNetwork.nativeToken().name, "Ether");
+  });
+
+  test("Sepolia", () => {
+    dataSourceMock.setNetwork("sepolia");
+
+    assert.stringEquals(CurrentNetwork.nativeToken().symbol, "ETH");
+    assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
+    assert.stringEquals(CurrentNetwork.nativeToken().name, "Ether");
+  });
+
+  test("Base", () => {
+    dataSourceMock.setNetwork("base");
+
+    assert.stringEquals(CurrentNetwork.nativeToken().symbol, "ETH");
+    assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
+    assert.stringEquals(CurrentNetwork.nativeToken().name, "Ether");
+  });
+
+  test("Unichain", () => {
+    dataSourceMock.setNetwork("unichain");
+
+    assert.stringEquals(CurrentNetwork.nativeToken().symbol, "ETH");
+    assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
+    assert.stringEquals(CurrentNetwork.nativeToken().name, "Ether");
+  });
+});

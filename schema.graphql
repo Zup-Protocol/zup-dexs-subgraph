@@ -1,3 +1,8 @@
+enum PoolType {
+  V3
+  V4
+}
+
 type Token @entity {
   id: Bytes!
   usdPrice: BigDecimal!
@@ -21,6 +26,9 @@ type Pool @entity {
   hourlyData: [PoolHourlyData]! @derivedFrom(field: "pool")
   dailyData: [PoolDailyData]! @derivedFrom(field: "pool")
   protocol: Protocol!
+  sqrtPriceX96: BigInt!
+  tick: BigInt!
+  type: PoolType!
 }
 
 type PoolHourlyData @entity {
