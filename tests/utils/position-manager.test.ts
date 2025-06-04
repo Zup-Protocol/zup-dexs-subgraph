@@ -110,6 +110,11 @@ describe("V4PositionManagerAddress", () => {
     assert.stringEquals(V4PositionManagerAddress.uniswap, "0xbD216513d74C8cf14cf4747E6AaA6420FF64ee9e");
   });
 
+  test("uniswap returns correct address for base", () => {
+    dataSourceMock.setNetwork("base");
+    assert.stringEquals(V4PositionManagerAddress.uniswap, "0x7c5f5a4bbd8fd63184577525326123b519429bdc");
+  });
+
   test(
     "uniswap throws for unsupported network",
     () => {
