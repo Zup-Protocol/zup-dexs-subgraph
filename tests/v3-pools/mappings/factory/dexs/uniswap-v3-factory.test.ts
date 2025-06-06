@@ -37,7 +37,7 @@ export class PoolCreatedEventParams {
   }
 }
 
-export function createEvent(params: PoolCreatedEventParams = new PoolCreatedEventParams()): PoolCreated {
+function createEvent(params: PoolCreatedEventParams = new PoolCreatedEventParams()): PoolCreated {
   let mockEvent = newMockEvent();
 
   let token0Decimals: i32 = 6;

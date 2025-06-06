@@ -15,6 +15,7 @@ export function handleUniswapV4PoolInitialize(event: Initialize): void {
     event.params.tickSpacing,
     BigInt.fromI32(event.params.tick),
     event.params.sqrtPriceX96,
+    event.params.hooks,
     getOrCreateProtocol(
       ProtocolId.uniswapV4,
       "Uniswap V4",

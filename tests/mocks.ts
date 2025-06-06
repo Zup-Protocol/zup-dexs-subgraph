@@ -74,6 +74,7 @@ export class PoolMock extends Pool {
     this.tick = BigInt.fromI32(98675689);
     this.sqrtPriceX96 = BigInt.fromI32(1579);
     this.type = PoolType.V3;
+    this.v4Hooks = Address.fromString("0x0000000000000000000000000000000000000031");
 
     this.save();
   }

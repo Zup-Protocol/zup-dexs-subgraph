@@ -29,6 +29,7 @@ type Pool @entity {
   sqrtPriceX96: BigInt!
   tick: BigInt!
   type: PoolType!
+  v4Hooks: Bytes
 }
 
 type PoolHourlyData @entity {

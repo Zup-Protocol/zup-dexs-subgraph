@@ -20,6 +20,7 @@ test("When calling the handler, it should correctly assign the protocol to the p
     pool.tickSpacing,
     pool.tick,
     pool.sqrtPriceX96,
+    Address.fromBytes(pool.v4Hooks!),
     protocol,
   );
 
@@ -41,6 +42,7 @@ test("When calling the handler, it should correctly assign the created timestamp
     pool.tickSpacing,
     pool.tick,
     pool.sqrtPriceX96,
+    Address.fromBytes(pool.v4Hooks!),
     protocol,
   );
 
@@ -62,6 +64,7 @@ test("When calling the handler, it should correctly assign the token0 to the poo
     pool.tickSpacing,
     pool.tick,
     pool.sqrtPriceX96,
+    Address.fromBytes(pool.v4Hooks!),
     protocol,
   );
 
@@ -83,6 +86,7 @@ test("When calling the handler, it should correctly assign the token1 to the poo
     pool.tickSpacing,
     pool.tick,
     pool.sqrtPriceX96,
+    Address.fromBytes(pool.v4Hooks!),
     protocol,
   );
 
@@ -103,6 +107,7 @@ test("When calling the handler, it should correctly assign the fee tier to the p
     pool.tickSpacing,
     pool.tick,
     pool.sqrtPriceX96,
+    Address.fromBytes(pool.v4Hooks!),
     protocol,
   );
 
@@ -123,6 +128,7 @@ test("When calling the handler, it should correctly assign the tick spacing to t
     tickSpacing,
     pool.tick,
     pool.sqrtPriceX96,
+    Address.fromBytes(pool.v4Hooks!),
     protocol,
   );
 
@@ -143,6 +149,7 @@ test("When calling the handler, it should correctly assign the tick to the pool"
     pool.tickSpacing,
     BigInt.fromI32(tick),
     pool.sqrtPriceX96,
+    Address.fromBytes(pool.v4Hooks!),
     protocol,
   );
 
@@ -163,6 +170,7 @@ test("When calling the handler, it should correctly assign the sqrt price to the
     pool.tickSpacing,
     pool.tick,
     BigInt.fromI32(sqrtPriceX96),
+    Address.fromBytes(pool.v4Hooks!),
     protocol,
   );
 
@@ -182,6 +190,7 @@ test("When calling the handler, it should set totalValueLockedUSD to ZERO_BIG_DE
     pool.tickSpacing,
     pool.tick,
     pool.sqrtPriceX96,
+    Address.fromBytes(pool.v4Hooks!),
     protocol,
   );
 
@@ -201,6 +210,7 @@ test("When calling the handler, it should set totalValueLockedToken0 to ZERO_BIG
     pool.tickSpacing,
     pool.tick,
     pool.sqrtPriceX96,
+    Address.fromBytes(pool.v4Hooks!),
     protocol,
   );
 
@@ -220,6 +230,7 @@ test("When calling the handler, it should set totalValueLockedToken1 to ZERO_BIG
     pool.tickSpacing,
     pool.tick,
     pool.sqrtPriceX96,
+    Address.fromBytes(pool.v4Hooks!),
     protocol,
   );
 
@@ -239,8 +250,31 @@ test("When calling the handler, it should set type to PoolType.V4", () => {
     pool.tickSpacing,
     pool.tick,
     pool.sqrtPriceX96,
+    Address.fromBytes(pool.v4Hooks!),
     protocol,
   );
 
   assert.fieldEquals("Pool", pool.id.toHexString(), "type", PoolType.V4.toString());
+});
+
+test("When calling the handler, it should set the v4 hooks passed to the pool", () => {
+  let pool = new PoolMock();
+  let protocol = new ProtocolMock();
+
+  let hooksAddress = Address.fromString("0x1240000000000000000000000000000000000001");
+
+  handleV4PoolInitialize(
+    newMockEvent(),
+    pool.id,
+    Address.fromBytes(pool.token0),
+    Address.fromBytes(pool.token1),
+    pool.feeTier,
+    pool.tickSpacing,
+    pool.tick,
+    pool.sqrtPriceX96,
+    Address.fromBytes(hooksAddress),
+    protocol,
+  );
+
+  assert.fieldEquals("Pool", pool.id.toHexString(), "v4Hooks", hooksAddress.toHexString());
 });

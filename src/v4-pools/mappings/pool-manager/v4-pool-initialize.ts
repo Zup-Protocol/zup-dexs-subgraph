@@ -14,6 +14,7 @@ export function handleV4PoolInitialize(
   tickSpacing: u32,
   tick: BigInt,
   sqrtPriceX96: BigInt,
+  hooks: Address,
   protocol: ProtocolEntity,
 ): void {
   handleV4PoolInitializeImpl(
@@ -26,6 +27,7 @@ export function handleV4PoolInitialize(
     tick,
     sqrtPriceX96,
     protocol,
+    hooks,
   );
 }
 
@@ -39,6 +41,7 @@ export function handleV4PoolInitializeImpl(
   tick: BigInt,
   sqrtPriceX96: BigInt,
   protocol: ProtocolEntity,
+  hooks: Address,
   v4PoolSetters: V3V4PoolSetters = new V3V4PoolSetters(),
 ): void {
   let poolEntity = new PoolEntity(poolId);
@@ -57,6 +60,7 @@ export function handleV4PoolInitializeImpl(
   poolEntity.type = PoolType.V4;
   poolEntity.tick = tick;
   poolEntity.sqrtPriceX96 = sqrtPriceX96;
+  poolEntity.v4Hooks = hooks;
 
   v4PoolSetters.setPricesForPoolWhitelistedTokens(sqrtPriceX96, poolEntity, token0Entity, token1Entity);
 
