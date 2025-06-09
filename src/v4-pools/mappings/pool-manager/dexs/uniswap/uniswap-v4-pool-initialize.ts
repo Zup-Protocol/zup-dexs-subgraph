@@ -1,8 +1,11 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import { Initialize } from "../../../../../../generated/UniswapV4PoolManager/UniswapV4PoolManager";
+import { Permit2Address } from "../../../../../utils/permit2-address";
 import { V4PositionManagerAddress } from "../../../../../utils/position-manager-address";
 import { ProtocolId } from "../../../../../utils/protocol-id";
 import { getOrCreateProtocol } from "../../../../../utils/protocol-utils";
+import { V4PoolManagerAddress } from "../../../../utils/v4-pool-manager-address";
+import { V4StateViewAddress } from "../../../../utils/v4-state-view-address";
 import { handleV4PoolInitialize } from "../../v4-pool-initialize";
 
 export function handleUniswapV4PoolInitialize(event: Initialize): void {
@@ -22,6 +25,9 @@ export function handleUniswapV4PoolInitialize(event: Initialize): void {
       "https://uniswap.org",
       "https://raw.githubusercontent.com/trustwallet/assets/refs/heads/master/dapps/app.uniswap.org.png",
       V4PositionManagerAddress.uniswap,
+      Permit2Address.uniswap,
+      V4StateViewAddress.uniswap,
+      V4PoolManagerAddress.uniswap,
     ),
   );
 }

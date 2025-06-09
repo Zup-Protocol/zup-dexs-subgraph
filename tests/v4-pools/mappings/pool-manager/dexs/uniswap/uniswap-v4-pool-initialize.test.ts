@@ -10,8 +10,11 @@ import {
   test,
 } from "matchstick-as";
 import { Initialize as InitializeEvent } from "../../../../../../generated/UniswapV4PoolManager/UniswapV4PoolManager";
+import { Permit2Address } from "../../../../../../src/utils/permit2-address";
 import { V4PositionManagerAddress } from "../../../../../../src/utils/position-manager-address";
 import { handleUniswapV4PoolInitialize } from "../../../../../../src/v4-pools/mappings/pool-manager/dexs/uniswap";
+import { V4PoolManagerAddress } from "../../../../../../src/v4-pools/utils/v4-pool-manager-address";
+import { V4StateViewAddress } from "../../../../../../src/v4-pools/utils/v4-state-view-address";
 
 function createEvent(
   poolId: Bytes = Bytes.fromI32(1),
@@ -76,6 +79,9 @@ describe("uniswap-v4-pool-initialize", () => {
       "https://raw.githubusercontent.com/trustwallet/assets/refs/heads/master/dapps/app.uniswap.org.png",
     );
     assert.fieldEquals("Protocol", "uniswap-v4", "positionManager", V4PositionManagerAddress.uniswap.toLowerCase());
+    assert.fieldEquals("Protocol", "uniswap-v4", "permit2", Permit2Address.uniswap.toLowerCase());
+    assert.fieldEquals("Protocol", "uniswap-v4", "v4StateView", V4StateViewAddress.uniswap.toLowerCase());
+    assert.fieldEquals("Protocol", "uniswap-v4", "v4PoolManager", V4PoolManagerAddress.uniswap.toLowerCase());
   });
 
   test("When calling the handler, it should correctly pass the hooks from the event", () => {

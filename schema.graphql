@@ -59,4 +59,7 @@ type Protocol @entity(immutable: true) {
   logo: String!
   url: String!
   positionManager: Bytes!
+  permit2: Bytes
+  v4StateView: Bytes
+  v4PoolManager: Bytes
 }

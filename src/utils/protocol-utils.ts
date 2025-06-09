@@ -7,6 +7,9 @@ export function getOrCreateProtocol(
   protocolUrl: string,
   protocolLogo: string,
   protocolPositionManager: string,
+  permit2: string | null = null,
+  v4StateView: string | null = null,
+  v4PoolManager: string | null = null,
 ): ProtocolEntity {
   let protocolEntity = ProtocolEntity.load(protocolId);
 
@@ -17,6 +20,9 @@ export function getOrCreateProtocol(
     protocolEntity.url = protocolUrl;
     protocolEntity.logo = protocolLogo;
     protocolEntity.positionManager = Address.fromString(protocolPositionManager);
+    protocolEntity.v4PoolManager = v4PoolManager == null ? null : Address.fromString(v4PoolManager!);
+    protocolEntity.permit2 = permit2 == null ? null : Address.fromString(permit2!);
+    protocolEntity.v4StateView = v4StateView == null ? null : Address.fromString(v4StateView!);
 
     protocolEntity.save();
   }
