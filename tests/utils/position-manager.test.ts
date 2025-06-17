@@ -76,12 +76,37 @@ describe("V3PositionManagerAddress", () => {
 
   test("AlienBase returns correct address for base", () => {
     dataSourceMock.setNetwork("base");
-    assert.stringEquals(V3PositionManagerAddress.AlienBase, "0xB7996D1ECD07fB227e8DcA8CD5214bDfb04534E5");
+    assert.stringEquals(V3PositionManagerAddress.alienBase, "0xB7996D1ECD07fB227e8DcA8CD5214bDfb04534E5");
   });
 
   test("uniswap returns correct address for unichain", () => {
     dataSourceMock.setNetwork("unichain");
     assert.stringEquals(V3PositionManagerAddress.uniswap, "0x943e6e07a7e8e791dafc44083e54041d743c46e9");
+  });
+
+  test("uniswap returns correct address for bnb", () => {
+    dataSourceMock.setNetwork("bsc");
+    assert.stringEquals(V3PositionManagerAddress.uniswap, "0x7b8A01B39D58278b5DE7e48c8449c9f4F5170613");
+  });
+
+  test("pancakeSwap returns correct address for bnb", () => {
+    dataSourceMock.setNetwork("bsc");
+    assert.stringEquals(V3PositionManagerAddress.pancakeSwap, "0x46A15B0b27311cedF172AB29E4f4766fbE7F4364");
+  });
+
+  test("sushiSwap returns correct address for bnb", () => {
+    dataSourceMock.setNetwork("bsc");
+    assert.stringEquals(V3PositionManagerAddress.sushiSwap, "0xF70c086618dcf2b1A461311275e00D6B722ef914");
+  });
+
+  test("squadSwap returns correct address for bnb", () => {
+    dataSourceMock.setNetwork("bsc");
+    assert.stringEquals(V3PositionManagerAddress.squadSwap, "0x501535ef0B92eE1df5C12f47720f1E479b1Db7b4");
+  });
+
+  test("unichainX returns correct address for bnb", () => {
+    dataSourceMock.setNetwork("bsc");
+    assert.stringEquals(V3PositionManagerAddress.unchainX, "0x854EC70B78933fAB3f95E5bC95D7Af72b62703dE");
   });
 
   test(
@@ -113,6 +138,16 @@ describe("V4PositionManagerAddress", () => {
   test("uniswap returns correct address for base", () => {
     dataSourceMock.setNetwork("base");
     assert.stringEquals(V4PositionManagerAddress.uniswap, "0x7c5f5a4bbd8fd63184577525326123b519429bdc");
+  });
+
+  test("uniswap returns correct address for bnb", () => {
+    dataSourceMock.setNetwork("bsc");
+    assert.stringEquals(V4PositionManagerAddress.uniswap, "0x7A4a5c919aE2541AeD11041A1AEeE68f1287f95b");
+  });
+
+  test("pancakeswap returns correct address for bnb", () => {
+    dataSourceMock.setNetwork("bsc");
+    assert.stringEquals(V4PositionManagerAddress.pancakeSwap, "0x55f4c8abA71A1e923edC303eb4fEfF14608cC226");
   });
 
   test(

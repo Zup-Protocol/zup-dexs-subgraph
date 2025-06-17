@@ -27,11 +27,30 @@ describe("Permit2Address", () => {
     assert.stringEquals(Permit2Address.uniswap, "0x000000000022D473030F116dDEE9F6B43aC78BA3");
   });
 
+  test("uniswap returns correct address for bsc", () => {
+    dataSourceMock.setNetwork("bsc");
+    assert.stringEquals(Permit2Address.uniswap, "0x000000000022D473030F116dDEE9F6B43aC78BA3");
+  });
+
   test(
     "uniswap throws for unsupported network",
     () => {
       dataSourceMock.setNetwork("randomnet");
       Permit2Address.uniswap;
+    },
+    true,
+  );
+
+  test("pancakeSWap returns correct address for bsc", () => {
+    dataSourceMock.setNetwork("bsc");
+    assert.stringEquals(Permit2Address.pancakeSwap, "0x31c2F6fcFf4F8759b3Bd5Bf0e1084A055615c768");
+  });
+
+  test(
+    "pancakeSwap throws for unsupported network",
+    () => {
+      dataSourceMock.setNetwork("randomnet");
+      Permit2Address.pancakeSwap;
     },
     true,
   );

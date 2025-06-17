@@ -9,4 +9,7 @@ export abstract class ProtocolId {
   static baseSwapV3: string = "base-swap-v3";
   static alienBaseV3: string = "alien-base-v3";
   static uniswapV4: string = "uniswap-v4";
+  static squadSwapV3: string = "squad-swap-v3";
+  static unchainXV3: string = "unchainx-v3";
+  static pancakeSwapV4CL: string = "pancake-v4-cl";
 }

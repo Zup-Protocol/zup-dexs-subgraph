@@ -57,8 +57,8 @@ export class ProtocolMock extends Protocol {
 export class PoolMock extends Pool {
   mockId: Address;
 
-  constructor() {
-    let id = Address.fromString("0x0000000000000000000000000000000000000021");
+  constructor(customId: Address = Address.fromString("0x0000000000000000000000000000000000000021")) {
+    let id = customId;
     super(id);
 
     this.mockId = id;

@@ -47,14 +47,16 @@ To add a new network to the subgraph, you need to do a few things:
 2. Add a new constant with the network name (following the [Network CLI Name](https://thegraph.com/docs/en/supported-networks/) from the Graph) in [current-network.ts](./src/utils/current-network.ts) for the new network.
 3. Add a new entry for each function defined in [current-network.ts](./src/utils/current-network.ts) that needs to be overriden for the new network.
 4. Modify the functions in [utils/position-manager-address.ts](./src/utils/position-manager-address.ts) to return the position manager address of
-   each DEX supported in the new network.
-5. Add new scripts in [package.json](./package.json) for the new network (following the pattern `[script]:networkname`), to make it easier to deploy, generate code and build the subgraph.
+   each DEX supported in the new network, for the applicable network or pool types.
+5. In case of the network having V4 Pools, modify the functions at [utils/permit2-address.ts](./src/utils/permit2-address.ts) to return the permit2 address for each DEX supported in the new network.
+6. In case of the network having V4 Pools, modify the functions at [utils/v4-state-view-address.ts](./src/v4-pools/utils/v4-state-view-address.ts) to return the V4 State View address for each DEX supported in the new network (if applicable for the current DEX)
+7. Add new scripts in [package.json](./package.json) for the new network (following the pattern `[script]:networkname`), to make it easier to deploy, generate code and build the subgraph.
 
-## Adding a new DEX
+## Adding a new V3 DEX
 
 To add a new DEX to the subgraph, you need to do a few things:
 
-1. Modify the manifest of the networks that should support the new DEX in [subgraph-manifests](./subgraph-manifests):
+1. Modify the manifest of the networks that should support the new V3 DEX in [subgraph-manifests](./subgraph-manifests):
 
 - The Factory contract of the DEX must be included in the manifest, at the `dataSources` section, following the same pattern as the other DEXs.
 - In case that the new DEX events or code is a little different from the UniswapV3 original one, some additional things are required:
@@ -72,3 +74,17 @@ To add a new DEX to the subgraph, you need to do a few things:
    and changing the path of the handlers and files
 
 5. Code tests for this nex DEX handlers if possible :)
+
+## Adding a new V4 DEX
+
+1. Modify the manifest of the networks that should support the new V4 DEX in [subgraph-manifests](./subgraph-manifests):
+
+2. Create a pool manager initialize handler specific for the new DEX in [v4-pools/mappings/pool-manager/dexs](./src/v4-pools/mappings/pool-manager/dexs), following the pattern of the other ones
+
+3. Create a new function in [utils/position-manager-address.ts](./src/utils/position-manager-address.ts) to return the address of the position manager address in the `V4PositionManagerAddress` object for each network that the new DEX is supported
+
+4. Add the V4 State view address for the new V4 DEX if applicable in [utils/v4-state-view-address.ts](./src/v4-pools/utils/v4-state-view-address.ts). If not applicable, just pass `null` to the handler
+
+5. Add the permit2 address for the new V4 DEX in [utils/permit2-address.ts](./src/utils/permit2-address.ts).
+
+6. Code tests for this nex DEX handlers if possible :D

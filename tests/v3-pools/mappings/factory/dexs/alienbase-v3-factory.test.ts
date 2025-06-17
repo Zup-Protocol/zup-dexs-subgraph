@@ -113,7 +113,7 @@ describe("alienbase-v3-factory", () => {
       "Protocol",
       ProtocolId.alienBaseV3,
       "positionManager",
-      Address.fromString(V3PositionManagerAddress.AlienBase).toHexString(),
+      Address.fromString(V3PositionManagerAddress.alienBase).toHexString(),
     );
   });
 });

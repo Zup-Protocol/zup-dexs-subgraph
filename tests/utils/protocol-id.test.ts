@@ -70,3 +70,24 @@ test("Uniswap V4 Id should be correct", () => {
 
   assert.stringEquals(actualId, expectedId);
 });
+
+test("SquadSwap V3 Id should be correct", () => {
+  const expectedId = "squad-swap-v3";
+  const actualId = ProtocolId.squadSwapV3;
+
+  assert.stringEquals(actualId, expectedId);
+});
+
+test("UnchainX V3 Id should be correct", () => {
+  const expectedId = "unchainx-v3";
+  const actualId = ProtocolId.unchainXV3;
+
+  assert.stringEquals(actualId, expectedId);
+});
+
+test("PancakeSwap V4 CL Id should be correct", () => {
+  const expectedId = "pancake-v4-cl";
+  const actualId = ProtocolId.pancakeSwapV4CL;
+
+  assert.stringEquals(actualId, expectedId);
+});

@@ -12,8 +12,9 @@ export function handleV4PoolSwap(
   amount1: BigInt,
   sqrtPriceX96: BigInt,
   tick: BigInt,
+  swapFee: i32,
 ): void {
-  handleV4PoolSwapImpl(event, poolEntity, token0Entity, token1Entity, amount0, amount1, sqrtPriceX96, tick);
+  handleV4PoolSwapImpl(event, poolEntity, token0Entity, token1Entity, amount0, amount1, sqrtPriceX96, tick, swapFee);
 }
 
 export function handleV4PoolSwapImpl(
@@ -25,6 +26,7 @@ export function handleV4PoolSwapImpl(
   amount1: BigInt,
   sqrtPriceX96: BigInt,
   tick: BigInt,
+  swapFee: i32,
   v4PoolSetters: V3V4PoolSetters = new V3V4PoolSetters(),
 ): void {
   // Unlike V3, a negative amount represents that amount is being sent to the pool and vice versa, so invert the sign
@@ -49,8 +51,8 @@ export function handleV4PoolSwapImpl(
   token0Entity.totalValuePooledUsd = token0Entity.totalTokenPooledAmount.times(token0Entity.usdPrice);
   token1Entity.totalValuePooledUsd = token1Entity.totalTokenPooledAmount.times(token1Entity.usdPrice);
 
-  v4PoolSetters.setHourlyData(event, token0Entity, token1Entity, poolEntity, amount0, amount1);
-  v4PoolSetters.setDailyData(event, poolEntity, token0Entity, token1Entity, amount0, amount1);
+  v4PoolSetters.setHourlyData(event, token0Entity, token1Entity, poolEntity, amount0, amount1, swapFee);
+  v4PoolSetters.setDailyData(event, poolEntity, token0Entity, token1Entity, amount0, amount1, swapFee);
 
   poolEntity.save();
   token0Entity.save();

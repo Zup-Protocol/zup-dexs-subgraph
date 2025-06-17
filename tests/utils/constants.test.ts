@@ -2,6 +2,7 @@ import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { assert, test } from "matchstick-as";
 import {
   BASE_NETWORK_NAME,
+  BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
   MAX_UINT256,
   ONE_BIG_INT,
@@ -58,4 +59,8 @@ test("Q96 should return the correct value", () => {
 
 test("UNICHAIN_NAME should return the correct value", () => {
   assert.assertTrue(UNICHAIN_NETWORK_NAME == "unichain");
+});
+
+test("BNB_NETWORK_NAME should return the correct value", () => {
+  assert.assertTrue(BNB_NETWORK_NAME == "bsc");
 });

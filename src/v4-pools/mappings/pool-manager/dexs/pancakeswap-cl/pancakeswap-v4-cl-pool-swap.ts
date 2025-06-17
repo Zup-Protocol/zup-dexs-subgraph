@@ -1,9 +1,9 @@
 import { BigInt } from "@graphprotocol/graph-ts";
+import { Swap as SwapEvent } from "../../../../../../generated/PancakeSwapV4CLPoolManager/PancakeSwapV4CLPoolManager";
 import { Pool as PoolEntity, Token as TokenEntity } from "../../../../../../generated/schema";
-import { Swap as SwapEvent } from "../../../../../../generated/UniswapV4PoolManager/UniswapV4PoolManager";
 import { handleV4PoolSwap } from "../../v4-pool-swap";
 
-export function handleUniswapV4PoolSwap(event: SwapEvent): void {
+export function handlePancakeSwapV4CLSwap(event: SwapEvent): void {
   let poolEntity = PoolEntity.load(event.params.id)!;
   let token0Entity = TokenEntity.load(poolEntity.token0)!;
   let token1Entity = TokenEntity.load(poolEntity.token1)!;

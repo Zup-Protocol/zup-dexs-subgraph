@@ -22,6 +22,11 @@ describe("V4StateViewAddress", () => {
     assert.stringEquals(V4StateViewAddress.uniswap, "0x86e8631a016f9068c3f085faf484ee3f5fdee8f2");
   });
 
+  test("uniswap returns correct address for bsc", () => {
+    dataSourceMock.setNetwork("bsc");
+    assert.stringEquals(V4StateViewAddress.uniswap, "0xd13Dd3D6E93f276FAfc9Db9E6BB47C1180aeE0c4");
+  });
+
   test(
     "uniswap throws for unsupported network",
     () => {

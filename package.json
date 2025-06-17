@@ -2,7 +2,7 @@
   "name": "zup-dexs-subgraph",
   "description": "The Zup Protocol Subgraph with protocol supported DEXs",
   "license": "MIT",
-  "version": "1.1.16",
+  "version": "1.1.20",
   "engines": {
     "node": ">=20.11.1"
   },
@@ -11,7 +11,8 @@
     "scroll": "subgraph-manifests/scroll.subgraph.yaml",
     "sepolia": "subgraph-manifests/sepolia.subgraph.yaml",
     "base": "subgraph-manifests/base.subgraph.yaml",
-    "unichain": "subgraph-manifests/unichain.subgraph.yaml"
+    "unichain": "subgraph-manifests/unichain.subgraph.yaml",
+    "bnb": "subgraph-manifests/bnb.subgraph.yaml"
   },
   "commands": {
     "deploystudio": "graph deploy --node https://api.studio.thegraph.com/deploy/",
@@ -26,12 +27,15 @@
     "codegen:sepolia": "$npm_package_commands_codegen $npm_package_manifests_sepolia",
     "codegen:base": "$npm_package_commands_codegen $npm_package_manifests_base",
     "codegen:unichain": "$npm_package_commands_codegen $npm_package_manifests_unichain",
+    "codegen:bnb": "$npm_package_commands_codegen $npm_package_manifests_bnb",
     "build:sepolia": "$npm_package_commands_build $npm_package_manifests_sepolia",
     "build:mainnet": "$npm_package_commands_build $npm_package_manifests_mainnet",
     "build:scroll": "$npm_package_commands_build $npm_package_manifests_scroll",
     "build:base": "$npm_package_commands_build $npm_package_manifests_base",
     "build:unichain": "$npm_package_commands_build $npm_package_manifests_unichain",
+    "build:bnb": "$npm_package_commands_build $npm_package_manifests_bnb",
     "deploy:mainnet": "$npm_package_commands_deploystudio zup-dexs-ethereum $npm_package_manifests_mainnet --version-label=$npm_package_version",
+    "deploy:bnb": "$npm_package_commands_deploystudio zup-dexs-bnb $npm_package_manifests_bnb --version-label=$npm_package_version",
     "deploy:scroll": "$npm_package_commands_deploystudio zup-dexs-scroll $npm_package_manifests_scroll --version-label=$npm_package_version",
     "deploy:sepolia": "$npm_package_commands_deploystudio zup-dexs-sepolia $npm_package_manifests_sepolia --version-label=$npm_package_version",
     "deploy:unichain": "$npm_package_commands_deploystudio zup-dexs-unichain $npm_package_manifests_unichain --version-label=$npm_package_version",
@@ -42,6 +46,8 @@
     "deploy-local:mainnet": "$npm_package_commands_deploylocal $npm_package_manifests_mainnet",
     "deploy-local:sepolia": "$npm_package_commands_deploylocal $npm_package_manifests_sepolia",
     "deploy-local:base": "$npm_package_commands_deploylocal $npm_package_manifests_base",
+    "deploy-local:unichain": "$npm_package_commands_deploylocal $npm_package_manifests_unichain",
+    "deploy-local:bnb": "$npm_package_commands_deploylocal $npm_package_manifests_bnb",
     "test": "graph codegen && graph test && rm -rf generated",
     "prepare": "husky"
   },

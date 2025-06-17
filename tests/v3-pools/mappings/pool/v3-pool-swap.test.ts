@@ -1,5 +1,5 @@
 import { Address, BigDecimal, BigInt, Bytes } from "@graphprotocol/graph-ts";
-import { assert, beforeEach, clearStore, describe, newMockEvent, test } from "matchstick-as";
+import { assert, beforeEach, clearInBlockStore, clearStore, describe, newMockEvent, test } from "matchstick-as";
 import { Pool } from "../../../../generated/schema";
 import { ONE_HOUR_IN_SECONDS } from "../../../../src/utils/constants";
 import { getPoolDailyDataId, getPoolHourlyDataId } from "../../../../src/utils/pool-utils";
@@ -11,6 +11,7 @@ import { PoolDailyDataMock, PoolHourlyDataMock, PoolMock, TokenMock, V3V4PoolSet
 describe("v3-pool-swap", () => {
   beforeEach(() => {
     clearStore();
+    clearInBlockStore();
   });
 
   test(`The handler should call 'setPricesForV3PoolWhitelistedTokens' with the correct parameters to update the pool assets prices`, () => {
@@ -1080,7 +1081,7 @@ describe("v3-pool-swap", () => {
       token0.id.toHexString(),
       "totalValuePooledUsd",
       currentToken0PooledUsdAmount
-        .minus(formatFromTokenAmount(amount0BigInt, token0).times(token0.usdPrice!).neg())
+        .minus(formatFromTokenAmount(amount0BigInt, token0).times(token0.usdPrice).neg())
         .toString(),
     );
   });
@@ -1118,7 +1119,7 @@ describe("v3-pool-swap", () => {
       token1.id.toHexString(),
       "totalValuePooledUsd",
       currentToken1PooledUsdAmount
-        .minus(formatFromTokenAmount(amount1BigInt, token0).times(token1.usdPrice!).neg())
+        .minus(formatFromTokenAmount(amount1BigInt, token0).times(token1.usdPrice).neg())
         .toString(),
     );
   });
