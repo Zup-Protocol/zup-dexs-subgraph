@@ -11,7 +11,7 @@ import {
 } from "matchstick-as";
 import { PoolCreated } from "../../../../../generated/ZebraProtocolV3Factory/UniswapV3Factory";
 
-import { ProtocolId } from "../../../../../src/utils/protocol-id";
+import { ProtocolId } from "../../../../../src/common/protocol-id";
 import { handleZebraProtocolV3PoolCreated } from "../../../../../src/v3-pools/mappings/factory/dexs/zebra-protocol-v3-factory";
 
 export class PoolCreatedEventParams {

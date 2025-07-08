@@ -1,6 +1,6 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import { assert, beforeEach, clearStore, describe, test } from "matchstick-as/assembly/index";
-import { ZERO_BIG_INT } from "../../../src/utils/constants";
+import { ZERO_BIG_INT } from "../../../src/common/constants";
 import { getAmount0, getAmount1 } from "../../../src/v4-pools/utils/liquidity-amounts";
 
 describe("Amount Calculations", () => {

@@ -1,9 +1,10 @@
 import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { assert, newMockEvent, test } from "matchstick-as";
-import { ONE_HOUR_IN_SECONDS, ZERO_BIG_DECIMAL } from "../../../src/utils/constants";
-import { CurrentNetwork } from "../../../src/utils/current-network";
-import { getPoolDailyDataId } from "../../../src/utils/pool-utils";
-import { PoolDailyDataMock, PoolMock, TokenMock, V3V4PoolSettersMock } from "../../mocks";
+import { ONE_HOUR_IN_SECONDS, ZERO_BIG_DECIMAL } from "../../../src/common/constants";
+import { CurrentNetwork } from "../../../src/common/current-network";
+import { getPoolDailyDataId } from "../../../src/common/pool-utils";
+import { sqrtPriceX96toPrice } from "../../../src/v3-pools/utils/v3-v4-pool-converters";
+import { PoolDailyDataMock, PoolMock, PoolSettersMock, TokenMock } from "../../mocks";
 
 test(`When calling 'setPoolDailyDataTVL' and a PoolDailyData entity
       has already been created in the same day, the TVL should be updated
@@ -27,7 +28,7 @@ test(`When calling 'setPoolDailyDataTVL' and a PoolDailyData entity
   dailyPoolData.totalValueLockedToken1 = ZERO_BIG_DECIMAL;
   dailyPoolData.save();
 
-  new V3V4PoolSettersMock().setPoolDailyDataTVL(event, pool);
+  new PoolSettersMock().setPoolDailyDataTVL(event, pool);
 
   assert.fieldEquals(
     "PoolDailyData",
@@ -77,7 +78,7 @@ test(`When calling 'setPoolDailyDataTVL' and a PoolDailyData entity
   dailyPoolDataYesterday.totalValueLockedToken1 = ZERO_BIG_DECIMAL;
   dailyPoolDataYesterday.save();
 
-  new V3V4PoolSettersMock().setPoolDailyDataTVL(event, pool);
+  new PoolSettersMock().setPoolDailyDataTVL(event, pool);
 
   assert.fieldEquals(
     "PoolDailyData",
@@ -140,7 +141,12 @@ test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of
   pool.token1 = nonStableToken.id;
   pool.save();
 
-  new V3V4PoolSettersMock().setPricesForPoolWhitelistedTokens(sqrtPriceX96, pool, stableToken, nonStableToken);
+  new PoolSettersMock().setPricesForPoolWhitelistedTokens(
+    pool,
+    stableToken,
+    nonStableToken,
+    sqrtPriceX96toPrice(sqrtPriceX96, stableToken, nonStableToken),
+  );
 
   assert.fieldEquals("Token", nonStableToken.id.toHexString(), "usdPrice", "0.3596161703425394429455590507159066");
   assert.fieldEquals("Token", stableToken.id.toHexString(), "usdPrice", "1");
@@ -164,7 +170,12 @@ test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of
   pool.token1 = stableToken.id;
   pool.save();
 
-  new V3V4PoolSettersMock().setPricesForPoolWhitelistedTokens(sqrtPriceX96, pool, nonStableToken, stableToken);
+  new PoolSettersMock().setPricesForPoolWhitelistedTokens(
+    pool,
+    nonStableToken,
+    stableToken,
+    sqrtPriceX96toPrice(sqrtPriceX96, nonStableToken, stableToken),
+  );
 
   assert.fieldEquals("Token", nonStableToken.id.toHexString(), "usdPrice", "93501.87063469230918451445286994512");
   assert.fieldEquals("Token", stableToken.id.toHexString(), "usdPrice", "1");
@@ -190,7 +201,12 @@ test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of
   pool.token1 = nonWrappedNative.id;
   pool.save();
 
-  new V3V4PoolSettersMock().setPricesForPoolWhitelistedTokens(sqrtPriceX96, pool, wrappedNative, nonWrappedNative);
+  new PoolSettersMock().setPricesForPoolWhitelistedTokens(
+    pool,
+    wrappedNative,
+    nonWrappedNative,
+    sqrtPriceX96toPrice(sqrtPriceX96, wrappedNative, nonWrappedNative),
+  );
 
   assert.fieldEquals("Token", nonWrappedNative.id.toHexString(), "usdPrice", "3.496912490848270512206851599806777");
 });
@@ -215,7 +231,12 @@ test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of
   pool.token1 = wrappedNative.id;
   pool.save();
 
-  new V3V4PoolSettersMock().setPricesForPoolWhitelistedTokens(sqrtPriceX96, pool, nonWrappedNative, wrappedNative);
+  new PoolSettersMock().setPricesForPoolWhitelistedTokens(
+    pool,
+    nonWrappedNative,
+    wrappedNative,
+    sqrtPriceX96toPrice(sqrtPriceX96, nonWrappedNative, wrappedNative),
+  );
 
   assert.fieldEquals("Token", nonWrappedNative.id.toHexString(), "usdPrice", "93430.72975104423786494759603164283");
 });
@@ -237,7 +258,12 @@ test(`when calling 'setPricesForV3PoolWhitelistedTokens' with a pool of token0
   pool.token1 = token1.id;
   pool.save();
 
-  new V3V4PoolSettersMock().setPricesForPoolWhitelistedTokens(sqrtPriceX96, pool, token0, token1);
+  new PoolSettersMock().setPricesForPoolWhitelistedTokens(
+    pool,
+    token0,
+    token1,
+    sqrtPriceX96toPrice(sqrtPriceX96, token0, token1),
+  );
 
   assert.fieldEquals("Token", token0.id.toHexString(), "usdPrice", "1.00202533202543717719096334135079");
   assert.fieldEquals("Token", token1.id.toHexString(), "usdPrice", "0.9979787616533174007690719676506302");
@@ -264,7 +290,12 @@ test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of token0
   pool.token1 = token1.id;
   pool.save();
 
-  new V3V4PoolSettersMock().setPricesForPoolWhitelistedTokens(sqrtPriceX96, pool, token0, token1);
+  new PoolSettersMock().setPricesForPoolWhitelistedTokens(
+    pool,
+    token0,
+    token1,
+    sqrtPriceX96toPrice(sqrtPriceX96, token0, token1),
+  );
 
   assert.fieldEquals("Token", token0.id.toHexString(), "usdPrice", token0UsdPrice.toString());
   assert.fieldEquals("Token", token1.id.toHexString(), "usdPrice", "103244.7713883273314787832311543079");
@@ -292,7 +323,12 @@ test(`When calling 'setPricesForV3PoolWhitelistedTokens' with a pool of token0
   pool.token1 = token1.id;
   pool.save();
 
-  new V3V4PoolSettersMock().setPricesForPoolWhitelistedTokens(sqrtPriceX96, pool, token0, token1);
+  new PoolSettersMock().setPricesForPoolWhitelistedTokens(
+    pool,
+    token0,
+    token1,
+    sqrtPriceX96toPrice(sqrtPriceX96, token0, token1),
+  );
 
   assert.fieldEquals("Token", token0.id.toHexString(), "usdPrice", "0.5416820920078591274742823691740816");
   assert.fieldEquals("Token", token1.id.toHexString(), "usdPrice", token1UsdPrice.toString());

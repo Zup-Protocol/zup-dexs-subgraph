@@ -1,9 +1,9 @@
 import { BigInt, dataSource } from "@graphprotocol/graph-ts";
 import { Initialize } from "../../../../../../generated/PancakeSwapV4CLPoolManager/PancakeSwapV4CLPoolManager";
-import { Permit2Address } from "../../../../../utils/permit2-address";
-import { V4PositionManagerAddress } from "../../../../../utils/position-manager-address";
-import { ProtocolId } from "../../../../../utils/protocol-id";
-import { getOrCreateProtocol } from "../../../../../utils/protocol-utils";
+import { Permit2Address } from "../../../../../common/permit2-address";
+import { ProtocolId } from "../../../../../common/protocol-id";
+import { getOrCreateProtocol } from "../../../../../common/protocol-utils";
+import { V4PositionManagerAddress } from "../../../../utils/v4-position-manager-address";
 import { handleV4PoolInitialize } from "../../v4-pool-initialize";
 import { getPoolTickSpacingFromParameters } from "./pancakeswap-v4-cl-utils";
 

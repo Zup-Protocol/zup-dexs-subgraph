@@ -1,6 +1,6 @@
 import { BigInt } from "@graphprotocol/graph-ts";
-import { ONE_BIG_INT, Q96 } from "../../utils/constants";
-import { mulDivRoundingUp } from "../../utils/math";
+import { ONE_BIG_INT, Q96 } from "../../common/constants";
+import { mulDivRoundingUp } from "../../common/math";
 
 export abstract class SqrtPriceMath {
   public static getAmount0Delta(

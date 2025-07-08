@@ -1,7 +1,7 @@
 import { Address } from "@graphprotocol/graph-ts";
 import { assert, beforeEach, clearStore, describe, test } from "matchstick-as";
 import { Protocol } from "../../generated/schema";
-import { getOrCreateProtocol } from "../../src/utils/protocol-utils";
+import { getOrCreateProtocol } from "../../src/common/protocol-utils";
 
 describe("Protocol Utils", () => {
   beforeEach(() => {

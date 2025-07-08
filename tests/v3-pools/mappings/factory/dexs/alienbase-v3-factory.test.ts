@@ -10,9 +10,9 @@ import {
   test,
 } from "matchstick-as";
 import { PoolCreated } from "../../../../../generated/UniswapV3Factory/UniswapV3Factory";
-import { V3PositionManagerAddress } from "../../../../../src/utils/position-manager-address";
-import { ProtocolId } from "../../../../../src/utils/protocol-id";
+import { ProtocolId } from "../../../../../src/common/protocol-id";
 import { handleAlienBaseV3PoolCreated } from "../../../../../src/v3-pools/mappings/factory/dexs/alienbase-v3-factory";
+import { V3PositionManagerAddress } from "../../../../../src/v3-pools/utils/v3-position-manager-address";
 
 export class PoolCreatedEventParams {
   token0: Address;

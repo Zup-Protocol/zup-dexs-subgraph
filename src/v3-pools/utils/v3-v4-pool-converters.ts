@@ -1,12 +1,8 @@
 import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { Token } from "../../../generated/schema";
-import { safeDiv } from "../../utils/math";
-import { tokenBaseAmount } from "../../utils/token-utils";
-
-class PriceResult {
-  token0PerToken1: BigDecimal;
-  token1PerToken0: BigDecimal;
-}
+import { safeDiv } from "../../common/math";
+import { tokenBaseAmount } from "../../common/token-utils";
+import { PriceResult } from "../../common/types/price-result";
 
 export function sqrtPriceX96toPrice(sqrtPriceX96: BigInt, poolToken0: Token, poolToken1: Token): PriceResult {
   const Q192 = BigInt.fromI32(2).pow(192 as u8);

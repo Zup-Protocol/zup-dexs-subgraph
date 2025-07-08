@@ -1,4 +1,5 @@
 enum PoolType {
+  V2
   V3
   V4
 }
@@ -18,7 +19,6 @@ type Pool @entity {
   token0: Token!
   token1: Token!
   feeTier: Int!
-  tickSpacing: Int!
   totalValueLockedUSD: BigDecimal!
   totalValueLockedToken0: BigDecimal!
   totalValueLockedToken1: BigDecimal!
@@ -26,10 +26,32 @@ type Pool @entity {
   hourlyData: [PoolHourlyData]! @derivedFrom(field: "pool")
   dailyData: [PoolDailyData]! @derivedFrom(field: "pool")
   protocol: Protocol!
-  sqrtPriceX96: BigInt!
-  tick: BigInt!
   type: PoolType!
-  v4Hooks: Bytes
+  v4PoolData: V4Pool @derivedFrom(field: "pool")
+  v3PoolData: V3Pool @derivedFrom(field: "pool")
+  v2PoolData: V2Pool @derivedFrom(field: "pool")
+}
+
+type V2Pool @entity {
+  id: Bytes!
+  pool: Pool!
+}
+
+type V3Pool @entity {
+  id: Bytes!
+  pool: Pool!
+  tick: BigInt!
+  sqrtPriceX96: BigInt!
+  tickSpacing: Int!
+}
+
+type V4Pool @entity {
+  id: Bytes!
+  hooks: Bytes!
+  tick: BigInt!
+  pool: Pool!
+  sqrtPriceX96: BigInt!
+  tickSpacing: Int!
 }
 
 type PoolHourlyData @entity {

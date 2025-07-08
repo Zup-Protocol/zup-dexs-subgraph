@@ -1,6 +1,6 @@
 import { BigInt } from "@graphprotocol/graph-ts";
-import { MAX_UINT256 } from "../../utils/constants";
-import { hexToBigInt } from "../../utils/math";
+import { MAX_UINT256 } from "../../common/constants";
+import { hexToBigInt } from "../../common/math";
 
 function mulShift(val: BigInt, mulBy: BigInt): BigInt {
   return val.times(mulBy).rightShift(128);

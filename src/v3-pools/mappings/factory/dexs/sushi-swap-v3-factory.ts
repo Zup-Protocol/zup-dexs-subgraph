@@ -1,8 +1,8 @@
 import { PoolCreated as PoolCreatedEvent } from "../../../../../generated/SushiSwapV3Factory/UniswapV3Factory";
 import { UniswapV3Pool as UniswapV3PoolTemplate } from "../../../../../generated/templates";
-import { V3PositionManagerAddress } from "../../../../utils/position-manager-address";
-import { ProtocolId } from "../../../../utils/protocol-id";
-import { getOrCreateProtocol } from "../../../../utils/protocol-utils";
+import { ProtocolId } from "../../../../common/protocol-id";
+import { getOrCreateProtocol } from "../../../../common/protocol-utils";
+import { V3PositionManagerAddress } from "../../../../v3-pools/utils/v3-position-manager-address";
 import { handleV3PoolCreated } from "../v3-factory";
 
 export function handleSushiSwapV3PoolCreated(event: PoolCreatedEvent): void {

@@ -11,7 +11,7 @@ import {
 } from "matchstick-as";
 import { PoolCreated } from "../../../../../generated/PancakeSwapV3Factory/PancakeSwapV3Factory";
 
-import { ProtocolId } from "../../../../../src/utils/protocol-id";
+import { ProtocolId } from "../../../../../src/common/protocol-id";
 import { handlePancakeSwapV3PoolCreated } from "../../../../../src/v3-pools/mappings/factory/dexs/pancakeswap-v3-factory";
 export class PoolCreatedEventParams {
   token0: Address;

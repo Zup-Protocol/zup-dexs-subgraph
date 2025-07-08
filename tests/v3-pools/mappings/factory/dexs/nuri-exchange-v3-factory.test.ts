@@ -11,7 +11,7 @@ import {
 } from "matchstick-as";
 import { PoolCreated } from "../../../../../generated/NuriExchangeV3Factory/NuriExchangeV3Factory";
 
-import { ProtocolId } from "../../../../../src/utils/protocol-id";
+import { ProtocolId } from "../../../../../src/common/protocol-id";
 import { handleNuriExchangeV3PoolCreated } from "../../../../../src/v3-pools/mappings/factory/dexs/nuri-exchange-v3-factory";
 
 export class PoolCreatedEventParams {

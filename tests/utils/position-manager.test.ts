@@ -1,5 +1,6 @@
 import { assert, dataSourceMock, describe, test } from "matchstick-as";
-import { V3PositionManagerAddress, V4PositionManagerAddress } from "../../src/utils/position-manager-address";
+import { V3PositionManagerAddress } from "../../src/v3-pools/utils/v3-position-manager-address";
+import { V4PositionManagerAddress } from "../../src/v4-pools/utils/v4-position-manager-address";
 
 describe("V3PositionManagerAddress", () => {
   test("nuriExchange returns correct address for scroll", () => {

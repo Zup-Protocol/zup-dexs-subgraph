@@ -1,9 +1,9 @@
 import { Address, BigDecimal, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { assert, createMockedFunction, test } from "matchstick-as";
 import { Token } from "../../generated/schema";
-import { ZERO_ADDRESS } from "../../src/utils/constants";
-import { CurrentNetwork } from "../../src/utils/current-network";
-import { formatFromTokenAmount, getOrCreateTokenEntity, tokenBaseAmount } from "../../src/utils/token-utils";
+import { ZERO_ADDRESS } from "../../src/common/constants";
+import { CurrentNetwork } from "../../src/common/current-network";
+import { formatFromTokenAmount, getOrCreateTokenEntity, tokenBaseAmount } from "../../src/common/token-utils";
 import { TokenMock } from "../mocks";
 
 test(`'tokenBaseAmount' should return the base amount

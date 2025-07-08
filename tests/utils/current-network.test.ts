@@ -1,6 +1,6 @@
 import { Address } from "@graphprotocol/graph-ts";
 import { assert, dataSourceMock, describe, test } from "matchstick-as";
-import { CurrentNetwork } from "../../src/utils/current-network";
+import { CurrentNetwork } from "../../src/common/current-network";
 
 describe("`wrappedNativeAddress` should return the correct value for each network", () => {
   test("Mainnet", () => {

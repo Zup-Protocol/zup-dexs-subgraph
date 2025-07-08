@@ -1,8 +1,8 @@
 import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { assert, beforeEach, clearStore, describe, newMockEvent, test } from "matchstick-as";
 import { Token } from "../../../../generated/schema";
-import { getPoolDailyDataId } from "../../../../src/utils/pool-utils";
-import { formatFromTokenAmount } from "../../../../src/utils/token-utils";
+import { getPoolDailyDataId } from "../../../../src/common/pool-utils";
+import { formatFromTokenAmount } from "../../../../src/common/token-utils";
 import { handleV3PoolMint } from "../../../../src/v3-pools/mappings/pool/v3-pool-mint";
 import { PoolMock, TokenMock } from "../../../mocks";
 

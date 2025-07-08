@@ -1,5 +1,5 @@
 import { assert, dataSourceMock, describe, test } from "matchstick-as";
-import { Permit2Address } from "../../src/utils/permit2-address";
+import { Permit2Address } from "../../src/common/permit2-address";
 
 describe("Permit2Address", () => {
   test("uniswap returns correct address for mainnet", () => {

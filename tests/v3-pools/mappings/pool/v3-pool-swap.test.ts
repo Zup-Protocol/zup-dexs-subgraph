@@ -1,12 +1,20 @@
 import { Address, BigDecimal, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { assert, beforeEach, clearInBlockStore, clearStore, describe, newMockEvent, test } from "matchstick-as";
 import { Pool } from "../../../../generated/schema";
-import { ONE_HOUR_IN_SECONDS } from "../../../../src/utils/constants";
-import { getPoolDailyDataId, getPoolHourlyDataId } from "../../../../src/utils/pool-utils";
-import { formatFromTokenAmount } from "../../../../src/utils/token-utils";
+import { ONE_HOUR_IN_SECONDS } from "../../../../src/common/constants";
+import { getPoolDailyDataId, getPoolHourlyDataId } from "../../../../src/common/pool-utils";
+import { formatFromTokenAmount } from "../../../../src/common/token-utils";
 
 import { handleV3PoolSwap, handleV3PoolSwapImpl } from "../../../../src/v3-pools/mappings/pool/v3-pool-swap";
-import { PoolDailyDataMock, PoolHourlyDataMock, PoolMock, TokenMock, V3V4PoolSettersMock } from "../../../mocks";
+import { sqrtPriceX96toPrice } from "../../../../src/v3-pools/utils/v3-v4-pool-converters";
+import {
+  PoolDailyDataMock,
+  PoolHourlyDataMock,
+  PoolMock,
+  PoolSettersMock,
+  TokenMock,
+  V3PoolMock,
+} from "../../../mocks";
 
 describe("v3-pool-swap", () => {
   beforeEach(() => {
@@ -16,15 +24,18 @@ describe("v3-pool-swap", () => {
 
   test(`The handler should call 'setPricesForV3PoolWhitelistedTokens' with the correct parameters to update the pool assets prices`, () => {
     let pool = new PoolMock();
+    let token0 = new TokenMock();
+    let token1 = new TokenMock();
     let sqrtPriceX96 = BigInt.fromI32(3432);
     let tick = BigInt.fromI32(989756545);
-
+    let poolPrices = sqrtPriceX96toPrice(sqrtPriceX96, token0, token1);
     let amount0 = BigInt.fromI32(100);
     let amount1 = BigInt.fromI32(200);
 
     let event = newMockEvent();
-    let v3PoolSetters = new V3V4PoolSettersMock();
+    let v3PoolSetters = new PoolSettersMock();
 
+    new V3PoolMock(Address.fromBytes(pool.id));
     handleV3PoolSwapImpl(
       event,
       pool,
@@ -42,10 +53,16 @@ describe("v3-pool-swap", () => {
       "setPricesForV3PoolWhitelistedTokens have not been called",
     );
 
-    assert.bigIntEquals(
-      v3PoolSetters.setPricesForPoolWhitelistedTokensCalls[0].poolSqrtPriceX96,
-      sqrtPriceX96,
-      "sqrtPriceX96 is not the same",
+    assert.stringEquals(
+      v3PoolSetters.setPricesForPoolWhitelistedTokensCalls[0].poolPrices.token0PerToken1.toString(),
+      poolPrices.token0PerToken1.toString(),
+      "Pool prices token0 per token 1 is not correct",
+    );
+
+    assert.stringEquals(
+      v3PoolSetters.setPricesForPoolWhitelistedTokensCalls[0].poolPrices.token1PerToken0.toString(),
+      poolPrices.token1PerToken0.toString(),
+      "Pool prices token1 per token 0 is not correct",
     );
 
     assert.bytesEquals(
@@ -84,6 +101,7 @@ describe("v3-pool-swap", () => {
 
     let event = newMockEvent();
 
+    new V3PoolMock(Address.fromBytes(pool.id));
     handleV3PoolSwap(event, pool, token0, new TokenMock(), amount0, amount1, sqrtPriceX96, tick);
 
     assert.fieldEquals(
@@ -113,6 +131,7 @@ describe("v3-pool-swap", () => {
 
     let event = newMockEvent();
 
+    new V3PoolMock(Address.fromBytes(pool.id));
     handleV3PoolSwap(event, pool, token0, new TokenMock(), amount0, amount1, sqrtPriceX96, tick);
 
     assert.fieldEquals(
@@ -140,6 +159,7 @@ describe("v3-pool-swap", () => {
 
     let event = newMockEvent();
 
+    new V3PoolMock(Address.fromBytes(pool.id));
     handleV3PoolSwap(event, pool, new TokenMock(), token1, amount0, amount1, sqrtPriceX96, tick);
 
     assert.fieldEquals(
@@ -169,6 +189,7 @@ describe("v3-pool-swap", () => {
 
     let event = newMockEvent();
 
+    new V3PoolMock(Address.fromBytes(pool.id));
     handleV3PoolSwap(event, pool, new TokenMock(), token1, amount0, amount1, sqrtPriceX96, tick);
 
     assert.fieldEquals(
@@ -208,6 +229,7 @@ describe("v3-pool-swap", () => {
 
     let event = newMockEvent();
 
+    new V3PoolMock(Address.fromBytes(pool.id));
     handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96, tick);
 
     assert.fieldEquals(
@@ -248,6 +270,7 @@ describe("v3-pool-swap", () => {
     poolHourlyData.save();
     let tick = BigInt.fromI32(989756545);
 
+    new V3PoolMock(Address.fromBytes(pool.id));
     handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96, tick);
 
     assert.fieldEquals(
@@ -287,6 +310,7 @@ describe("v3-pool-swap", () => {
     poolHourlyData.feesToken1 = currentFees;
     poolHourlyData.save();
 
+    new V3PoolMock(Address.fromBytes(pool.id));
     handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96, tick);
 
     assert.fieldEquals(
@@ -341,6 +365,7 @@ describe("v3-pool-swap", () => {
       token0,
     );
 
+    new V3PoolMock(Address.fromBytes(pool.id));
     handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96, tick);
 
     assert.fieldEquals(
@@ -397,6 +422,7 @@ describe("v3-pool-swap", () => {
       token1,
     );
 
+    new V3PoolMock(Address.fromBytes(pool.id));
     handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96, tick);
 
     assert.fieldEquals(
@@ -447,6 +473,8 @@ describe("v3-pool-swap", () => {
     poolHourlyData.feesToken1 = currentFeesToken1;
     poolHourlyData.feesUSD = currentUSDFees;
     poolHourlyData.save();
+
+    new V3PoolMock(Address.fromBytes(pool.id));
 
     let token1ExpectedSwapFee = formatFromTokenAmount(
       amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
@@ -522,6 +550,8 @@ describe("v3-pool-swap", () => {
     poolHourlyData.feesToken1 = currentFeesToken1;
     poolHourlyData.feesUSD = currentUSDFees;
     poolHourlyData.save();
+
+    new V3PoolMock(Address.fromBytes(pool.id));
 
     let token0ExpectedSwapFee = formatFromTokenAmount(
       amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
@@ -603,6 +633,7 @@ describe("v3-pool-swap", () => {
 
       hourIds.push(Bytes.fromHexString(currentHourlyId));
 
+      new V3PoolMock(Address.fromBytes(pool.id));
       handleV3PoolSwap(event, pool, token0, token1, amount0, amount1, sqrtPriceX96, tick);
 
       assert.fieldEquals(
@@ -646,6 +677,8 @@ describe("v3-pool-swap", () => {
     pool.token1 = token1.id;
     pool.save();
 
+    new V3PoolMock(Address.fromBytes(pool.id));
+
     for (let i = 0; i < swapTimes; i++) {
       event.block.timestamp = event.block.timestamp.plus(BigInt.fromU32(ONE_HOUR_IN_SECONDS));
       let currentHourlyId = getPoolHourlyDataId(event.block.timestamp, pool).toHexString();
@@ -678,8 +711,9 @@ describe("v3-pool-swap", () => {
     let sqrtPriceX96 = BigInt.fromI32(3432);
     let amount0 = BigInt.fromI32(200);
     let amount1 = BigInt.fromI32(100);
-    let v3PoolSetters = new V3V4PoolSettersMock();
+    let v3PoolSetters = new PoolSettersMock();
     let tick = BigInt.fromI32(989756545);
+    new V3PoolMock(Address.fromBytes(pool.id));
 
     handleV3PoolSwapImpl(
       event,
@@ -736,6 +770,8 @@ describe("v3-pool-swap", () => {
     poolDailyData.feesToken1 = currentFeesToken1;
     poolDailyData.feesUSD = currentUSDFees;
     poolDailyData.save();
+
+    new V3PoolMock(Address.fromBytes(pool.id));
 
     let token0ExpectedSwapFee = formatFromTokenAmount(
       amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
@@ -835,6 +871,8 @@ describe("v3-pool-swap", () => {
     poolDailyData.feesUSD = currentUSDFees;
     poolDailyData.save();
 
+    new V3PoolMock(Address.fromBytes(pool.id));
+
     let token1ExpectedSwapFee = formatFromTokenAmount(
       amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
       token0,
@@ -925,6 +963,8 @@ describe("v3-pool-swap", () => {
     pool.token1 = token1.id;
     pool.save();
 
+    new V3PoolMock(Address.fromBytes(pool.id));
+
     for (let i = 0; i < swapTimes; i++) {
       event.block.timestamp = event.block.timestamp.plus(BigInt.fromU32(ONE_HOUR_IN_SECONDS * 24));
       let currentDayId = getPoolDailyDataId(event.block.timestamp, pool).toHexString();
@@ -1002,6 +1042,8 @@ describe("v3-pool-swap", () => {
     pool.token1 = token1.id;
     pool.save();
 
+    new V3PoolMock(Address.fromBytes(pool.id));
+
     for (let i = 0; i < swapTimes; i++) {
       event.block.timestamp = event.block.timestamp.plus(BigInt.fromU32(ONE_HOUR_IN_SECONDS * 24));
       let currentDayId = getPoolDailyDataId(event.block.timestamp, pool).toHexString();
@@ -1074,6 +1116,7 @@ describe("v3-pool-swap", () => {
     let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
     let tick = BigInt.fromI32(989756545);
 
+    new V3PoolMock(Address.fromBytes(pool.id));
     handleV3PoolSwap(event, pool, token0, token1, amount0BigInt, amount1BigInt, sqrtPriceX96, tick);
 
     assert.fieldEquals(
@@ -1112,6 +1155,7 @@ describe("v3-pool-swap", () => {
     let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
     let tick = BigInt.fromI32(989756545);
 
+    new V3PoolMock(Address.fromBytes(pool.id));
     handleV3PoolSwap(event, pool, token0, token1, amount0BigInt, amount1BigInt, sqrtPriceX96, tick);
 
     assert.fieldEquals(
@@ -1126,6 +1170,7 @@ describe("v3-pool-swap", () => {
 
   test("When the handler is called, it should assign the sqrtPriceX96 to the pool", () => {
     let pool = new PoolMock();
+    let v3Pool = new V3PoolMock(Address.fromBytes(pool.id));
     let sqrtPriceX96 = BigInt.fromI32(23456111);
     let tick = BigInt.fromI32(989756545);
 
@@ -1133,8 +1178,7 @@ describe("v3-pool-swap", () => {
     let amount1 = BigInt.fromI32(200);
 
     let event = newMockEvent();
-    let v3PoolSetters = new V3V4PoolSettersMock();
-
+    let v3PoolSetters = new PoolSettersMock();
     handleV3PoolSwapImpl(
       event,
       pool,
@@ -1147,11 +1191,12 @@ describe("v3-pool-swap", () => {
       v3PoolSetters,
     );
 
-    assert.fieldEquals("Pool", pool.id.toHexString(), "sqrtPriceX96", sqrtPriceX96.toString());
+    assert.fieldEquals("V3Pool", v3Pool.id.toHexString(), "sqrtPriceX96", sqrtPriceX96.toString());
   });
 
   test("When the handler is called, it should assign the tick to the pool", () => {
     let pool = new PoolMock();
+    let v3Pool = new V3PoolMock(Address.fromBytes(pool.id));
     let sqrtPriceX96 = BigInt.fromI32(23456111);
     let tick = BigInt.fromI32(777777);
 
@@ -1159,7 +1204,7 @@ describe("v3-pool-swap", () => {
     let amount1 = BigInt.fromI32(200);
 
     let event = newMockEvent();
-    let v3PoolSetters = new V3V4PoolSettersMock();
+    let v3PoolSetters = new PoolSettersMock();
 
     handleV3PoolSwapImpl(
       event,
@@ -1173,6 +1218,6 @@ describe("v3-pool-swap", () => {
       v3PoolSetters,
     );
 
-    assert.fieldEquals("Pool", pool.id.toHexString(), "tick", tick.toString());
+    assert.fieldEquals("V3Pool", v3Pool.id.toHexString(), "tick", tick.toString());
   });
 });

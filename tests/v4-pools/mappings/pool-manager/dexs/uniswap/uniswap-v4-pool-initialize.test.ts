@@ -10,9 +10,9 @@ import {
   test,
 } from "matchstick-as";
 import { Initialize as InitializeEvent } from "../../../../../../generated/UniswapV4PoolManager/UniswapV4PoolManager";
-import { Permit2Address } from "../../../../../../src/utils/permit2-address";
-import { V4PositionManagerAddress } from "../../../../../../src/utils/position-manager-address";
+import { Permit2Address } from "../../../../../../src/common/permit2-address";
 import { handleUniswapV4PoolInitialize } from "../../../../../../src/v4-pools/mappings/pool-manager/dexs/uniswap";
+import { V4PositionManagerAddress } from "../../../../../../src/v4-pools/utils/v4-position-manager-address";
 import { V4StateViewAddress } from "../../../../../../src/v4-pools/utils/v4-state-view-address";
 
 function createEvent(
@@ -105,6 +105,6 @@ describe("uniswap-v4-pool-initialize", () => {
 
     handleUniswapV4PoolInitialize(event);
 
-    assert.fieldEquals("Pool", poolId.toHexString(), "v4Hooks", hooks.toHexString());
+    assert.fieldEquals("V4Pool", poolId.toHexString(), "hooks", hooks.toHexString());
   });
 });

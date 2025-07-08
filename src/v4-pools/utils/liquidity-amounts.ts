@@ -1,6 +1,6 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 
-import { ZERO_BIG_INT } from "../../utils/constants";
+import { ZERO_BIG_INT } from "../../common/constants";
 import { SqrtPriceMath } from "./sqrt-price-match";
 import { TickMath } from "./tick-math";
 

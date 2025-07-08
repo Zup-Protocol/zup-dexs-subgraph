@@ -1,5 +1,5 @@
 import { assert, test } from "matchstick-as";
-import { ProtocolId } from "../../src/utils/protocol-id";
+import { ProtocolId } from "../../src/common/protocol-id";
 
 test("PancakeSwap V3 Id should be correct", () => {
   const expectedId = "pancake-swap-v3";
@@ -88,6 +88,13 @@ test("UnchainX V3 Id should be correct", () => {
 test("PancakeSwap V4 CL Id should be correct", () => {
   const expectedId = "pancake-v4-cl";
   const actualId = ProtocolId.pancakeSwapV4CL;
+
+  assert.stringEquals(actualId, expectedId);
+});
+
+test("Uniswap V2 Id should be correct", () => {
+  const expectedId = "uniswap-v2";
+  const actualId = ProtocolId.uniswapV2;
 
   assert.stringEquals(actualId, expectedId);
 });

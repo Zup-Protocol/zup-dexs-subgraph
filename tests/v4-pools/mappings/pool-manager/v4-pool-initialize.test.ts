@@ -1,14 +1,15 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { assert, newMockEvent, test } from "matchstick-as";
-import { ZERO_BIG_DECIMAL } from "../../../../src/utils/constants";
-import { PoolType } from "../../../../src/utils/types/pool-type";
+import { ZERO_BIG_DECIMAL } from "../../../../src/common/constants";
+import { PoolType } from "../../../../src/common/types/pool-type";
 import { handleV4PoolInitialize } from "../../../../src/v4-pools/mappings/pool-manager/v4-pool-initialize";
-import { PoolMock, ProtocolMock, TokenMock } from "../../../mocks";
+import { PoolMock, ProtocolMock, TokenMock, V4PoolMock } from "../../../mocks";
 
 test("When calling the handler, it should correctly assign the protocol to the pool", () => {
   let expectedProtocolId = "some-random-id-tot-te";
   let event = newMockEvent();
   let pool = new PoolMock();
+  let v4Pool = new V4PoolMock();
   let protocol = new ProtocolMock(expectedProtocolId);
 
   handleV4PoolInitialize(
@@ -17,10 +18,10 @@ test("When calling the handler, it should correctly assign the protocol to the p
     Address.fromBytes(pool.token0),
     Address.fromBytes(pool.token1),
     pool.feeTier,
-    pool.tickSpacing,
-    pool.tick,
-    pool.sqrtPriceX96,
-    Address.fromBytes(pool.v4Hooks!),
+    v4Pool.tickSpacing,
+    v4Pool.tick,
+    v4Pool.sqrtPriceX96,
+    Address.fromBytes(v4Pool.hooks),
     protocol,
   );
 
@@ -32,6 +33,7 @@ test("When calling the handler, it should correctly assign the created timestamp
 
   let pool = new PoolMock();
   let protocol = new ProtocolMock();
+  let v4Pool = new V4PoolMock();
 
   handleV4PoolInitialize(
     mockEvent,
@@ -39,10 +41,10 @@ test("When calling the handler, it should correctly assign the created timestamp
     Address.fromBytes(pool.token0),
     Address.fromBytes(pool.token1),
     pool.feeTier,
-    pool.tickSpacing,
-    pool.tick,
-    pool.sqrtPriceX96,
-    Address.fromBytes(pool.v4Hooks!),
+    v4Pool.tickSpacing,
+    v4Pool.tick,
+    v4Pool.sqrtPriceX96,
+    Address.fromBytes(v4Pool.hooks),
     protocol,
   );
 
@@ -52,6 +54,7 @@ test("When calling the handler, it should correctly assign the created timestamp
 test("When calling the handler, it should correctly assign the token0 to the pool", () => {
   let token0Address = Address.fromString("0x0000000000000000000000000000000000000119");
   let pool = new PoolMock();
+  let v4Pool = new V4PoolMock();
   let protocol = new ProtocolMock();
   let token0 = new TokenMock(Address.fromBytes(token0Address));
 
@@ -61,10 +64,10 @@ test("When calling the handler, it should correctly assign the token0 to the poo
     Address.fromBytes(token0.id),
     Address.fromBytes(pool.token1),
     pool.feeTier,
-    pool.tickSpacing,
-    pool.tick,
-    pool.sqrtPriceX96,
-    Address.fromBytes(pool.v4Hooks!),
+    v4Pool.tickSpacing,
+    v4Pool.tick,
+    v4Pool.sqrtPriceX96,
+    Address.fromBytes(v4Pool.hooks),
     protocol,
   );
 
@@ -74,6 +77,7 @@ test("When calling the handler, it should correctly assign the token0 to the poo
 test("When calling the handler, it should correctly assign the token1 to the pool", () => {
   let token1Address = Address.fromString("0x0000000000000000000000000000000000012379");
   let pool = new PoolMock();
+  let v4Pool = new V4PoolMock();
   let protocol = new ProtocolMock();
   let token1 = new TokenMock(Address.fromBytes(token1Address));
 
@@ -83,10 +87,10 @@ test("When calling the handler, it should correctly assign the token1 to the poo
     Address.fromBytes(pool.token0),
     Address.fromBytes(token1.id),
     pool.feeTier,
-    pool.tickSpacing,
-    pool.tick,
-    pool.sqrtPriceX96,
-    Address.fromBytes(pool.v4Hooks!),
+    v4Pool.tickSpacing,
+    v4Pool.tick,
+    v4Pool.sqrtPriceX96,
+    Address.fromBytes(v4Pool.hooks),
     protocol,
   );
 
@@ -97,6 +101,7 @@ test("When calling the handler, it should correctly assign the fee tier to the p
   let pool = new PoolMock();
   let protocol = new ProtocolMock();
   let feeTier = 7283;
+  let v4Pool = new V4PoolMock();
 
   handleV4PoolInitialize(
     newMockEvent(),
@@ -104,10 +109,10 @@ test("When calling the handler, it should correctly assign the fee tier to the p
     Address.fromBytes(pool.token0),
     Address.fromBytes(pool.token1),
     feeTier,
-    pool.tickSpacing,
-    pool.tick,
-    pool.sqrtPriceX96,
-    Address.fromBytes(pool.v4Hooks!),
+    v4Pool.tickSpacing,
+    v4Pool.tick,
+    v4Pool.sqrtPriceX96,
+    Address.fromBytes(v4Pool.hooks),
     protocol,
   );
 
@@ -118,6 +123,7 @@ test("When calling the handler, it should correctly assign the tick spacing to t
   let pool = new PoolMock();
   let protocol = new ProtocolMock();
   let tickSpacing = 32;
+  let v4Pool = new V4PoolMock();
 
   handleV4PoolInitialize(
     newMockEvent(),
@@ -126,17 +132,18 @@ test("When calling the handler, it should correctly assign the tick spacing to t
     Address.fromBytes(pool.token1),
     pool.feeTier,
     tickSpacing,
-    pool.tick,
-    pool.sqrtPriceX96,
-    Address.fromBytes(pool.v4Hooks!),
+    v4Pool.tick,
+    v4Pool.sqrtPriceX96,
+    Address.fromBytes(v4Pool.hooks),
     protocol,
   );
 
-  assert.fieldEquals("Pool", pool.id.toHexString(), "tickSpacing", tickSpacing.toString());
+  assert.fieldEquals("V4Pool", pool.id.toHexString(), "tickSpacing", tickSpacing.toString());
 });
 
 test("When calling the handler, it should correctly assign the tick to the pool", () => {
   let pool = new PoolMock();
+  let v4Pool = new V4PoolMock();
   let protocol = new ProtocolMock();
   let tick = 8976;
 
@@ -146,20 +153,21 @@ test("When calling the handler, it should correctly assign the tick to the pool"
     Address.fromBytes(pool.token0),
     Address.fromBytes(pool.token1),
     pool.feeTier,
-    pool.tickSpacing,
+    v4Pool.tickSpacing,
     BigInt.fromI32(tick),
-    pool.sqrtPriceX96,
-    Address.fromBytes(pool.v4Hooks!),
+    v4Pool.sqrtPriceX96,
+    Address.fromBytes(v4Pool.hooks),
     protocol,
   );
 
-  assert.fieldEquals("Pool", pool.id.toHexString(), "tick", tick.toString());
+  assert.fieldEquals("V4Pool", pool.id.toHexString(), "tick", tick.toString());
 });
 
 test("When calling the handler, it should correctly assign the sqrt price to the pool", () => {
   let pool = new PoolMock();
   let protocol = new ProtocolMock();
   let sqrtPriceX96 = 998896678;
+  let v4Pool = new V4PoolMock();
 
   handleV4PoolInitialize(
     newMockEvent(),
@@ -167,19 +175,20 @@ test("When calling the handler, it should correctly assign the sqrt price to the
     Address.fromBytes(pool.token0),
     Address.fromBytes(pool.token1),
     pool.feeTier,
-    pool.tickSpacing,
-    pool.tick,
+    v4Pool.tickSpacing,
+    v4Pool.tick,
     BigInt.fromI32(sqrtPriceX96),
-    Address.fromBytes(pool.v4Hooks!),
+    Address.fromBytes(v4Pool.hooks),
     protocol,
   );
 
-  assert.fieldEquals("Pool", pool.id.toHexString(), "sqrtPriceX96", sqrtPriceX96.toString());
+  assert.fieldEquals("V4Pool", pool.id.toHexString(), "sqrtPriceX96", sqrtPriceX96.toString());
 });
 
 test("When calling the handler, it should set totalValueLockedUSD to ZERO_BIG_DECIMAL", () => {
   let pool = new PoolMock();
   let protocol = new ProtocolMock();
+  let v4Pool = new V4PoolMock();
 
   handleV4PoolInitialize(
     newMockEvent(),
@@ -187,10 +196,10 @@ test("When calling the handler, it should set totalValueLockedUSD to ZERO_BIG_DE
     Address.fromBytes(pool.token0),
     Address.fromBytes(pool.token1),
     pool.feeTier,
-    pool.tickSpacing,
-    pool.tick,
-    pool.sqrtPriceX96,
-    Address.fromBytes(pool.v4Hooks!),
+    v4Pool.tickSpacing,
+    v4Pool.tick,
+    v4Pool.sqrtPriceX96,
+    Address.fromBytes(v4Pool.hooks),
     protocol,
   );
 
@@ -200,6 +209,7 @@ test("When calling the handler, it should set totalValueLockedUSD to ZERO_BIG_DE
 test("When calling the handler, it should set totalValueLockedToken0 to ZERO_BIG_DECIMAL", () => {
   let pool = new PoolMock();
   let protocol = new ProtocolMock();
+  let v4Pool = new V4PoolMock();
 
   handleV4PoolInitialize(
     newMockEvent(),
@@ -207,10 +217,10 @@ test("When calling the handler, it should set totalValueLockedToken0 to ZERO_BIG
     Address.fromBytes(pool.token0),
     Address.fromBytes(pool.token1),
     pool.feeTier,
-    pool.tickSpacing,
-    pool.tick,
-    pool.sqrtPriceX96,
-    Address.fromBytes(pool.v4Hooks!),
+    v4Pool.tickSpacing,
+    v4Pool.tick,
+    v4Pool.sqrtPriceX96,
+    Address.fromBytes(v4Pool.hooks),
     protocol,
   );
 
@@ -220,6 +230,7 @@ test("When calling the handler, it should set totalValueLockedToken0 to ZERO_BIG
 test("When calling the handler, it should set totalValueLockedToken1 to ZERO_BIG_DECIMAL", () => {
   let pool = new PoolMock();
   let protocol = new ProtocolMock();
+  let v4Pool = new V4PoolMock();
 
   handleV4PoolInitialize(
     newMockEvent(),
@@ -227,10 +238,10 @@ test("When calling the handler, it should set totalValueLockedToken1 to ZERO_BIG
     Address.fromBytes(pool.token0),
     Address.fromBytes(pool.token1),
     pool.feeTier,
-    pool.tickSpacing,
-    pool.tick,
-    pool.sqrtPriceX96,
-    Address.fromBytes(pool.v4Hooks!),
+    v4Pool.tickSpacing,
+    v4Pool.tick,
+    v4Pool.sqrtPriceX96,
+    Address.fromBytes(v4Pool.hooks),
     protocol,
   );
 
@@ -240,6 +251,7 @@ test("When calling the handler, it should set totalValueLockedToken1 to ZERO_BIG
 test("When calling the handler, it should set type to PoolType.V4", () => {
   let pool = new PoolMock();
   let protocol = new ProtocolMock();
+  let v4Pool = new V4PoolMock();
 
   handleV4PoolInitialize(
     newMockEvent(),
@@ -247,10 +259,10 @@ test("When calling the handler, it should set type to PoolType.V4", () => {
     Address.fromBytes(pool.token0),
     Address.fromBytes(pool.token1),
     pool.feeTier,
-    pool.tickSpacing,
-    pool.tick,
-    pool.sqrtPriceX96,
-    Address.fromBytes(pool.v4Hooks!),
+    v4Pool.tickSpacing,
+    v4Pool.tick,
+    v4Pool.sqrtPriceX96,
+    Address.fromBytes(v4Pool.hooks),
     protocol,
   );
 
@@ -260,7 +272,7 @@ test("When calling the handler, it should set type to PoolType.V4", () => {
 test("When calling the handler, it should set the v4 hooks passed to the pool", () => {
   let pool = new PoolMock();
   let protocol = new ProtocolMock();
-
+  let v4Pool = new V4PoolMock();
   let hooksAddress = Address.fromString("0x1240000000000000000000000000000000000001");
 
   handleV4PoolInitialize(
@@ -269,12 +281,12 @@ test("When calling the handler, it should set the v4 hooks passed to the pool", 
     Address.fromBytes(pool.token0),
     Address.fromBytes(pool.token1),
     pool.feeTier,
-    pool.tickSpacing,
-    pool.tick,
-    pool.sqrtPriceX96,
+    v4Pool.tickSpacing,
+    v4Pool.tick,
+    v4Pool.sqrtPriceX96,
     Address.fromBytes(hooksAddress),
     protocol,
   );
 
-  assert.fieldEquals("Pool", pool.id.toHexString(), "v4Hooks", hooksAddress.toHexString());
+  assert.fieldEquals("V4Pool", pool.id.toHexString(), "hooks", hooksAddress.toHexString());
 });

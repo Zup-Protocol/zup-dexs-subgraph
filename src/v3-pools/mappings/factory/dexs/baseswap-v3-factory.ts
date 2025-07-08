@@ -1,9 +1,9 @@
 import { UniswapV3Pool as UniswapV3PoolTemplate } from "../../../../../generated/templates";
 import { PoolCreated as PoolCreatedEvent } from "../../../../../generated/UniswapV3Factory/UniswapV3Factory";
-import { V3PositionManagerAddress } from "../../../../utils/position-manager-address";
-import { ProtocolId } from "../../../../utils/protocol-id";
+import { ProtocolId } from "../../../../common/protocol-id";
+import { V3PositionManagerAddress } from "../../../../v3-pools/utils/v3-position-manager-address";
 
-import { getOrCreateProtocol } from "../../../../utils/protocol-utils";
+import { getOrCreateProtocol } from "../../../../common/protocol-utils";
 import { handleV3PoolCreated } from "./../v3-factory";
 
 export function handleBaseSwapV3PoolCreated(event: PoolCreatedEvent): void {

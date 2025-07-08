@@ -1,11 +1,11 @@
-import { BigInt, ethereum, log } from "@graphprotocol/graph-ts";
+import { BigInt, ethereum } from "@graphprotocol/graph-ts";
 import {
   PoolDailyData as PoolDailyDataEntity,
   Pool as PoolEntity,
   PoolHourlyData as PoolHourlyDataEntity,
   Token as TokenEntity,
-} from "../../../generated/schema";
-import { ZERO_BIG_DECIMAL, ZERO_BIG_INT } from "../../utils/constants";
+} from "../../generated/schema";
+import { ZERO_BIG_DECIMAL, ZERO_BIG_INT } from "./constants";
 import {
   findNativeToken,
   findStableToken,
@@ -16,11 +16,11 @@ import {
   isStablePool,
   isVariableWithStablePool,
   isWrappedNativePool,
-} from "../../utils/pool-utils";
-import { formatFromTokenAmount } from "../../utils/token-utils";
-import { sqrtPriceX96toPrice } from "./v3-v4-pool-converters";
+} from "./pool-utils";
+import { formatFromTokenAmount } from "./token-utils";
+import { PriceResult } from "./types/price-result";
 
-export class V3V4PoolSetters {
+export class PoolSetters {
   setPoolDailyDataTVL(event: ethereum.Event, poolEntity: PoolEntity): void {
     let poolDailyDataId = getPoolDailyDataId(event.block.timestamp, poolEntity);
     let poolDailyDataEntity = PoolDailyDataEntity.load(poolDailyDataId);
@@ -46,13 +46,11 @@ export class V3V4PoolSetters {
   }
 
   setPricesForPoolWhitelistedTokens(
-    poolSqrtPriceX96: BigInt,
     poolEntity: PoolEntity,
     poolToken0Entity: TokenEntity,
     poolToken1Entity: TokenEntity,
+    poolPrices: PriceResult,
   ): void {
-    let poolPrices = sqrtPriceX96toPrice(poolSqrtPriceX96, poolToken0Entity, poolToken1Entity);
-
     if (isVariableWithStablePool(poolEntity)) {
       let stableToken = findStableToken(poolEntity);
 
@@ -178,8 +176,6 @@ export class V3V4PoolSetters {
       poolHourlyDataEntity.feesUSD = ZERO_BIG_DECIMAL;
       poolHourlyDataEntity.pool = pool.id;
     }
-
-    log.debug("customFee: {}, pool.feeTier: {}", [customFee.toString(), pool.feeTier.toString()]);
 
     if (userInputToken.id == pool.token0) {
       let feeAmountToken0 = this._getSwapFee(amount0, customFee != pool.feeTier ? customFee : pool.feeTier);

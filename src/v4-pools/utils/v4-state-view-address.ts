@@ -5,7 +5,7 @@ import {
   MAINNET_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
   UNICHAIN_NETWORK_NAME,
-} from "../../utils/constants";
+} from "../../common/constants";
 
 export class V4StateViewAddress {
   private static unsupportedProtocolNetworkError(protocolName: string): Error {

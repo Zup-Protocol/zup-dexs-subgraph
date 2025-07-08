@@ -1,7 +1,7 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 import { assert, test } from "matchstick-as";
 import { Pool, Token } from "../../generated/schema";
-import { CurrentNetwork } from "../../src/utils/current-network";
+import { CurrentNetwork } from "../../src/common/current-network";
 import {
   findNativeToken,
   findStableToken,
@@ -12,7 +12,7 @@ import {
   isStablePool,
   isVariableWithStablePool,
   isWrappedNativePool,
-} from "../../src/utils/pool-utils";
+} from "../../src/common/pool-utils";
 import { PoolMock, TokenMock } from "../mocks";
 
 test(`When a pool has the token 0 as stablecoin,

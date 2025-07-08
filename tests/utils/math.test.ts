@@ -1,7 +1,7 @@
 import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { assert, test } from "matchstick-as";
-import { ZERO_BIG_DECIMAL } from "../../src/utils/constants";
-import { hexToBigInt, mulDivRoundingUp, safeDiv } from "../../src/utils/math";
+import { ZERO_BIG_DECIMAL } from "../../src/common/constants";
+import { hexToBigInt, mulDivRoundingUp, safeDiv } from "../../src/common/math";
 
 test("When passing the `b` param as zero in safeDiv, instead of throwing, it should return zero", () => {
   const a = BigDecimal.fromString("1");

@@ -1,6 +1,6 @@
 import { BigInt } from "@graphprotocol/graph-ts";
-import { Pool as PoolEntity, Token as TokenEntity } from "../../../../generated/schema";
-import { formatFromTokenAmount } from "../../../utils/token-utils";
+import { Pool as PoolEntity, Token as TokenEntity, V4Pool as V4PoolEntity } from "../../../../generated/schema";
+import { formatFromTokenAmount } from "../../../common/token-utils";
 import { getAmount0, getAmount1 } from "../../utils/liquidity-amounts";
 
 export function handleV4PoolModifyLiquidity(
@@ -11,8 +11,9 @@ export function handleV4PoolModifyLiquidity(
   tickLower: i32,
   tickUpper: i32,
 ): void {
-  let amount0 = getAmount0(tickLower, tickUpper, poolEntity.tick.toI32(), liqudityDelta, poolEntity.sqrtPriceX96);
-  let amount1 = getAmount1(tickLower, tickUpper, poolEntity.tick.toI32(), liqudityDelta, poolEntity.sqrtPriceX96);
+  let v4PoolEntity = V4PoolEntity.load(poolEntity.id)!;
+  let amount0 = getAmount0(tickLower, tickUpper, v4PoolEntity.tick.toI32(), liqudityDelta, v4PoolEntity.sqrtPriceX96);
+  let amount1 = getAmount1(tickLower, tickUpper, v4PoolEntity.tick.toI32(), liqudityDelta, v4PoolEntity.sqrtPriceX96);
   let amount0Formatted = formatFromTokenAmount(amount0, token0Entity);
   let amount1Formatted = formatFromTokenAmount(amount1, token1Entity);
 

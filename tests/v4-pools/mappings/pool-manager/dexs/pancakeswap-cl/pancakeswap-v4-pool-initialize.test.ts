@@ -10,12 +10,12 @@ import {
   test,
 } from "matchstick-as";
 import { Initialize as InitializeEvent } from "../../../../../../generated/PancakeSwapV4CLPoolManager/PancakeSwapV4CLPoolManager";
-import { BNB_NETWORK_NAME } from "../../../../../../src/utils/constants";
-import { Permit2Address } from "../../../../../../src/utils/permit2-address";
-import { V4PositionManagerAddress } from "../../../../../../src/utils/position-manager-address";
-import { ProtocolId } from "../../../../../../src/utils/protocol-id";
+import { BNB_NETWORK_NAME } from "../../../../../../src/common/constants";
+import { Permit2Address } from "../../../../../../src/common/permit2-address";
+import { ProtocolId } from "../../../../../../src/common/protocol-id";
 import { handlePancakeSwapV4CLPoolInitialize } from "../../../../../../src/v4-pools/mappings/pool-manager/dexs/pancakeswap-cl/pancakeswap-v4-cl-pool-initialize";
 import { getPoolTickSpacingFromParameters } from "../../../../../../src/v4-pools/mappings/pool-manager/dexs/pancakeswap-cl/pancakeswap-v4-cl-utils";
+import { V4PositionManagerAddress } from "../../../../../../src/v4-pools/utils/v4-position-manager-address";
 
 function createEvent(
   poolId: Bytes = Bytes.fromI32(1),
@@ -100,7 +100,7 @@ describe("pancakeswap-v4-cl-pool-initialize", () => {
 
     handlePancakeSwapV4CLPoolInitialize(event);
 
-    assert.fieldEquals("Pool", poolId.toHexString(), "v4Hooks", hooks.toHexString());
+    assert.fieldEquals("V4Pool", poolId.toHexString(), "hooks", hooks.toHexString());
   });
 
   test("When calling the handler, it should correctly pass the pool tick spacing, converting from the event parameters param", () => {
@@ -117,7 +117,7 @@ describe("pancakeswap-v4-cl-pool-initialize", () => {
     handlePancakeSwapV4CLPoolInitialize(event);
 
     assert.fieldEquals(
-      "Pool",
+      "V4Pool",
       poolId.toHexString(),
       "tickSpacing",
       getPoolTickSpacingFromParameters(tickspacingParamaters).toString(),

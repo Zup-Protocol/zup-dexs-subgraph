@@ -1,13 +1,23 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { assert, beforeEach, clearStore, createMockedFunction, describe, newMockEvent, test } from "matchstick-as";
+import {
+  assert,
+  beforeEach,
+  clearInBlockStore,
+  clearStore,
+  createMockedFunction,
+  describe,
+  newMockEvent,
+  test,
+} from "matchstick-as";
 
 import { handleV3PoolCreated } from "../../../../src/v3-pools/mappings/factory/v3-factory";
 
-import { PoolMock, ProtocolMock, TokenMock } from "../../../mocks";
+import { PoolMock, ProtocolMock, TokenMock, V3PoolMock } from "../../../mocks";
 
 describe("", () => {
   beforeEach(() => {
     clearStore();
+    clearInBlockStore();
   });
 
   test(`When the handler is called,
@@ -258,6 +268,7 @@ describe("", () => {
     let token0 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000019"));
     let token1 = new TokenMock(Address.fromString("0x0000000000000000000000000000000000000009"));
     let pool = new PoolMock();
+    let v3Pool = new V3PoolMock(pool.id);
     let fee = 3000;
 
     handleV3PoolCreated(
@@ -271,8 +282,8 @@ describe("", () => {
     );
 
     assert.fieldEquals(
-      "Pool",
-      Address.fromBytes(pool.id).toHexString(),
+      "V3Pool",
+      Address.fromBytes(v3Pool.id).toHexString(),
       "tickSpacing",
       expectedEventTickSpacing.toString(),
     );
@@ -562,6 +573,7 @@ describe("", () => {
     let token0Address = Address.fromString("0x0000000000000000000000000000000000000019");
     let token1Address = Address.fromString("0x0000000000000000000000000000000000000009");
     let pool = new PoolMock();
+    let v3Pool = new V3PoolMock(pool.id);
     let fee = 3000;
     let tickSpacing = 10;
 
@@ -575,20 +587,20 @@ describe("", () => {
       new ProtocolMock(),
     );
 
-    assert.fieldEquals("Pool", pool.id.toHexString(), "sqrtPriceX96", "0");
+    assert.fieldEquals("V3Pool", v3Pool.id.toHexString(), "sqrtPriceX96", "0");
   });
 
   test(`When the handler is called, it should assign 0 to the tick`, () => {
     let event = newMockEvent();
     let token0Address = Address.fromString("0x0000000000000000000000000000000000000019");
     let token1Address = Address.fromString("0x0000000000000000000000000000000000000009");
-    let pool = new PoolMock();
+    let poolAddress = Address.fromHexString("0x0000000000000000000000000000000000111111");
     let fee = 3000;
     let tickSpacing = 10;
 
     handleV3PoolCreated(
       event,
-      Address.fromBytes(pool.id),
+      Address.fromBytes(poolAddress),
       token0Address,
       token1Address,
       fee,
@@ -596,6 +608,6 @@ describe("", () => {
       new ProtocolMock(),
     );
 
-    assert.fieldEquals("Pool", pool.id.toHexString(), "tick", "0");
+    assert.fieldEquals("V3Pool", poolAddress.toHexString(), "tick", "0");
   });
 });

@@ -1,8 +1,8 @@
 import { PoolCreated as PoolCreatedEvent } from "../../../../../generated/NuriExchangeV3Factory/NuriExchangeV3Factory";
 import { NuriExchangeV3Pool } from "../../../../../generated/templates";
-import { V3PositionManagerAddress } from "../../../../utils/position-manager-address";
-import { ProtocolId } from "../../../../utils/protocol-id";
-import { getOrCreateProtocol } from "../../../../utils/protocol-utils";
+import { ProtocolId } from "../../../../common/protocol-id";
+import { getOrCreateProtocol } from "../../../../common/protocol-utils";
+import { V3PositionManagerAddress } from "../../../../v3-pools/utils/v3-position-manager-address";
 import { handleV3PoolCreated } from "./../v3-factory";
 
 export function handleNuriExchangeV3PoolCreated(event: PoolCreatedEvent): void {

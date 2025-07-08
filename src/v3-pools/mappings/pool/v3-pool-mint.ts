@@ -1,8 +1,8 @@
 import { BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { Pool as PoolEntity, Token as TokenEntity } from "../../../../generated/schema";
 
-import { formatFromTokenAmount } from "../../../utils/token-utils";
-import { V3V4PoolSetters } from "../../utils/v3-v4-pool-setters";
+import { PoolSetters } from "../../../common/pool-setters";
+import { formatFromTokenAmount } from "../../../common/token-utils";
 
 export function handleV3PoolMint(
   event: ethereum.Event,
@@ -12,7 +12,7 @@ export function handleV3PoolMint(
   amount0: BigInt,
   amount1: BigInt,
 ): void {
-  handleV3PoolMintImpl(event, poolEntity, token0Entity, token1Entity, amount0, amount1, new V3V4PoolSetters());
+  handleV3PoolMintImpl(event, poolEntity, token0Entity, token1Entity, amount0, amount1, new PoolSetters());
 }
 
 export function handleV3PoolMintImpl(
@@ -22,7 +22,7 @@ export function handleV3PoolMintImpl(
   token1Entity: TokenEntity,
   amount0: BigInt,
   amount1: BigInt,
-  v3PoolSetters: V3V4PoolSetters = new V3V4PoolSetters(),
+  v3PoolSetters: PoolSetters = new PoolSetters(),
 ): void {
   let token0FormattedAmount = formatFromTokenAmount(amount0, token0Entity);
   let token1FormattedAmount = formatFromTokenAmount(amount1, token1Entity);

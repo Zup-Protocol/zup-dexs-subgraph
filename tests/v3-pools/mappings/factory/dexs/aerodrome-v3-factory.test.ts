@@ -10,9 +10,9 @@ import {
   test,
 } from "matchstick-as";
 import { PoolCreated } from "../../../../../generated/AerodromeV3Factory/AerodromeV3Factory";
-import { V3PositionManagerAddress } from "../../../../../src/utils/position-manager-address";
-import { ProtocolId } from "../../../../../src/utils/protocol-id";
+import { ProtocolId } from "../../../../../src/common/protocol-id";
 import { handleAerodromeV3PoolCreated } from "../../../../../src/v3-pools/mappings/factory/dexs/aerodrome-v3-factory";
+import { V3PositionManagerAddress } from "../../../../../src/v3-pools/utils/v3-position-manager-address";
 
 export class PoolCreatedEventParams {
   token0: Address;

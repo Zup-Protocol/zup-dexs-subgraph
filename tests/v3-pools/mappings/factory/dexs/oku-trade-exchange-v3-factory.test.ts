@@ -10,7 +10,7 @@ import {
   test,
 } from "matchstick-as";
 import { PoolCreated } from "../../../../../generated/UniswapV3Factory/UniswapV3Factory";
-import { ProtocolId } from "../../../../../src/utils/protocol-id";
+import { ProtocolId } from "../../../../../src/common/protocol-id";
 import { handleOkuTradeV3PoolCreated } from "../../../../../src/v3-pools/mappings/factory/dexs/oku-trade-v3-factory";
 
 export class PoolCreatedEventParams {

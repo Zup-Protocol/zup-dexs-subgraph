@@ -12,7 +12,7 @@ import {
   ZERO_ADDRESS,
   ZERO_BIG_DECIMAL,
   ZERO_BIG_INT,
-} from "../../src/utils/constants";
+} from "../../src/common/constants";
 
 test("Zero big decimal should return zero as Big Decimal", () => {
   assert.assertTrue(ZERO_BIG_DECIMAL.equals(BigDecimal.fromString("0")));
