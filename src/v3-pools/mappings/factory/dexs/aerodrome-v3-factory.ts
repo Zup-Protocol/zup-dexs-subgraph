@@ -1,7 +1,4 @@
-import {
-  AerodromeV3Factory,
-  PoolCreated as PoolCreatedEvent,
-} from "../../../../../generated/AerodromeV3Factory/AerodromeV3Factory";
+import { PoolCreated as PoolCreatedEvent } from "../../../../../generated/AerodromeV3Factory/AerodromeV3Factory";
 import { AerodromeV3Pool as AerodromeV3PoolTemplate } from "../../../../../generated/templates";
 import { ProtocolId } from "../../../../common/protocol-id";
 import { getOrCreateProtocol } from "../../../../common/protocol-utils";
@@ -17,14 +14,12 @@ export function handleAerodromeV3PoolCreated(event: PoolCreatedEvent): void {
     V3PositionManagerAddress.aerodrome,
   );
 
-  const swapFee = AerodromeV3Factory.bind(event.address).getSwapFee(event.params.pool);
-
   handleV3PoolCreated(
     event,
     event.params.pool,
     event.params.token0,
     event.params.token1,
-    swapFee,
+    0,
     event.params.tickSpacing,
     protocolEntity,
   );

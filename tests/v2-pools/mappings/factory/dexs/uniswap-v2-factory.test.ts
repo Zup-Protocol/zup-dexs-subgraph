@@ -13,7 +13,7 @@ import {
 import { PairCreated as PoolCreated } from "../../../../../generated/UniswapV2Factory/UniswapV2Factory";
 import { UNICHAIN_NETWORK_NAME } from "../../../../../src/common/constants";
 import { ProtocolId } from "../../../../../src/common/protocol-id";
-import { handleUniswapV2PoolCreated } from "../../../../../src/v2-pools/mappings/factory/dexs/uniswap/uniswap-v2-factory";
+import { handleUniswapV2PoolCreated } from "../../../../../src/v2-pools/mappings/factory/dexs/uniswap-v2-factory";
 
 export class PoolCreatedEventParams {
   token0: Address;

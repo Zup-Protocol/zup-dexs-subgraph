@@ -93,6 +93,28 @@ dataSources:
       eventHandlers:
         - event: PoolCreated(indexed address,indexed address,indexed uint24,int24,address)
           handler: handleOkuTradeV3PoolCreated
+  - kind: ethereum
+    name: SushiSwapV2Factory
+    network: scroll
+    source:
+      address: "0xB45e53277a7e0F1D35f2a77160e91e25507f1763"
+      abi: UniswapV2Factory
+      startBlock: 81841
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/factory/dexs/sushiswap-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: UniswapV2Factory
+          file: "../abis/factories/UniswapV2Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleSushiSwapV2PoolCreated
 
 templates:
   - kind: ethereum/contract
@@ -153,3 +175,28 @@ templates:
           handler: handleUniswapV3PoolSwap
         - event: CollectProtocol(indexed address,indexed address,uint128,uint128)
           handler: handleUniswapV3PoolCollectProtocol
+  - kind: ethereum/contract
+    name: UniswapV2Pool
+    network: scroll
+    source:
+      abi: UniswapV2Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/pool/dexs/uniswap/index.ts
+      entities:
+        - Pool
+        - Token
+      abis:
+        - name: UniswapV2Pool
+          file: ../abis/pools/UniswapV2Pool.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleUniswapV2Mint
+        - event: Burn(indexed address,uint256,uint256,indexed address)
+          handler: handleUniswapV2Burn
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleUniswapV2Swap
+        - event: Sync(uint112,uint112)
+          handler: handleUniswapV2Sync

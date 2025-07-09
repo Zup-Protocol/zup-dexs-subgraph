@@ -1098,4 +1098,31 @@ describe("v2-pool-swap", () => {
         .toString(),
     );
   });
+
+  test("when the handler is called passing a custom fee tier, it should be applied to the pool", () => {
+    let event = newMockEvent();
+    let pool = PoolMock.loadMock();
+    let token0 = new TokenMock();
+    let token1 = new TokenMock();
+    let amount1OutBigInt = BigInt.fromI32(3134).times(BigInt.fromI32(10).pow(token1.decimals as u8));
+    let amount0OutBigInt = BigInt.fromI32(0);
+    let amount0InBigInt = BigInt.fromI32(12).times(BigInt.fromI32(10).pow(token1.decimals as u8));
+    let amount1InBigInt = BigInt.fromI32(0);
+
+    let customFeeTier = 32567;
+
+    handleV2PoolSwap(
+      event,
+      pool,
+      token0,
+      token1,
+      amount0InBigInt,
+      amount1InBigInt,
+      amount0OutBigInt,
+      amount1OutBigInt,
+      customFeeTier,
+    );
+
+    assert.fieldEquals("Pool", pool.id.toHexString(), "feeTier", customFeeTier.toString());
+  });
 });

@@ -1,5 +1,5 @@
 import { Address, ethereum } from "@graphprotocol/graph-ts";
-import { Pool, Protocol as ProtocolEntity, V2Pool as V2PoolEntity } from "../../../../generated/schema";
+import { Pool as PoolEntity, Protocol as ProtocolEntity, V2Pool as V2PoolEntity } from "../../../../generated/schema";
 import { ZERO_BIG_DECIMAL } from "../../../common/constants";
 import { getOrCreateTokenEntity } from "../../../common/token-utils";
 import { PoolType } from "../../../common/types/pool-type";
@@ -11,10 +11,10 @@ export function handleV2PoolCreated(
   poolAddress: Address,
   feeTier: u32,
   protocol: ProtocolEntity,
-): void {
+): PoolEntity {
   let token0Entity = getOrCreateTokenEntity(token0Address);
   let token1Entity = getOrCreateTokenEntity(token1Address);
-  let poolEntity = new Pool(poolAddress);
+  let poolEntity = new PoolEntity(poolAddress);
   let v2PoolEntity = new V2PoolEntity(poolAddress);
 
   v2PoolEntity.pool = poolAddress;
@@ -33,4 +33,6 @@ export function handleV2PoolCreated(
   poolEntity.save();
   token0Entity.save();
   token1Entity.save();
+
+  return poolEntity;
 }

@@ -14,8 +14,20 @@ export function handleV3PoolSwap(
   amount1: BigInt,
   sqrtPriceX96: BigInt,
   tick: BigInt,
+  feeTier: i32 = 0,
 ): void {
-  handleV3PoolSwapImpl(event, poolEntity, token0Entity, token1Entity, amount0, amount1, sqrtPriceX96, tick);
+  handleV3PoolSwapImpl(
+    event,
+    poolEntity,
+    token0Entity,
+    token1Entity,
+    amount0,
+    amount1,
+    sqrtPriceX96,
+    tick,
+    new PoolSetters(),
+    feeTier,
+  );
 }
 
 export function handleV3PoolSwapImpl(
@@ -28,6 +40,7 @@ export function handleV3PoolSwapImpl(
   sqrtPriceX96: BigInt,
   tick: BigInt,
   v3PoolSetters: PoolSetters = new PoolSetters(),
+  feeTier: i32 = 0,
 ): void {
   let tokenAmount0Formatted = formatFromTokenAmount(amount0, token0Entity);
   let tokenAmount1Formatted = formatFromTokenAmount(amount1, token1Entity);
@@ -46,6 +59,8 @@ export function handleV3PoolSwapImpl(
   poolEntity.totalValueLockedUSD = poolEntity.totalValueLockedToken0
     .times(token0Entity.usdPrice)
     .plus(poolEntity.totalValueLockedToken1.times(token1Entity.usdPrice));
+
+  if (feeTier != 0) poolEntity.feeTier = feeTier;
 
   token0Entity.totalTokenPooledAmount = token0Entity.totalTokenPooledAmount.plus(tokenAmount0Formatted);
   token1Entity.totalTokenPooledAmount = token1Entity.totalTokenPooledAmount.plus(tokenAmount1Formatted);

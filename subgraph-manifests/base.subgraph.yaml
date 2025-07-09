@@ -24,11 +24,11 @@ dataSources:
           file: "../abis/factories/AerodromeV3Factory.json"
         - name: ERC20
           file: "../abis/ERC20.json"
+        - name: AerodromeV3Pool
+          file: "../abis/pools/AerodromeV3Pool.json"
       eventHandlers:
         - event: PoolCreated(indexed address,indexed address,indexed int24,address)
           handler: handleAerodromeV3PoolCreated
-          calls:
-            AerodromeV3Factory.getSwapFee: AerodromeV3Factory[event.address].getSwapFee(event.params.pool)
   - kind: ethereum
     name: UniswapV3Factory
     network: base
@@ -166,6 +166,138 @@ dataSources:
           handler: handleUniswapV4ModifyLiquidity
         - event: Swap(indexed bytes32,indexed address,int128,int128,uint160,uint128,int24,uint24)
           handler: handleUniswapV4PoolSwap
+  - kind: ethereum
+    name: UniswapV2Factory
+    network: base
+    source:
+      address: "0x8909Dc15e40173Ff4699343b6eB8132c65e18eC6"
+      abi: UniswapV2Factory
+      startBlock: 6601915
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/factory/dexs/uniswap-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: UniswapV2Factory
+          file: "../abis/factories/UniswapV2Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleUniswapV2PoolCreated
+  - kind: ethereum
+    name: PancakeSwapV2Factory
+    network: base
+    source:
+      address: "0x02a84c1b3BBD7401a5f7fa98a384EBC70bB5749E"
+      abi: UniswapV2Factory
+      startBlock: 2910387
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/factory/dexs/pancakeswap-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: UniswapV2Factory
+          file: "../abis/factories/UniswapV2Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handlePancakeSwapV2PoolCreated
+  - kind: ethereum
+    name: SushiSwapV2Factory
+    network: base
+    source:
+      address: "0x71524B4f93c58fcbF659783284E38825f0622859"
+      abi: UniswapV2Factory
+      startBlock: 2631214
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/factory/dexs/sushiswap-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: UniswapV2Factory
+          file: "../abis/factories/UniswapV2Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleSushiSwapV2PoolCreated
+  - kind: ethereum
+    name: BaseSwapV2Factory
+    network: base
+    source:
+      address: "0xFDa619b6d20975be80A10332cD39b9a4b0FAa8BB"
+      abi: UniswapV2Factory
+      startBlock: 2059124
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/factory/dexs/baseswap-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: UniswapV2Factory
+          file: "../abis/factories/UniswapV2Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleBaseSwapV2PoolCreated
+  - kind: ethereum
+    name: AlienBaseV2Factory
+    network: base
+    source:
+      address: "0x3E84D913803b02A4a7f027165E8cA42C14C0FdE7"
+      abi: UniswapV2Factory
+      startBlock: 2353671
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/factory/dexs/alienbase-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: UniswapV2Factory
+          file: "../abis/factories/UniswapV2Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleAlienBaseV2PoolCreated
+  - kind: ethereum
+    name: AerodromeV2Factory
+    network: base
+    source:
+      address: "0x420DD381b31aEf6683db6B902084cB0FFECe40Da"
+      abi: AerodromeV2Factory
+      startBlock: 3200559
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/factory/dexs/aerodrome-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: AerodromeV2Factory
+          file: "../abis/factories/AerodromeV2Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PoolCreated(indexed address,indexed address,indexed bool,address,uint256)
+          handler: handleAerodromeV2PoolCreated
 
 templates:
   - kind: ethereum/contract
@@ -195,6 +327,8 @@ templates:
           handler: handleAerodromeV3PoolCollect
         - event: Swap(indexed address,indexed address,int256,int256,uint160,uint128,int24)
           handler: handleAerodromeV3PoolSwap
+          calls:
+            AerodromeV3Factory.getSwapFee: AerodromeV3Factory[0x5e7BB104d84c7CB9B682AaC2F3d509f5F406809A].getSwapFee(event.address)
         - event: CollectFees(indexed address,uint128,uint128)
           handler: handleAerodromeV3PoolCollectProtocol
   - kind: ethereum/contract
@@ -255,3 +389,53 @@ templates:
           handler: handlePancakeSwapV3PoolSwap
         - event: CollectProtocol(indexed address,indexed address,uint128,uint128)
           handler: handlePancakeSwapV3PoolCollectProtocol
+  - kind: ethereum/contract
+    name: UniswapV2Pool
+    network: base
+    source:
+      abi: UniswapV2Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/pool/dexs/uniswap/index.ts
+      entities:
+        - Pool
+        - Token
+      abis:
+        - name: UniswapV2Pool
+          file: ../abis/pools/UniswapV2Pool.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleUniswapV2Mint
+        - event: Burn(indexed address,uint256,uint256,indexed address)
+          handler: handleUniswapV2Burn
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleUniswapV2Swap
+        - event: Sync(uint112,uint112)
+          handler: handleUniswapV2Sync
+  - kind: ethereum/contract
+    name: AerodromeV2Pool
+    network: base
+    source:
+      abi: AerodromeV2Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/pool/dexs/aerodrome/index.ts
+      entities:
+        - Pool
+        - Token
+      abis:
+        - name: AerodromeV2Pool
+          file: ../abis/pools/AerodromeV2Pool.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleAerodromeV2Mint
+        - event: Burn(indexed address,indexed address,uint256,uint256)
+          handler: handleAerodromeV2Burn
+        - event: Swap(indexed address,indexed address,uint256,uint256,uint256,uint256)
+          handler: handleAerodromeV2Swap
+        - event: Sync(uint256,uint256)
+          handler: handleAerodromeV2Sync

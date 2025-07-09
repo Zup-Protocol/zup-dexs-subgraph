@@ -14,6 +14,7 @@ export function handleV2PoolSwap(
   amount1In: BigInt,
   amount0Out: BigInt,
   amount1Out: BigInt,
+  feeTier: i32 = i32(0),
 ): void {
   handleV2PoolSwapImpl(
     event,
@@ -25,6 +26,7 @@ export function handleV2PoolSwap(
     amount0Out,
     amount1Out,
     new PoolSetters(),
+    feeTier,
   );
 }
 
@@ -38,6 +40,7 @@ export function handleV2PoolSwapImpl(
   amount0Out: BigInt,
   amount1Out: BigInt,
   v2PoolSetters: PoolSetters = new PoolSetters(),
+  feeTier: i32 = i32(0),
 ): void {
   let rawAmount0 = amount0In.minus(amount0Out);
   let rawAmount1 = amount1In.minus(amount1Out);
@@ -67,6 +70,8 @@ export function handleV2PoolSwapImpl(
   poolEntity.totalValueLockedUSD = poolEntity.totalValueLockedToken0
     .times(token0Entity.usdPrice)
     .plus(poolEntity.totalValueLockedToken1.times(token1Entity.usdPrice));
+
+  if (feeTier != 0) poolEntity.feeTier = feeTier;
 
   token0Entity.totalTokenPooledAmount = token0Entity.totalTokenPooledAmount.plus(amount0Formatted);
   token1Entity.totalTokenPooledAmount = token1Entity.totalTokenPooledAmount.plus(amount1Formatted);

@@ -1220,4 +1220,21 @@ describe("v3-pool-swap", () => {
 
     assert.fieldEquals("V3Pool", v3Pool.id.toHexString(), "tick", tick.toString());
   });
+
+  test("When passing a feeTier for the handler, it should be assigned to the pool", () => {
+    let pool = new PoolMock();
+    let feeTier = 3218;
+    let sqrtPriceX96 = BigInt.fromI32(23456111);
+    let tick = BigInt.fromI32(989756545);
+
+    let amount0 = BigInt.fromI32(100);
+    let amount1 = BigInt.fromI32(200);
+
+    let event = newMockEvent();
+
+    new V3PoolMock();
+    handleV3PoolSwap(event, pool, new TokenMock(), new TokenMock(), amount0, amount1, sqrtPriceX96, tick, feeTier);
+
+    assert.fieldEquals("Pool", pool.id.toHexString(), "feeTier", feeTier.toString());
+  });
 });

@@ -73,6 +73,7 @@ export class PoolMock extends Pool {
     this.createdAtTimestamp = BigInt.fromI32(124);
     this.protocol = new ProtocolMock().id;
     this.type = PoolType.V3;
+    this.__aerodromeV2StablePool = false;
 
     this.save();
   }

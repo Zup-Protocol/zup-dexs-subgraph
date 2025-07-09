@@ -30,6 +30,9 @@ type Pool @entity {
   v4PoolData: V4Pool @derivedFrom(field: "pool")
   v3PoolData: V3Pool @derivedFrom(field: "pool")
   v2PoolData: V2Pool @derivedFrom(field: "pool")
+
+  # Internal only use
+  __aerodromeV2StablePool: Boolean
 }
 
 type V2Pool @entity {

@@ -103,6 +103,72 @@ dataSources:
           handler: handleUniswapV4ModifyLiquidity
         - event: Swap(indexed bytes32,indexed address,int128,int128,uint160,uint128,int24,uint24)
           handler: handleUniswapV4PoolSwap
+  - kind: ethereum
+    name: UniswapV2Factory
+    network: mainnet
+    source:
+      address: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
+      abi: UniswapV2Factory
+      startBlock: 10000835
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/factory/dexs/uniswap-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: UniswapV2Factory
+          file: "../abis/factories/UniswapV2Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleUniswapV2PoolCreated
+  - kind: ethereum
+    name: SushiSwapV2Factory
+    network: mainnet
+    source:
+      address: "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac"
+      abi: UniswapV2Factory
+      startBlock: 10794229
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/factory/dexs/sushiswap-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: UniswapV2Factory
+          file: "../abis/factories/UniswapV2Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleSushiSwapV2PoolCreated
+  - kind: ethereum
+    name: PancakeSwapV2Factory
+    network: mainnet
+    source:
+      address: "0x1097053Fd2ea711dad45caCcc45EfF7548fCB362"
+      abi: UniswapV2Factory
+      startBlock: 15614590
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/factory/dexs/pancakeswap-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: UniswapV2Factory
+          file: "../abis/factories/UniswapV2Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handlePancakeSwapV2PoolCreated
 
 templates:
   - kind: ethereum/contract
@@ -163,3 +229,28 @@ templates:
           handler: handlePancakeSwapV3PoolSwap
         - event: CollectProtocol(indexed address,indexed address,uint128,uint128)
           handler: handlePancakeSwapV3PoolCollectProtocol
+  - kind: ethereum/contract
+    name: UniswapV2Pool
+    network: mainnet
+    source:
+      abi: UniswapV2Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/pool/dexs/uniswap/index.ts
+      entities:
+        - Pool
+        - Token
+      abis:
+        - name: UniswapV2Pool
+          file: ../abis/pools/UniswapV2Pool.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleUniswapV2Mint
+        - event: Burn(indexed address,uint256,uint256,indexed address)
+          handler: handleUniswapV2Burn
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleUniswapV2Swap
+        - event: Sync(uint112,uint112)
+          handler: handleUniswapV2Sync
