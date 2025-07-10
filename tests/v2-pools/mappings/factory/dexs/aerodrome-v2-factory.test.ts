@@ -99,7 +99,7 @@ describe("", () => {
     dataSourceMock.setNetwork(BASE_NETWORK_NAME);
     handleAerodromeV2PoolCreated(createEvent(customParams));
 
-    assert.fieldEquals("Pool", poolId, "__aerodromeV2StablePool", "true");
+    assert.fieldEquals("Pool", poolId, "_aerodromeV2StablePool", "true");
   });
 
   test("When calling the handler with the stable param false, it should assign it to the pool entity", () => {
@@ -111,6 +111,6 @@ describe("", () => {
     dataSourceMock.setNetwork(BASE_NETWORK_NAME);
     handleAerodromeV2PoolCreated(createEvent(customParams));
 
-    assert.fieldEquals("Pool", poolId, "__aerodromeV2StablePool", "false");
+    assert.fieldEquals("Pool", poolId, "_aerodromeV2StablePool", "false");
   });
 });

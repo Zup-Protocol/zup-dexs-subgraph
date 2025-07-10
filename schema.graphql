@@ -32,7 +32,7 @@ type Pool @entity {
   v2PoolData: V2Pool @derivedFrom(field: "pool")
 
   # Internal only use
-  __aerodromeV2StablePool: Boolean
+  _aerodromeV2StablePool: Boolean
 }
 
 type V2Pool @entity {

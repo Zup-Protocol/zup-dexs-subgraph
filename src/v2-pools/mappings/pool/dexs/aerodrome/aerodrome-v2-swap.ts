@@ -12,7 +12,7 @@ export function handleAerodromeV2Swap(event: SwapEvent): void {
 
   let swapFee = AerodromeV2Factory.bind(Address.fromString(V2FactoryAddress.aerodrome)).getFee(
     event.address,
-    pool.__aerodromeV2StablePool,
+    pool._aerodromeV2StablePool,
   );
 
   handleV2PoolSwap(

@@ -80,7 +80,7 @@ describe("Aerodrome V2 Swap", () => {
     let event = createEvent(eventParams);
 
     createMockedFunction(Address.fromString(V2FactoryAddress.aerodrome), "getFee", "getFee(address,bool):(uint256)")
-      .withArgs([ethereum.Value.fromAddress(pool.id), ethereum.Value.fromBoolean(pool.__aerodromeV2StablePool)])
+      .withArgs([ethereum.Value.fromAddress(pool.id), ethereum.Value.fromBoolean(pool._aerodromeV2StablePool)])
       .returns([ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(aerodromeFeeTier))]);
 
     handleAerodromeV2Swap(event);
