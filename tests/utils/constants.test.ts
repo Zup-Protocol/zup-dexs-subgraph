@@ -1,6 +1,7 @@
 import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { assert, test } from "matchstick-as";
 import {
+  ARBITRUM_NETWORK_NAME,
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
@@ -63,4 +64,8 @@ test("UNICHAIN_NAME should return the correct value", () => {
 
 test("BNB_NETWORK_NAME should return the correct value", () => {
   assert.assertTrue(BNB_NETWORK_NAME == "bsc");
+});
+
+test("ARBITRUM_NETWORK_NAME should return the correct value", () => {
+  assert.assertTrue(ARBITRUM_NETWORK_NAME == "arbitrum-one");
 });

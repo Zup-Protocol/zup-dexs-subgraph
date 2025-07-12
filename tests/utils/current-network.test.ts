@@ -1,10 +1,19 @@
 import { Address } from "@graphprotocol/graph-ts";
 import { assert, dataSourceMock, describe, test } from "matchstick-as";
+import {
+  ARBITRUM_NETWORK_NAME,
+  BASE_NETWORK_NAME,
+  BNB_NETWORK_NAME,
+  MAINNET_NETWORK_NAME,
+  SCROLL_NETWORK_NAME,
+  SEPOLIA_NETWORK_NAME,
+  UNICHAIN_NETWORK_NAME,
+} from "../../src/common/constants";
 import { CurrentNetwork } from "../../src/common/current-network";
 
 describe("`wrappedNativeAddress` should return the correct value for each network", () => {
   test("Mainnet", () => {
-    dataSourceMock.setNetwork("mainnet");
+    dataSourceMock.setNetwork(MAINNET_NETWORK_NAME);
 
     assert.addressEquals(
       Address.fromString(CurrentNetwork.wrappedNativeAddress),
@@ -13,7 +22,7 @@ describe("`wrappedNativeAddress` should return the correct value for each networ
   });
 
   test("Scroll", () => {
-    dataSourceMock.setNetwork("scroll");
+    dataSourceMock.setNetwork(SCROLL_NETWORK_NAME);
 
     assert.addressEquals(
       Address.fromString(CurrentNetwork.wrappedNativeAddress),
@@ -22,7 +31,7 @@ describe("`wrappedNativeAddress` should return the correct value for each networ
   });
 
   test("Sepolia", () => {
-    dataSourceMock.setNetwork("sepolia");
+    dataSourceMock.setNetwork(SEPOLIA_NETWORK_NAME);
 
     assert.addressEquals(
       Address.fromString(CurrentNetwork.wrappedNativeAddress),
@@ -31,7 +40,7 @@ describe("`wrappedNativeAddress` should return the correct value for each networ
   });
 
   test("Base", () => {
-    dataSourceMock.setNetwork("base");
+    dataSourceMock.setNetwork(BASE_NETWORK_NAME);
 
     assert.addressEquals(
       Address.fromString(CurrentNetwork.wrappedNativeAddress),
@@ -40,7 +49,7 @@ describe("`wrappedNativeAddress` should return the correct value for each networ
   });
 
   test("Unichain", () => {
-    dataSourceMock.setNetwork("unichain");
+    dataSourceMock.setNetwork(UNICHAIN_NETWORK_NAME);
 
     assert.addressEquals(
       Address.fromString(CurrentNetwork.wrappedNativeAddress),
@@ -49,11 +58,20 @@ describe("`wrappedNativeAddress` should return the correct value for each networ
   });
 
   test("BNB", () => {
-    dataSourceMock.setNetwork("bsc");
+    dataSourceMock.setNetwork(BNB_NETWORK_NAME);
 
     assert.addressEquals(
       Address.fromString(CurrentNetwork.wrappedNativeAddress),
       Address.fromString("0xBB4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"),
+    );
+  });
+
+  test("Arbitrum", () => {
+    dataSourceMock.setNetwork(ARBITRUM_NETWORK_NAME);
+
+    assert.addressEquals(
+      Address.fromString(CurrentNetwork.wrappedNativeAddress),
+      Address.fromString("0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"),
     );
   });
 });
@@ -70,7 +88,7 @@ test(
 
 describe("`stablecoinsAddresses` should return a correct list of stablecoins for each network", () => {
   test("Mainnet", () => {
-    dataSourceMock.setNetwork("mainnet");
+    dataSourceMock.setNetwork(MAINNET_NETWORK_NAME);
 
     assert.assertTrue(
       CurrentNetwork.stablecoinsAddresses.join() ==
@@ -86,7 +104,7 @@ describe("`stablecoinsAddresses` should return a correct list of stablecoins for
   });
 
   test("Scroll", () => {
-    dataSourceMock.setNetwork("scroll");
+    dataSourceMock.setNetwork(SCROLL_NETWORK_NAME);
 
     assert.assertTrue(
       CurrentNetwork.stablecoinsAddresses.join() ==
@@ -95,7 +113,7 @@ describe("`stablecoinsAddresses` should return a correct list of stablecoins for
   });
 
   test("Sepolia", () => {
-    dataSourceMock.setNetwork("sepolia");
+    dataSourceMock.setNetwork(SEPOLIA_NETWORK_NAME);
 
     assert.assertTrue(
       CurrentNetwork.stablecoinsAddresses.join() == ["0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"].join(),
@@ -103,7 +121,7 @@ describe("`stablecoinsAddresses` should return a correct list of stablecoins for
   });
 
   test("Base", () => {
-    dataSourceMock.setNetwork("base");
+    dataSourceMock.setNetwork(BASE_NETWORK_NAME);
 
     assert.assertTrue(
       CurrentNetwork.stablecoinsAddresses.join() ==
@@ -117,7 +135,7 @@ describe("`stablecoinsAddresses` should return a correct list of stablecoins for
   });
 
   test("Unichain", () => {
-    dataSourceMock.setNetwork("unichain");
+    dataSourceMock.setNetwork(UNICHAIN_NETWORK_NAME);
 
     assert.assertTrue(
       CurrentNetwork.stablecoinsAddresses.join() ==
@@ -126,7 +144,7 @@ describe("`stablecoinsAddresses` should return a correct list of stablecoins for
   });
 
   test("BNB", () => {
-    dataSourceMock.setNetwork("bsc");
+    dataSourceMock.setNetwork(BNB_NETWORK_NAME);
 
     assert.assertTrue(
       CurrentNetwork.stablecoinsAddresses.join() ==
@@ -136,6 +154,23 @@ describe("`stablecoinsAddresses` should return a correct list of stablecoins for
           "0xc5f0f7b66764F6ec8C8Dff7BA683102295E16409",
           "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
           "0x2492D0006411Af6C8bbb1c8afc1B0197350a79e9",
+        ].join(),
+    );
+  });
+
+  test("Arbitrum", () => {
+    dataSourceMock.setNetwork(ARBITRUM_NETWORK_NAME);
+
+    assert.assertTrue(
+      CurrentNetwork.stablecoinsAddresses.join() ==
+        [
+          "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+          "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8",
+          "0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65",
+          "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+          "0x4D15a3A2286D883AF0AA1B3f21367843FAc63E07",
+          "0x6a7661795c374c0bfc635934efaddff3a7ee23b6",
         ].join(),
     );
   });
@@ -153,7 +188,7 @@ test(
 
 describe("`NativeToken` should return a correct native token object for each network", () => {
   test("Mainnet", () => {
-    dataSourceMock.setNetwork("mainnet");
+    dataSourceMock.setNetwork(MAINNET_NETWORK_NAME);
 
     assert.stringEquals(CurrentNetwork.nativeToken().symbol, "ETH");
     assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
@@ -161,7 +196,7 @@ describe("`NativeToken` should return a correct native token object for each net
   });
 
   test("Scroll", () => {
-    dataSourceMock.setNetwork("scroll");
+    dataSourceMock.setNetwork(SCROLL_NETWORK_NAME);
 
     assert.stringEquals(CurrentNetwork.nativeToken().symbol, "ETH");
     assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
@@ -169,7 +204,7 @@ describe("`NativeToken` should return a correct native token object for each net
   });
 
   test("Sepolia", () => {
-    dataSourceMock.setNetwork("sepolia");
+    dataSourceMock.setNetwork(SEPOLIA_NETWORK_NAME);
 
     assert.stringEquals(CurrentNetwork.nativeToken().symbol, "ETH");
     assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
@@ -177,7 +212,7 @@ describe("`NativeToken` should return a correct native token object for each net
   });
 
   test("Base", () => {
-    dataSourceMock.setNetwork("base");
+    dataSourceMock.setNetwork(BASE_NETWORK_NAME);
 
     assert.stringEquals(CurrentNetwork.nativeToken().symbol, "ETH");
     assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
@@ -185,7 +220,7 @@ describe("`NativeToken` should return a correct native token object for each net
   });
 
   test("Unichain", () => {
-    dataSourceMock.setNetwork("unichain");
+    dataSourceMock.setNetwork(UNICHAIN_NETWORK_NAME);
 
     assert.stringEquals(CurrentNetwork.nativeToken().symbol, "ETH");
     assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
@@ -193,10 +228,18 @@ describe("`NativeToken` should return a correct native token object for each net
   });
 
   test("BNB", () => {
-    dataSourceMock.setNetwork("bsc");
+    dataSourceMock.setNetwork(BNB_NETWORK_NAME);
 
     assert.stringEquals(CurrentNetwork.nativeToken().symbol, "BNB");
     assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
     assert.stringEquals(CurrentNetwork.nativeToken().name, "BNB");
+  });
+
+  test("Arbitrum", () => {
+    dataSourceMock.setNetwork(ARBITRUM_NETWORK_NAME);
+
+    assert.stringEquals(CurrentNetwork.nativeToken().symbol, "ETH");
+    assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
+    assert.stringEquals(CurrentNetwork.nativeToken().name, "Ether");
   });
 });

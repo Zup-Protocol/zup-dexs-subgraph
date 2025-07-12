@@ -18,7 +18,8 @@ type Pool @entity {
   id: Bytes!
   token0: Token!
   token1: Token!
-  feeTier: Int!
+  currentFeeTier: Int!
+  initialFeeTier: Int!
   totalValueLockedUSD: BigDecimal!
   totalValueLockedToken0: BigDecimal!
   totalValueLockedToken1: BigDecimal!
@@ -27,12 +28,10 @@ type Pool @entity {
   dailyData: [PoolDailyData]! @derivedFrom(field: "pool")
   protocol: Protocol!
   type: PoolType!
+  isStablePool: Boolean
   v4PoolData: V4Pool @derivedFrom(field: "pool")
   v3PoolData: V3Pool @derivedFrom(field: "pool")
   v2PoolData: V2Pool @derivedFrom(field: "pool")
-
-  # Internal only use
-  _aerodromeV2StablePool: Boolean
 }
 
 type V2Pool @entity {

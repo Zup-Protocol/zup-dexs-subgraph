@@ -1,5 +1,6 @@
 import { dataSource } from "@graphprotocol/graph-ts";
 import {
+  ARBITRUM_NETWORK_NAME,
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
@@ -18,6 +19,7 @@ export class V4PositionManagerAddress {
     if (dataSource.network() == MAINNET_NETWORK_NAME) return "0xbD216513d74C8cf14cf4747E6AaA6420FF64ee9e";
     if (dataSource.network() == BASE_NETWORK_NAME) return "0x7c5f5a4bbd8fd63184577525326123b519429bdc";
     if (dataSource.network() == BNB_NETWORK_NAME) return "0x7A4a5c919aE2541AeD11041A1AEeE68f1287f95b";
+    if (dataSource.network() == ARBITRUM_NETWORK_NAME) return "0xd88F38F930b7952f2DB2432Cb002E7abbF3dD869";
 
     throw V4PositionManagerAddress.unsupportedProtocolNetworkError("Uniswap V4");
   }

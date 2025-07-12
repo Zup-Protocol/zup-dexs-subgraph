@@ -3,7 +3,7 @@ import { FeeAdjustment as FeeAdjustmentEvent } from "../../../../../../generated
 
 export function handleNuriExchangeV3PoolFeeAdjustment(event: FeeAdjustmentEvent): void {
   let poolEntity = PoolEntity.load(event.address)!;
-  poolEntity.feeTier = event.params.newFee;
+  poolEntity.currentFeeTier = event.params.newFee;
 
   poolEntity.save();
 }

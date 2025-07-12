@@ -1,4 +1,5 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
+
 import { AerodromeV2Factory } from "../../../../../../generated/AerodromeV2Factory/AerodromeV2Factory";
 import { Pool as PoolEntity, Token as TokenEntity } from "../../../../../../generated/schema";
 import { Swap as SwapEvent } from "../../../../../../generated/templates/AerodromeV2Pool/AerodromeV2Pool";
@@ -12,7 +13,7 @@ export function handleAerodromeV2Swap(event: SwapEvent): void {
 
   let swapFee = AerodromeV2Factory.bind(Address.fromString(V2FactoryAddress.aerodrome)).getFee(
     event.address,
-    pool._aerodromeV2StablePool,
+    pool.isStablePool,
   );
 
   handleV2PoolSwap(

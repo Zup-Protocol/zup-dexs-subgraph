@@ -245,7 +245,7 @@ describe("v2-pool-swap", () => {
     let poolHourlyData = new PoolHourlyDataMock();
     let currentFees = BigDecimal.fromString("12.3");
 
-    pool.feeTier = 500;
+    pool.currentFeeTier = 500;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -260,7 +260,12 @@ describe("v2-pool-swap", () => {
       getPoolHourlyDataId(event.block.timestamp, pool).toHexString(),
       "feesToken0",
       currentFees
-        .plus(formatFromTokenAmount(amount0In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)), token0))
+        .plus(
+          formatFromTokenAmount(
+            amount0In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
+            token0,
+          ),
+        )
         .toString(),
     );
   });
@@ -281,7 +286,7 @@ describe("v2-pool-swap", () => {
     let poolHourlyData = new PoolHourlyDataMock();
     let currentFees = BigDecimal.fromString("1832.3");
 
-    pool.feeTier = 100;
+    pool.currentFeeTier = 100;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -296,7 +301,12 @@ describe("v2-pool-swap", () => {
       getPoolHourlyDataId(event.block.timestamp, pool).toHexString(),
       "feesToken1",
       currentFees
-        .plus(formatFromTokenAmount(amount1In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)), token1))
+        .plus(
+          formatFromTokenAmount(
+            amount1In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
+            token1,
+          ),
+        )
         .toString(),
     );
   });
@@ -325,7 +335,7 @@ describe("v2-pool-swap", () => {
     let currentFeesToken1 = BigDecimal.fromString("2.3");
     let currentUSDFees = currentFeesToken0.times(token0.usdPrice).plus(currentFeesToken1.times(token1.usdPrice));
 
-    pool.feeTier = 1000;
+    pool.currentFeeTier = 1000;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -336,7 +346,7 @@ describe("v2-pool-swap", () => {
     poolHourlyData.save();
 
     let token0ExpectedSwapFee = formatFromTokenAmount(
-      amount0In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount0In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
       token0,
     );
 
@@ -378,7 +388,7 @@ describe("v2-pool-swap", () => {
     let currentFeesToken1 = BigDecimal.fromString("32987.3");
     let currentUSDFees = currentFeesToken0.times(token0.usdPrice).plus(currentFeesToken1.times(token1.usdPrice));
 
-    pool.feeTier = 50;
+    pool.currentFeeTier = 50;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -389,7 +399,7 @@ describe("v2-pool-swap", () => {
     poolHourlyData.save();
 
     let token1ExpectedSwapFee = formatFromTokenAmount(
-      amount1In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount1In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
       token1,
     );
 
@@ -431,7 +441,7 @@ describe("v2-pool-swap", () => {
     let currentHourlyId = getPoolHourlyDataId(event.block.timestamp, pool).toHexString();
     let swapTimes = 4;
 
-    pool.feeTier = 50;
+    pool.currentFeeTier = 50;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -442,7 +452,7 @@ describe("v2-pool-swap", () => {
     poolHourlyData.save();
 
     let token1ExpectedSwapFee = formatFromTokenAmount(
-      amount1In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount1In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
       token1,
     );
 
@@ -457,7 +467,7 @@ describe("v2-pool-swap", () => {
       currentFeesToken1
         .plus(
           formatFromTokenAmount(
-            amount1In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+            amount1In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
             token0,
           ).times(BigDecimal.fromString(swapTimes.toString())),
         )
@@ -504,7 +514,7 @@ describe("v2-pool-swap", () => {
     let currentHourlyId = getPoolHourlyDataId(event.block.timestamp, pool).toHexString();
     let swapTimes = 5;
 
-    pool.feeTier = 500;
+    pool.currentFeeTier = 500;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -515,7 +525,7 @@ describe("v2-pool-swap", () => {
     poolHourlyData.save();
 
     let token0ExpectedSwapFee = formatFromTokenAmount(
-      amount0In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount0In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
       token0,
     );
 
@@ -530,7 +540,7 @@ describe("v2-pool-swap", () => {
       currentFeesToken0
         .plus(
           formatFromTokenAmount(
-            amount0In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+            amount0In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
             token0,
           ).times(BigDecimal.fromString(swapTimes.toString())),
         )
@@ -575,7 +585,7 @@ describe("v2-pool-swap", () => {
     let hourIds: Bytes[] = [];
     let swapTimes = 5;
 
-    pool.feeTier = 500;
+    pool.currentFeeTier = 500;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -598,7 +608,7 @@ describe("v2-pool-swap", () => {
         currentHourlyId,
         "feesToken0",
         formatFromTokenAmount(
-          amount0In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+          amount0In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
           token0,
         ).toString(),
       );
@@ -627,7 +637,7 @@ describe("v2-pool-swap", () => {
     let hourIds: Bytes[] = [];
     let swapTimes = 5;
 
-    pool.feeTier = 100;
+    pool.currentFeeTier = 100;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -650,7 +660,7 @@ describe("v2-pool-swap", () => {
         currentHourlyId,
         "feesToken1",
         formatFromTokenAmount(
-          amount1In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+          amount1In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
           token1,
         ).toString(),
       );
@@ -711,7 +721,7 @@ describe("v2-pool-swap", () => {
     let currentDailyId = getPoolDailyDataId(event.block.timestamp, pool).toHexString();
     let swapTimes = 8;
 
-    pool.feeTier = 500;
+    pool.currentFeeTier = 500;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -722,7 +732,7 @@ describe("v2-pool-swap", () => {
     poolDailyData.save();
 
     let token0ExpectedSwapFee = formatFromTokenAmount(
-      amount0In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount0In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
       token0,
     );
 
@@ -739,7 +749,7 @@ describe("v2-pool-swap", () => {
       currentFeesToken0
         .plus(
           formatFromTokenAmount(
-            amount0In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+            amount0In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
             token0,
           ).times(BigDecimal.fromString(swapTimes.toString())),
         )
@@ -807,7 +817,7 @@ describe("v2-pool-swap", () => {
     let currentDailyId = getPoolDailyDataId(event.block.timestamp, pool).toHexString();
     let swapTimes = 8;
 
-    pool.feeTier = 500;
+    pool.currentFeeTier = 500;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -818,7 +828,7 @@ describe("v2-pool-swap", () => {
     poolDailyData.save();
 
     let token1ExpectedSwapFee = formatFromTokenAmount(
-      amount1In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount1In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
       token0,
     );
 
@@ -835,7 +845,7 @@ describe("v2-pool-swap", () => {
       currentFeesToken1
         .plus(
           formatFromTokenAmount(
-            amount1In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+            amount1In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
             token1,
           ).times(BigDecimal.fromString(swapTimes.toString())),
         )
@@ -902,7 +912,7 @@ describe("v2-pool-swap", () => {
     let swapTimes = 5;
     let tick = BigInt.fromI32(989756545);
 
-    pool.feeTier = 500;
+    pool.currentFeeTier = 500;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -925,7 +935,7 @@ describe("v2-pool-swap", () => {
         currentDayId,
         "feesToken0",
         formatFromTokenAmount(
-          amount0In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+          amount0In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
           token0,
         ).toString(),
       );
@@ -976,7 +986,7 @@ describe("v2-pool-swap", () => {
     let dayIds: Bytes[] = [];
     let swapTimes = 5;
 
-    pool.feeTier = 500;
+    pool.currentFeeTier = 500;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -999,7 +1009,7 @@ describe("v2-pool-swap", () => {
         currentDayId,
         "feesToken1",
         formatFromTokenAmount(
-          amount1In.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+          amount1In.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
           token1,
         ).toString(),
       );
@@ -1099,7 +1109,9 @@ describe("v2-pool-swap", () => {
     );
   });
 
-  test("when the handler is called passing a custom fee tier, it should be applied to the pool", () => {
+  test(`when the handler is called passing a custom fee tier,
+    it should be applied to the pool in the 'currentFeeTier'
+    variable. The 'initialFeeTier' should remain unchanged`, () => {
     let event = newMockEvent();
     let pool = PoolMock.loadMock();
     let token0 = new TokenMock();
@@ -1123,6 +1135,7 @@ describe("v2-pool-swap", () => {
       customFeeTier,
     );
 
-    assert.fieldEquals("Pool", pool.id.toHexString(), "feeTier", customFeeTier.toString());
+    assert.fieldEquals("Pool", pool.id.toHexString(), "currentFeeTier", customFeeTier.toString());
+    assert.fieldEquals("Pool", pool.id.toHexString(), "initialFeeTier", pool.initialFeeTier.toString());
   });
 });

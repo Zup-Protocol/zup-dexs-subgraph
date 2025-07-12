@@ -1,5 +1,6 @@
 import { dataSource } from "@graphprotocol/graph-ts";
 import {
+  ARBITRUM_NETWORK_NAME,
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
@@ -20,6 +21,7 @@ export class Permit2Address {
     if (dataSource.network() == BASE_NETWORK_NAME) return "0x000000000022D473030F116dDEE9F6B43aC78BA3";
     if (dataSource.network() == UNICHAIN_NETWORK_NAME) return "0x000000000022D473030F116dDEE9F6B43aC78BA3";
     if (dataSource.network() == BNB_NETWORK_NAME) return "0x000000000022D473030F116dDEE9F6B43aC78BA3";
+    if (dataSource.network() == ARBITRUM_NETWORK_NAME) return "0x000000000022D473030F116dDEE9F6B43aC78BA3";
 
     throw Permit2Address.unsupportedProtocolNetworkError("Uniswap");
   }

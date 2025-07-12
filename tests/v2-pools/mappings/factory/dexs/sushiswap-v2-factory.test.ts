@@ -82,4 +82,12 @@ describe("SushiSwapV2Factory", () => {
 
     assert.fieldEquals("Pool", poolId, "id", poolId);
   });
+
+  test("When calling the handler it should set the correct fee for the protocol", () => {
+    let event = createEvent();
+    handleSushiSwapV2PoolCreated(event);
+
+    assert.fieldEquals("Pool", event.params.pair.toHexString(), "initialFeeTier", "2500");
+    assert.fieldEquals("Pool", event.params.pair.toHexString(), "currentFeeTier", "2500");
+  });
 });

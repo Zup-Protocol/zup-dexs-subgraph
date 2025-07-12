@@ -258,7 +258,19 @@ describe("", () => {
       new ProtocolMock(),
     );
 
-    assert.fieldEquals("Pool", Address.fromBytes(pool.id).toHexString(), "feeTier", expectedEventFeeTier.toString());
+    assert.fieldEquals(
+      "Pool",
+      Address.fromBytes(pool.id).toHexString(),
+      "initialFeeTier",
+      expectedEventFeeTier.toString(),
+    );
+
+    assert.fieldEquals(
+      "Pool",
+      Address.fromBytes(pool.id).toHexString(),
+      "currentFeeTier",
+      expectedEventFeeTier.toString(),
+    );
   });
 
   test(`When creating the new pool entity, the tickSpacing should be the tickSpacing from the event`, () => {

@@ -118,4 +118,12 @@ describe("uniswap-v2-factory", () => {
       Address.fromString("0x284f11109359a7e1306c3e447ef14d38400063ff").toHexString(),
     );
   });
+
+  test("When calling the handler it should set the correct fee for the protocol", () => {
+    let event = createEvent();
+    handleUniswapV2PoolCreated(event);
+
+    assert.fieldEquals("Pool", event.params.pair.toHexString(), "initialFeeTier", "3000");
+    assert.fieldEquals("Pool", event.params.pair.toHexString(), "currentFeeTier", "3000");
+  });
 });

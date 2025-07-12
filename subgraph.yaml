@@ -366,6 +366,96 @@ dataSources:
       eventHandlers:
         - event: PairCreated(indexed address,indexed address,address,uint256)
           handler: handleAlienBaseV2PoolCreated
+  - kind: ethereum
+    name: CamelotV3Factory
+    network: mainnet
+    source:
+      address: "0x1a3c9B1d2F0529D97f2afC5136Cc23e58f1FD35B"
+      abi: CamelotV3Factory
+      startBlock: 101163738
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/v3-pools/mappings/factory/dexs/camelot-v3-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: CamelotV3Factory
+          file: "./abis/factories/CamelotV3Factory.json"
+        - name: ERC20
+          file: "./abis/ERC20.json"
+      eventHandlers:
+        - event: Pool(indexed address,indexed address,address)
+          handler: handleCamelotV3PoolCreated
+  - kind: ethereum
+    name: CamelotV2Factory
+    network: mainnet
+    source:
+      address: "0x6EcCab422D763aC031210895C81787E87B43A652"
+      abi: CamelotV2Factory
+      startBlock: 35061163
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/v2-pools/mappings/factory/dexs/camelot-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: CamelotV2Factory
+          file: "./abis/factories/CamelotV2Factory.json"
+        - name: ERC20
+          file: "./abis/ERC20.json"
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleCamelotV2PoolCreated
+  - kind: ethereum
+    name: RamsesV3Factory
+    network: mainnet
+    source:
+      address: "0xAA2cd7477c451E703f3B9Ba5663334914763edF8"
+      abi: RamsesV3Factory
+      startBlock: 90593047
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/v3-pools/mappings/factory/dexs/ramses-v3-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: RamsesV3Factory
+          file: "./abis/factories/RamsesV3Factory.json"
+        - name: ERC20
+          file: "./abis/ERC20.json"
+      eventHandlers:
+        - event: PoolCreated(indexed address,indexed address,indexed uint24,int24,address)
+          handler: handleRamsesV3PoolCreated
+  - kind: ethereum
+    name: RamsesV2Factory
+    network: mainnet
+    source:
+      address: "0xAAA20D08e59F6561f242b08513D36266C5A29415"
+      abi: RamsesV2Factory
+      startBlock: 69820005
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/v2-pools/mappings/factory/dexs/ramses-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: RamsesV2Factory
+          file: "./abis/factories/RamsesV2Factory.json"
+        - name: ERC20
+          file: "./abis/ERC20.json"
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,bool,address,uint256)
+          handler: handleRamsesV2PoolCreated
+          calls:
+            RamsesV2Factory.pairFee: RamsesV2Factory[event.address].pairFee(event.params.pair)
 
 templates:
   - kind: ethereum/contract
@@ -534,3 +624,119 @@ templates:
           handler: handleAerodromeV2Swap
         - event: Sync(uint256,uint256)
           handler: handleAerodromeV2Sync
+  - kind: ethereum/contract
+    name: RamsesV2Pool
+    network: mainnet
+    source:
+      abi: RamsesV2Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/v2-pools/mappings/pool/dexs/ramses/index.ts
+      entities:
+        - Pool
+        - Token
+      abis:
+        - name: RamsesV2Pool
+          file: ./abis/pools/RamsesV2Pool.json
+        - name: RamsesV2Factory
+          file: ./abis/factories/RamsesV2Factory.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleRamsesV2PoolMint
+        - event: Burn(indexed address,uint256,uint256,indexed address)
+          handler: handleRamsesV2PoolBurn
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleRamsesV2PoolSwap
+        - event: Sync(uint256,uint256)
+          handler: handleRamsesV2PoolSync
+  - kind: ethereum/contract
+    name: RamsesV3Pool
+    network: mainnet
+    source:
+      abi: RamsesV3Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/v3-pools/mappings/pool/dexs/ramses/index.ts
+      entities:
+        - Pool
+        - Token
+      abis:
+        - name: RamsesV3Pool
+          file: ./abis/pools/RamsesV3Pool.json
+        - name: RamsesV3Factory
+          file: "./abis/factories/RamsesV3Factory.json"
+      eventHandlers:
+        - event: Mint(address,indexed address,indexed int24,indexed int24,uint128,uint256,uint256)
+          handler: handleRamsesV3PoolMint
+        - event: Initialize(uint160,int24)
+          handler: handleRamsesV3PoolInitialize
+        - event: Collect(indexed address,address,indexed int24,indexed int24,uint128,uint128)
+          handler: handleRamsesV3PoolCollect
+        - event: Swap(indexed address,indexed address,int256,int256,uint160,uint128,int24)
+          handler: handleRamsesV3PoolSwap
+        - event: CollectProtocol(indexed address,indexed address,uint128,uint128)
+          handler: handleRamsesV3PoolCollectProtocol
+        - event: FeeAdjustment(uint24,uint24)
+          handler: handleRamsesV3PoolFeeAdjustment
+  - kind: ethereum/contract
+    name: CamelotV3Pool
+    network: mainnet
+    source:
+      abi: CamelotV3Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/v3-pools/mappings/pool/dexs/camelot/index.ts
+      entities:
+        - Pool
+        - Token
+      abis:
+        - name: CamelotV3Pool
+          file: ./abis/pools/CamelotV3Pool.json
+        - name: CamelotV3Factory
+          file: "./abis/factories/CamelotV3Factory.json"
+      eventHandlers:
+        - event: Initialize(uint160,int24)
+          handler: handleCamelotV3PoolInitialize
+        - event: Mint(address,indexed address,indexed int24,indexed int24,uint128,uint256,uint256)
+          handler: handleCamelotV3PoolMint
+        - event: Collect(indexed address,address,indexed int24,indexed int24,uint128,uint128)
+          handler: handleCamelotV3PoolCollect
+        - event: Swap(indexed address,indexed address,int256,int256,uint160,uint128,int24)
+          handler: handleCamelotV3PoolSwap
+        - event: Fee(uint16,uint16)
+          handler: handleCamelotV3PoolFee
+        - event: TickSpacing(int24)
+          handler: handleCamelotV3PoolTickSpacing
+  - kind: ethereum/contract
+    name: CamelotV2Pool
+    network: mainnet
+    source:
+      abi: CamelotV2Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/v2-pools/mappings/pool/dexs/camelot/index.ts
+      entities:
+        - Pool
+        - Token
+      abis:
+        - name: CamelotV2Pool
+          file: ./abis/pools/CamelotV2Pool.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleCamelotV2PoolMint
+        - event: Burn(indexed address,uint256,uint256,indexed address)
+          handler: handleCamelotV2PoolBurn
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleCamelotV2PoolSwap
+        - event: Sync(uint112,uint112)
+          handler: handleCamelotV2PoolSync
+        - event: FeePercentUpdated(uint16,uint16)
+          handler: handleCamelotV2PoolFeePercentUpdated

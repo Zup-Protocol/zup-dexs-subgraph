@@ -18,4 +18,8 @@ export abstract class ProtocolId {
   static baseSwapV2: string = "base-swap-v2";
   static alienBaseV2: string = "alien-base-v2";
   static aerodromeV2: string = "aerodrome-v2";
+  static camelotV3: string = "camelot-v3";
+  static camelotV2: string = "camelot-v2";
+  static ramsesV3: string = "ramses-v3";
+  static ramsesV2: string = "ramses-v2";
 }

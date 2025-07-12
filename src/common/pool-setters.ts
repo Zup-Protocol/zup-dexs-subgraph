@@ -126,7 +126,7 @@ export class PoolSetters {
     token1: TokenEntity,
     amount0: BigInt,
     amount1: BigInt,
-    customFee: i32 = pool.feeTier,
+    customFee: i32 = pool.currentFeeTier,
   ): void {
     this.setPoolDailyDataTVL(event, pool);
 
@@ -135,13 +135,19 @@ export class PoolSetters {
     let userInputToken = this._findUserInputToken(amount0, pool);
 
     if (userInputToken.id == pool.token0) {
-      let feeAmountToken0 = this._getSwapFee(amount0, customFee == pool.feeTier ? pool.feeTier : customFee);
+      let feeAmountToken0 = this._getSwapFee(
+        amount0,
+        customFee == pool.currentFeeTier ? pool.currentFeeTier : customFee,
+      );
 
       poolDailyDataEntity.feesToken0 = poolDailyDataEntity.feesToken0.plus(
         formatFromTokenAmount(feeAmountToken0, userInputToken),
       );
     } else {
-      let feeAmountToken1 = this._getSwapFee(amount1, customFee == pool.feeTier ? pool.feeTier : customFee);
+      let feeAmountToken1 = this._getSwapFee(
+        amount1,
+        customFee == pool.currentFeeTier ? pool.currentFeeTier : customFee,
+      );
 
       poolDailyDataEntity.feesToken1 = poolDailyDataEntity.feesToken1.plus(
         formatFromTokenAmount(feeAmountToken1, userInputToken),
@@ -162,7 +168,7 @@ export class PoolSetters {
     pool: PoolEntity,
     amount0: BigInt,
     amount1: BigInt,
-    customFee: i32 = pool.feeTier,
+    customFee: i32 = pool.currentFeeTier,
   ): void {
     let hourlyPoolDataId = getPoolHourlyDataId(event.block.timestamp, pool);
     let poolHourlyDataEntity = PoolHourlyDataEntity.load(hourlyPoolDataId);
@@ -178,13 +184,19 @@ export class PoolSetters {
     }
 
     if (userInputToken.id == pool.token0) {
-      let feeAmountToken0 = this._getSwapFee(amount0, customFee != pool.feeTier ? customFee : pool.feeTier);
+      let feeAmountToken0 = this._getSwapFee(
+        amount0,
+        customFee != pool.currentFeeTier ? customFee : pool.currentFeeTier,
+      );
 
       poolHourlyDataEntity.feesToken0 = poolHourlyDataEntity.feesToken0.plus(
         formatFromTokenAmount(feeAmountToken0, userInputToken),
       );
     } else {
-      let feeAmountToken1 = this._getSwapFee(amount1, customFee != pool.feeTier ? customFee : pool.feeTier);
+      let feeAmountToken1 = this._getSwapFee(
+        amount1,
+        customFee != pool.currentFeeTier ? customFee : pool.currentFeeTier,
+      );
 
       poolHourlyDataEntity.feesToken1 = poolHourlyDataEntity.feesToken1.plus(
         formatFromTokenAmount(feeAmountToken1, userInputToken),

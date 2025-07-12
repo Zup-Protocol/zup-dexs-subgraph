@@ -79,6 +79,14 @@ describe("AlienBaseV2Factory", () => {
     assert.entityCount("Protocol", 1);
   });
 
+  test("When calling the handler it should set the correct fee for the protocol", () => {
+    let event = createEvent();
+    handleAlienBaseV2PoolCreated(event);
+
+    assert.fieldEquals("Pool", event.params.pair.toHexString(), "initialFeeTier", "1600");
+    assert.fieldEquals("Pool", event.params.pair.toHexString(), "currentFeeTier", "1600");
+  });
+
   test("When calling the handler, it should assign the correct pair address to the pool entity", () => {
     let poolId = "0x0000000000000000000000000000000000000100";
     let customParams = new PairCreatedEventParams();

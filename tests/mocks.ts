@@ -65,7 +65,8 @@ export class PoolMock extends Pool {
     this.mockId = id;
     this.token0 = new TokenMock().id;
     this.token1 = new TokenMock().id;
-    this.feeTier = 0;
+    this.currentFeeTier = 0;
+    this.initialFeeTier = 0;
 
     this.totalValueLockedUSD = BigDecimal.fromString("0");
     this.totalValueLockedToken0 = BigDecimal.fromString("0");
@@ -73,7 +74,7 @@ export class PoolMock extends Pool {
     this.createdAtTimestamp = BigInt.fromI32(124);
     this.protocol = new ProtocolMock().id;
     this.type = PoolType.V3;
-    this._aerodromeV2StablePool = false;
+    this.isStablePool = false;
 
     this.save();
   }

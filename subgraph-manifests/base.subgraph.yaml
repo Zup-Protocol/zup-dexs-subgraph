@@ -428,6 +428,8 @@ templates:
       abis:
         - name: AerodromeV2Pool
           file: ../abis/pools/AerodromeV2Pool.json
+        - name: AerodromeV2Factory
+          file: ../abis/factories/AerodromeV2Factory.json
       eventHandlers:
         - event: Mint(indexed address,uint256,uint256)
           handler: handleAerodromeV2Mint

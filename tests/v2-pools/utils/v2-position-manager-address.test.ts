@@ -1,5 +1,6 @@
 import { assert, dataSourceMock, test } from "matchstick-as";
 import {
+  ARBITRUM_NETWORK_NAME,
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
@@ -57,6 +58,12 @@ test("When calling 'uniswap' on Base, it should return the correct address", () 
   assert.stringEquals(address, "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24");
 });
 
+test("When calling 'uniswap' on arbitrum, it should return the correct address", () => {
+  dataSourceMock.setNetwork(ARBITRUM_NETWORK_NAME);
+  let address = V2PositionManagerAddress.uniswap;
+  assert.stringEquals(address, "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24");
+});
+
 test(
   "When calling 'uniswap' on a network that is not mapped, it should throw an error",
   () => {
@@ -91,6 +98,12 @@ test("When calling 'sushiSwap' on Base, it should return the correct address", (
   assert.stringEquals(address, "0x6BDED42c6DA8FBf0d2bA55B2fa120C5e0c8D7891");
 });
 
+test("When calling 'sushiSwap' on arbitrum, it should return the correct address", () => {
+  dataSourceMock.setNetwork(ARBITRUM_NETWORK_NAME);
+  let address = V2PositionManagerAddress.sushiSwap;
+  assert.stringEquals(address, "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506");
+});
+
 test(
   "When calling 'sushiSwap' on a network that is not mapped, it should throw an error",
   () => {
@@ -115,6 +128,12 @@ test("When calling 'pancakeSwap' on BNB, it should return the correct address", 
 
 test("When calling 'pancakeSwap' on Base, it should return the correct address", () => {
   dataSourceMock.setNetwork(BASE_NETWORK_NAME);
+  let address = V2PositionManagerAddress.pancakeSwap;
+  assert.stringEquals(address, "0x8cFe327CEc66d1C090Dd72bd0FF11d690C33a2Eb");
+});
+
+test("When calling 'pancakeSwap' on arbitrum, it should return the correct address", () => {
+  dataSourceMock.setNetwork(ARBITRUM_NETWORK_NAME);
   let address = V2PositionManagerAddress.pancakeSwap;
   assert.stringEquals(address, "0x8cFe327CEc66d1C090Dd72bd0FF11d690C33a2Eb");
 });
@@ -172,6 +191,38 @@ test(
   () => {
     dataSourceMock.setNetwork("ababa");
     V2PositionManagerAddress.aerodrome;
+  },
+  true,
+);
+
+// Camelot
+test("When calling 'camelot' on Arbitrum, it should return the correct address", () => {
+  dataSourceMock.setNetwork(ARBITRUM_NETWORK_NAME);
+  let address = V2PositionManagerAddress.camelot;
+  assert.stringEquals(address, "0xc873fEcbd354f5A56E00E710B90EF4201db2448d");
+});
+
+test(
+  "When calling 'camelot' on a network that is not mapped, it should throw an error",
+  () => {
+    dataSourceMock.setNetwork("ababa");
+    V2PositionManagerAddress.camelot;
+  },
+  true,
+);
+
+// Ramses
+test("When calling 'ramses' on Arbitrum, it should return the correct address", () => {
+  dataSourceMock.setNetwork(ARBITRUM_NETWORK_NAME);
+  let address = V2PositionManagerAddress.ramses;
+  assert.stringEquals(address, "0xAAA87963EFeB6f7E0a2711F397663105Acb1805e");
+});
+
+test(
+  "When calling 'ramses' on a network that is not mapped, it should throw an error",
+  () => {
+    dataSourceMock.setNetwork("ababa");
+    V2PositionManagerAddress.ramses;
   },
   true,
 );

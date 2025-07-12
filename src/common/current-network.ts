@@ -1,5 +1,6 @@
 import { dataSource } from "@graphprotocol/graph-ts";
 import {
+  ARBITRUM_NETWORK_NAME,
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
@@ -19,6 +20,7 @@ export abstract class CurrentNetwork {
     if (dataSource.network() == BASE_NETWORK_NAME) return "0x4200000000000000000000000000000000000006";
     if (dataSource.network() == UNICHAIN_NETWORK_NAME) return "0x4200000000000000000000000000000000000006";
     if (dataSource.network() == BNB_NETWORK_NAME) return "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
+    if (dataSource.network() == ARBITRUM_NETWORK_NAME) return "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1";
 
     throw CurrentNetwork.unsupportedNetworkError;
   }
@@ -30,6 +32,7 @@ export abstract class CurrentNetwork {
     if (dataSource.network() == BASE_NETWORK_NAME) return new NativeToken("ETH", 18, "Ether");
     if (dataSource.network() == UNICHAIN_NETWORK_NAME) return new NativeToken("ETH", 18, "Ether");
     if (dataSource.network() == BNB_NETWORK_NAME) return new NativeToken("BNB", 18, "BNB");
+    if (dataSource.network() == ARBITRUM_NETWORK_NAME) return new NativeToken("ETH", 18, "Ether");
 
     throw CurrentNetwork.unsupportedNetworkError;
   }
@@ -82,6 +85,18 @@ export abstract class CurrentNetwork {
         "0xc5f0f7b66764F6ec8C8Dff7BA683102295E16409", // FDUSD
         "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34", // USDe
         "0x2492D0006411Af6C8bbb1c8afc1B0197350a79e9", // USR
+      ];
+    }
+
+    if (dataSource.network() == ARBITRUM_NETWORK_NAME) {
+      return [
+        "0xaf88d065e77c8cC2239327C5EDb3A432268e5831", // USDC
+        "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9", // USDT
+        "0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8", // USDC.e
+        "0xe80772Eaf6e2E18B651F160Bc9158b2A5caFCA65", // xUSD
+        "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1", // DAI
+        "0x4D15a3A2286D883AF0AA1B3f21367843FAc63E07", // TUSD
+        "0x6a7661795c374c0bfc635934efaddff3a7ee23b6", // DOLA
       ];
     }
 

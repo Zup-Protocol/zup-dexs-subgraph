@@ -60,7 +60,8 @@ export function handleV4PoolInitializeImpl(
   poolEntity.createdAtTimestamp = event.block.timestamp;
   poolEntity.token0 = token0Entity.id;
   poolEntity.token1 = token1Entity.id;
-  poolEntity.feeTier = feeTier;
+  poolEntity.currentFeeTier = feeTier;
+  poolEntity.initialFeeTier = feeTier;
   poolEntity.totalValueLockedUSD = ZERO_BIG_DECIMAL;
   poolEntity.totalValueLockedToken0 = ZERO_BIG_DECIMAL;
   poolEntity.totalValueLockedToken1 = ZERO_BIG_DECIMAL;

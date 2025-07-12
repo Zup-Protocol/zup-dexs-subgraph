@@ -71,7 +71,7 @@ export function handleV2PoolSwapImpl(
     .times(token0Entity.usdPrice)
     .plus(poolEntity.totalValueLockedToken1.times(token1Entity.usdPrice));
 
-  if (feeTier != 0) poolEntity.feeTier = feeTier;
+  if (feeTier != 0) poolEntity.currentFeeTier = feeTier;
 
   token0Entity.totalTokenPooledAmount = token0Entity.totalTokenPooledAmount.plus(amount0Formatted);
   token1Entity.totalTokenPooledAmount = token1Entity.totalTokenPooledAmount.plus(amount1Formatted);

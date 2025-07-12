@@ -14,7 +14,7 @@ export function handleSushiSwapV2PoolCreated(event: PoolCreatedEvent): void {
     V2PositionManagerAddress.sushiSwap,
   );
 
-  handleV2PoolCreated(event, event.params.token0, event.params.token1, event.params.pair, 3000, protocolEntity);
+  handleV2PoolCreated(event, event.params.token0, event.params.token1, event.params.pair, 2500, protocolEntity);
 
   UniswapV2PoolTemplate.create(event.params.pair);
 }

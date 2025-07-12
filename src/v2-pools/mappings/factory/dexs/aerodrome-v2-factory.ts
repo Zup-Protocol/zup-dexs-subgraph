@@ -25,6 +25,6 @@ export function handleAerodromeV2PoolCreated(event: PoolCreatedEvent): void {
 
   AerodromeV2PoolTemplate.create(event.params.pool);
 
-  poolEntity._aerodromeV2StablePool = event.params.stable;
+  poolEntity.isStablePool = event.params.stable;
   poolEntity.save();
 }

@@ -26,3 +26,5 @@ export const SEPOLIA_NETWORK_NAME = "sepolia";
 export const BASE_NETWORK_NAME = "base";
 
 export const BNB_NETWORK_NAME = "bsc";
+
+export const ARBITRUM_NETWORK_NAME = "arbitrum-one";

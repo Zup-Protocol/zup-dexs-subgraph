@@ -52,6 +52,6 @@ describe("AerodromeV3PoolSwap", () => {
 
     handleAerodromeV3PoolSwap(event);
 
-    assert.fieldEquals("Pool", pool.id.toHexString(), "feeTier", aerodromeFeeTier.toString());
+    assert.fieldEquals("Pool", pool.id.toHexString(), "currentFeeTier", aerodromeFeeTier.toString());
   });
 });

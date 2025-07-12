@@ -26,16 +26,17 @@ function createEvent(pool: Address, newFee: i32 = 3): FeeAdjustment {
   return event;
 }
 
-test(`When the handler is called, it should set a new fee tier
-    for the pool, got from the event`, () => {
+test(`When the handler is called, it should modify the 'currentFeeTier'
+  variable, and remain the 'initialFeeTier' unchanged`, () => {
   let oldFee = 909;
   let expectedNewFee = 1245;
   let pool = new PoolMock();
-  pool.feeTier = oldFee;
+  pool.currentFeeTier = oldFee;
 
   let event = createEvent(Address.fromBytes(pool.id), expectedNewFee);
 
   handleNuriExchangeV3PoolFeeAdjustment(event);
 
-  assert.fieldEquals("Pool", pool.id.toHexString(), "feeTier", expectedNewFee.toString());
+  assert.fieldEquals("Pool", pool.id.toHexString(), "currentFeeTier", expectedNewFee.toString());
+  assert.fieldEquals("Pool", pool.id.toHexString(), "initialFeeTier", pool.initialFeeTier.toString());
 });

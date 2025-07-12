@@ -70,7 +70,8 @@ describe("Aerodrome V2 Swap", () => {
     dataSourceMock.setNetwork(BASE_NETWORK_NAME);
   });
 
-  test("When calling the handler, it should get the pool fee from the factory and pass it converted to uniswap fee tier decimals to the handleV2PoolSwap function", () => {
+  test(`When calling the handler, it should get the pool fee from the factory and pass
+    it converted to uniswap fee tier decimals to the handleV2PoolSwap function`, () => {
     let aerodromeFeeTier: i32 = 30 as i32; // in case of aerodrome, 30 represents 0.3% fee
     let pool = new PoolMock();
 
@@ -80,11 +81,11 @@ describe("Aerodrome V2 Swap", () => {
     let event = createEvent(eventParams);
 
     createMockedFunction(Address.fromString(V2FactoryAddress.aerodrome), "getFee", "getFee(address,bool):(uint256)")
-      .withArgs([ethereum.Value.fromAddress(pool.id), ethereum.Value.fromBoolean(pool._aerodromeV2StablePool)])
+      .withArgs([ethereum.Value.fromAddress(pool.id), ethereum.Value.fromBoolean(pool.isStablePool)])
       .returns([ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(aerodromeFeeTier))]);
 
     handleAerodromeV2Swap(event);
 
-    assert.fieldEquals("Pool", pool.id.toHexString(), "feeTier", (aerodromeFeeTier * 100).toString()); // Convert to uniswap fee tier decimals (0.3% -> 3000)
+    assert.fieldEquals("Pool", pool.id.toHexString(), "currentFeeTier", (aerodromeFeeTier * 100).toString()); // Convert to uniswap fee tier decimals (0.3% -> 3000)
   });
 });

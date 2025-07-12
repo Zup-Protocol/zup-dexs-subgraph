@@ -98,3 +98,31 @@ test("Uniswap V2 Id should be correct", () => {
 
   assert.stringEquals(actualId, expectedId);
 });
+
+test("Camelot V3 Id should be correct", () => {
+  const expectedId = "camelot-v3";
+  const actualId = ProtocolId.camelotV3;
+
+  assert.stringEquals(actualId, expectedId);
+});
+
+test("Camelot V2 Id should be correct", () => {
+  const expectedId = "camelot-v2";
+  const actualId = ProtocolId.camelotV2;
+
+  assert.stringEquals(actualId, expectedId);
+});
+
+test("Ramses V3 Id should be correct", () => {
+  const expectedId = "ramses-v3";
+  const actualId = ProtocolId.ramsesV3;
+
+  assert.stringEquals(actualId, expectedId);
+});
+
+test("Ramses V2 Id should be correct", () => {
+  const expectedId = "ramses-v2";
+  const actualId = ProtocolId.ramsesV2;
+
+  assert.stringEquals(actualId, expectedId);
+});

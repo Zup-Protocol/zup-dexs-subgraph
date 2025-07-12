@@ -21,7 +21,8 @@ export function handleV2PoolCreated(
 
   poolEntity.token0 = token0Address;
   poolEntity.token1 = token1Address;
-  poolEntity.feeTier = feeTier;
+  poolEntity.currentFeeTier = feeTier;
+  poolEntity.initialFeeTier = feeTier;
   poolEntity.totalValueLockedUSD = ZERO_BIG_DECIMAL;
   poolEntity.totalValueLockedToken0 = ZERO_BIG_DECIMAL;
   poolEntity.totalValueLockedToken1 = ZERO_BIG_DECIMAL;

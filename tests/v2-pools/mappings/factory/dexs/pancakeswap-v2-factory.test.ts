@@ -82,4 +82,12 @@ describe("PancakeSwapV2Factory", () => {
 
     assert.fieldEquals("Pool", poolId, "id", poolId);
   });
+
+  test("When calling the handler it should set the correct fee for the protocol", () => {
+    let event = createEvent();
+    handlePancakeSwapV2PoolCreated(event);
+
+    assert.fieldEquals("Pool", event.params.pair.toHexString(), "initialFeeTier", "1700");
+    assert.fieldEquals("Pool", event.params.pair.toHexString(), "currentFeeTier", "1700");
+  });
 });

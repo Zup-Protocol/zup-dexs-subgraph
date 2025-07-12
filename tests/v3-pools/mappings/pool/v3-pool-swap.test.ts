@@ -261,7 +261,7 @@ describe("v3-pool-swap", () => {
     let poolHourlyData = new PoolHourlyDataMock();
     let currentFees = BigDecimal.fromString("12.3");
 
-    pool.feeTier = 500;
+    pool.currentFeeTier = 500;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -278,7 +278,12 @@ describe("v3-pool-swap", () => {
       getPoolHourlyDataId(event.block.timestamp, pool).toHexString(),
       "feesToken0",
       currentFees
-        .plus(formatFromTokenAmount(amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)), token0))
+        .plus(
+          formatFromTokenAmount(
+            amount0.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
+            token0,
+          ),
+        )
         .toString(),
     );
   });
@@ -302,7 +307,7 @@ describe("v3-pool-swap", () => {
     let currentFees = BigDecimal.fromString("1832.3");
     let tick = BigInt.fromI32(989756545);
 
-    pool.feeTier = 100;
+    pool.currentFeeTier = 100;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -318,7 +323,12 @@ describe("v3-pool-swap", () => {
       getPoolHourlyDataId(event.block.timestamp, pool).toHexString(),
       "feesToken1",
       currentFees
-        .plus(formatFromTokenAmount(amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)), token1))
+        .plus(
+          formatFromTokenAmount(
+            amount1.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
+            token1,
+          ),
+        )
         .toString(),
     );
   });
@@ -350,7 +360,7 @@ describe("v3-pool-swap", () => {
     let sqrtPriceX96 = BigInt.fromI32(3432);
     let tick = BigInt.fromI32(989756545);
 
-    pool.feeTier = 1000;
+    pool.currentFeeTier = 1000;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -361,7 +371,7 @@ describe("v3-pool-swap", () => {
     poolHourlyData.save();
 
     let token0ExpectedSwapFee = formatFromTokenAmount(
-      amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount0.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
       token0,
     );
 
@@ -407,7 +417,7 @@ describe("v3-pool-swap", () => {
     let sqrtPriceX96 = BigInt.fromI32(3432);
     let tick = BigInt.fromI32(989756545);
 
-    pool.feeTier = 50;
+    pool.currentFeeTier = 50;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -418,7 +428,7 @@ describe("v3-pool-swap", () => {
     poolHourlyData.save();
 
     let token1ExpectedSwapFee = formatFromTokenAmount(
-      amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount1.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
       token1,
     );
 
@@ -464,7 +474,7 @@ describe("v3-pool-swap", () => {
     let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
     let tick = BigInt.fromI32(989756545);
 
-    pool.feeTier = 50;
+    pool.currentFeeTier = 50;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -477,7 +487,7 @@ describe("v3-pool-swap", () => {
     new V3PoolMock(Address.fromBytes(pool.id));
 
     let token1ExpectedSwapFee = formatFromTokenAmount(
-      amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount1.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
       token1,
     );
 
@@ -491,9 +501,10 @@ describe("v3-pool-swap", () => {
       "feesToken1",
       currentFeesToken1
         .plus(
-          formatFromTokenAmount(amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)), token0).times(
-            BigDecimal.fromString(swapTimes.toString()),
-          ),
+          formatFromTokenAmount(
+            amount1.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
+            token0,
+          ).times(BigDecimal.fromString(swapTimes.toString())),
         )
         .toString(),
     );
@@ -541,7 +552,7 @@ describe("v3-pool-swap", () => {
     let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
     let tick = BigInt.fromI32(989756545);
 
-    pool.feeTier = 500;
+    pool.currentFeeTier = 500;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -554,7 +565,7 @@ describe("v3-pool-swap", () => {
     new V3PoolMock(Address.fromBytes(pool.id));
 
     let token0ExpectedSwapFee = formatFromTokenAmount(
-      amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount0.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
       token0,
     );
 
@@ -568,9 +579,10 @@ describe("v3-pool-swap", () => {
       "feesToken0",
       currentFeesToken0
         .plus(
-          formatFromTokenAmount(amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)), token0).times(
-            BigDecimal.fromString(swapTimes.toString()),
-          ),
+          formatFromTokenAmount(
+            amount0.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
+            token0,
+          ).times(BigDecimal.fromString(swapTimes.toString())),
         )
         .toString(),
     );
@@ -617,7 +629,7 @@ describe("v3-pool-swap", () => {
     let swapTimes = 5;
     let tick = BigInt.fromI32(989756545);
 
-    pool.feeTier = 500;
+    pool.currentFeeTier = 500;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -641,7 +653,7 @@ describe("v3-pool-swap", () => {
         currentHourlyId,
         "feesToken0",
         formatFromTokenAmount(
-          amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+          amount0.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
           token0,
         ).toString(),
       );
@@ -672,7 +684,7 @@ describe("v3-pool-swap", () => {
     let swapTimes = 5;
     let tick = BigInt.fromI32(989756545);
 
-    pool.feeTier = 100;
+    pool.currentFeeTier = 100;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -697,7 +709,7 @@ describe("v3-pool-swap", () => {
         currentHourlyId,
         "feesToken1",
         formatFromTokenAmount(
-          amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+          amount1.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
           token1,
         ).toString(),
       );
@@ -761,7 +773,7 @@ describe("v3-pool-swap", () => {
     let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
     let tick = BigInt.fromI32(989756545);
 
-    pool.feeTier = 500;
+    pool.currentFeeTier = 500;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -774,7 +786,7 @@ describe("v3-pool-swap", () => {
     new V3PoolMock(Address.fromBytes(pool.id));
 
     let token0ExpectedSwapFee = formatFromTokenAmount(
-      amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount0.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
       token0,
     );
 
@@ -790,9 +802,10 @@ describe("v3-pool-swap", () => {
       "feesToken0",
       currentFeesToken0
         .plus(
-          formatFromTokenAmount(amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)), token0).times(
-            BigDecimal.fromString(swapTimes.toString()),
-          ),
+          formatFromTokenAmount(
+            amount0.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
+            token0,
+          ).times(BigDecimal.fromString(swapTimes.toString())),
         )
         .toString(),
     );
@@ -861,7 +874,7 @@ describe("v3-pool-swap", () => {
     let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
     let tick = BigInt.fromI32(989756545);
 
-    pool.feeTier = 500;
+    pool.currentFeeTier = 500;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -874,7 +887,7 @@ describe("v3-pool-swap", () => {
     new V3PoolMock(Address.fromBytes(pool.id));
 
     let token1ExpectedSwapFee = formatFromTokenAmount(
-      amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+      amount1.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
       token0,
     );
 
@@ -890,9 +903,10 @@ describe("v3-pool-swap", () => {
       "feesToken1",
       currentFeesToken1
         .plus(
-          formatFromTokenAmount(amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)), token1).times(
-            BigDecimal.fromString(swapTimes.toString()),
-          ),
+          formatFromTokenAmount(
+            amount1.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
+            token1,
+          ).times(BigDecimal.fromString(swapTimes.toString())),
         )
         .toString(),
     );
@@ -958,7 +972,7 @@ describe("v3-pool-swap", () => {
     let swapTimes = 5;
     let tick = BigInt.fromI32(989756545);
 
-    pool.feeTier = 500;
+    pool.currentFeeTier = 500;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -983,7 +997,7 @@ describe("v3-pool-swap", () => {
         currentDayId,
         "feesToken0",
         formatFromTokenAmount(
-          amount0.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+          amount0.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
           token0,
         ).toString(),
       );
@@ -1037,7 +1051,7 @@ describe("v3-pool-swap", () => {
     let sqrtPriceX96 = BigInt.fromI32(100).times(BigInt.fromI32(10).pow(96));
     let tick = BigInt.fromI32(989756545);
 
-    pool.feeTier = 500;
+    pool.currentFeeTier = 500;
     pool.token0 = token0.id;
     pool.token1 = token1.id;
     pool.save();
@@ -1062,7 +1076,7 @@ describe("v3-pool-swap", () => {
         currentDayId,
         "feesToken1",
         formatFromTokenAmount(
-          amount1.times(BigInt.fromI32(pool.feeTier)).div(BigInt.fromU32(1000000)),
+          amount1.times(BigInt.fromI32(pool.currentFeeTier)).div(BigInt.fromU32(1000000)),
           token1,
         ).toString(),
       );
@@ -1221,7 +1235,9 @@ describe("v3-pool-swap", () => {
     assert.fieldEquals("V3Pool", v3Pool.id.toHexString(), "tick", tick.toString());
   });
 
-  test("When passing a feeTier for the handler, it should be assigned to the pool", () => {
+  test(`When passing a feeTier for the handler,
+    it should assign it only to the 'currentFeeTier',
+    the 'initialFeeTier' should remain unchanged`, () => {
     let pool = new PoolMock();
     let feeTier = 3218;
     let sqrtPriceX96 = BigInt.fromI32(23456111);
@@ -1235,6 +1251,7 @@ describe("v3-pool-swap", () => {
     new V3PoolMock();
     handleV3PoolSwap(event, pool, new TokenMock(), new TokenMock(), amount0, amount1, sqrtPriceX96, tick, feeTier);
 
-    assert.fieldEquals("Pool", pool.id.toHexString(), "feeTier", feeTier.toString());
+    assert.fieldEquals("Pool", pool.id.toHexString(), "currentFeeTier", feeTier.toString());
+    assert.fieldEquals("Pool", pool.id.toHexString(), "initialFeeTier", pool.initialFeeTier.toString());
   });
 });
