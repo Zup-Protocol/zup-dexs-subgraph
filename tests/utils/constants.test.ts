@@ -7,6 +7,7 @@ import {
   MAINNET_NETWORK_NAME,
   MAX_UINT256,
   ONE_BIG_INT,
+  OP_NETWORK_NAME,
   POLYGON_NETWORK_NAME,
   SCROLL_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
@@ -73,4 +74,8 @@ test("ARBITRUM_NETWORK_NAME should return the correct value", () => {
 
 test("POLYGON_NETWORK_NAME should return the correct value", () => {
   assert.assertTrue(POLYGON_NETWORK_NAME == "matic");
+});
+
+test("OP_NETWORK_NAME should return the correct value", () => {
+  assert.assertTrue(OP_NETWORK_NAME == "optimism");
 });

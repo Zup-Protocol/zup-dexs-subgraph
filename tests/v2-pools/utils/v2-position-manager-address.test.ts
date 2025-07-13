@@ -4,6 +4,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  OP_NETWORK_NAME,
   POLYGON_NETWORK_NAME,
   SCROLL_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
@@ -71,6 +72,13 @@ test("When calling 'uniswap' on Polygon, it should return the correct address", 
   assert.stringEquals(address, "0xedf6066a2b290C185783862C7F4776A2C8077AD1");
 });
 
+test("When calling 'uniswap' on OP, it should return the correct address", () => {
+  dataSourceMock.setNetwork(OP_NETWORK_NAME);
+
+  let address = V2PositionManagerAddress.uniswap;
+  assert.stringEquals(address, "0x4A7b5Da61326A6379179b40d00F57E5bbDC962c2");
+});
+
 test(
   "When calling 'uniswap' on a network that is not mapped, it should throw an error",
   () => {
@@ -115,6 +123,13 @@ test("When calling 'sushiSwap' on Polygon, it should return the correct address"
   dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
   let address = V2PositionManagerAddress.sushiSwap;
   assert.stringEquals(address, "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506");
+});
+
+test("When calling 'sushiSwap' on OP, it should return the correct address", () => {
+  dataSourceMock.setNetwork(OP_NETWORK_NAME);
+  let address = V2PositionManagerAddress.sushiSwap;
+
+  assert.stringEquals(address, "0x2ABf469074dc0b54d793850807E6eb5Faf2625b1");
 });
 
 test(
@@ -252,6 +267,23 @@ test(
   () => {
     dataSourceMock.setNetwork("ababa");
     V2PositionManagerAddress.quickSwap;
+  },
+  true,
+);
+
+// Velodrome
+test("When calling 'velodrome' on OP, it should return the correct address", () => {
+  dataSourceMock.setNetwork(OP_NETWORK_NAME);
+
+  let address = V2PositionManagerAddress.velodrome;
+  assert.stringEquals(address, "0xa062aE8A9c5e11aaA026fc2670B0D65cCc8B2858");
+});
+
+test(
+  "When calling 'velodrome' on a network that is not mapped, it should throw an error",
+  () => {
+    dataSourceMock.setNetwork("ababa");
+    V2PositionManagerAddress.velodrome;
   },
   true,
 );

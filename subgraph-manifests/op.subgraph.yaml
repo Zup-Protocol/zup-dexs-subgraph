@@ -1,0 +1,282 @@
+specVersion: 1.2.0
+repository: https://github.com/Zup-Protocol/zup-dexs-subgraph
+indexerHints:
+  prune: never
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum
+    name: VelodromeV3Factory
+    network: optimism
+    source:
+      address: "0xCc0bDDB707055e04e497aB22a59c2aF4391cd12F"
+      abi: AerodromeV3Factory
+      startBlock: 121501661
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v3-pools/mappings/factory/dexs/velodrome-v3-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: AerodromeV3Factory
+          file: "../abis/factories/AerodromeV3Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+        - name: AerodromeV3Pool
+          file: "../abis/pools/AerodromeV3Pool.json"
+      eventHandlers:
+        - event: PoolCreated(indexed address,indexed address,indexed int24,address)
+          handler: handleVelodromeV3PoolCreated
+  - kind: ethereum
+    name: VelodromeV2Factory
+    network: optimism
+    source:
+      address: "0xF1046053aa5682b4F9a81b5481394DA16BE5FF5a"
+      abi: VelodromeV2Factory
+      startBlock: 105896804
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/factory/dexs/velodrome-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: VelodromeV2Factory
+          file: "../abis/factories/VelodromeV2Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PoolCreated(indexed address,indexed address,indexed bool,address,uint256)
+          handler: handleVelodromeV2PoolCreated
+  - kind: ethereum
+    name: UniswapV4PoolManager
+    network: optimism
+    source:
+      address: "0x9a13F98Cb987694C9F086b1F5eB990EeA8264Ec3"
+      abi: UniswapV4PoolManager
+      startBlock: 130947675
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v4-pools/mappings/pool-manager/dexs/uniswap/index.ts
+      entities:
+        - Pool
+        - Token
+      abis:
+        - name: UniswapV4PoolManager
+          file: "../abis/UniswapV4PoolManager.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: Initialize(indexed bytes32,indexed address,indexed address,uint24,int24,address,uint160,int24)
+          handler: handleUniswapV4PoolInitialize
+        - event: ModifyLiquidity(indexed bytes32,indexed address,int24,int24,int256,bytes32)
+          handler: handleUniswapV4ModifyLiquidity
+        - event: Swap(indexed bytes32,indexed address,int128,int128,uint160,uint128,int24,uint24)
+          handler: handleUniswapV4PoolSwap
+  - kind: ethereum
+    name: UniswapV3Factory
+    network: optimism
+    source:
+      address: "0x1F98431c8aD98523631AE4a59f267346ea31F984"
+      abi: UniswapV3Factory
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v3-pools/mappings/factory/dexs/uniswap-v3-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: UniswapV3Factory
+          file: "../abis/factories/UniswapV3Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PoolCreated(indexed address,indexed address,indexed uint24,int24,address)
+          handler: handleUniswapV3PoolCreated
+  - kind: ethereum
+    name: UniswapV2Factory
+    network: optimism
+    source:
+      address: "0x0c3c1c532F1e39EdF36BE9Fe0bE1410313E074Bf"
+      abi: UniswapV2Factory
+      startBlock: 112197986
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/factory/dexs/uniswap-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: UniswapV2Factory
+          file: "../abis/factories/UniswapV2Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleUniswapV2PoolCreated
+  - kind: ethereum
+    name: SushiSwapV2Factory
+    network: optimism
+    source:
+      address: "0xFbc12984689e5f15626Bad03Ad60160Fe98B303C"
+      abi: UniswapV2Factory
+      startBlock: 110882086
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/factory/dexs/sushiswap-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: UniswapV2Factory
+          file: "../abis/factories/UniswapV2Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PairCreated(indexed address,indexed address,address,uint256)
+          handler: handleSushiSwapV2PoolCreated
+  - kind: ethereum
+    name: SushiSwapV3Factory
+    network: optimism
+    source:
+      address: "0x9c6522117e2ed1fE5bdb72bb0eD5E3f2bdE7DBe0"
+      abi: UniswapV3Factory
+      startBlock: 85432013
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v3-pools/mappings/factory/dexs/sushi-swap-v3-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: UniswapV3Factory
+          file: "../abis/factories/UniswapV3Factory.json"
+        - name: ERC20
+          file: "../abis/ERC20.json"
+      eventHandlers:
+        - event: PoolCreated(indexed address,indexed address,indexed uint24,int24,address)
+          handler: handleSushiSwapV3PoolCreated
+
+templates:
+  - kind: ethereum/contract
+    name: AerodromeV3Pool
+    network: optimism
+    source:
+      abi: AerodromeV3Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v3-pools/mappings/pool/dexs/aerodrome/index.ts
+      entities:
+        - Pool
+        - Token
+      abis:
+        - name: AerodromeV3Pool
+          file: ../abis/pools/AerodromeV3Pool.json
+        - name: AerodromeV3Factory
+          file: "../abis/factories/AerodromeV3Factory.json"
+      eventHandlers:
+        - event: Mint(address,indexed address,indexed int24,indexed int24,uint128,uint256,uint256)
+          handler: handleAerodromeV3PoolMint
+        - event: Initialize(uint160,int24)
+          handler: handleAerodromeV3PoolInitialize
+        - event: Collect(indexed address,address,indexed int24,indexed int24,uint128,uint128)
+          handler: handleAerodromeV3PoolCollect
+        - event: Swap(indexed address,indexed address,int256,int256,uint160,uint128,int24)
+          handler: handleAerodromeV3PoolSwap
+        - event: CollectFees(indexed address,uint128,uint128)
+          handler: handleAerodromeV3PoolCollectProtocol
+  - kind: ethereum/contract
+    name: VelodromeV2Pool
+    network: optimism
+    source:
+      abi: VelodromeV2Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/pool/dexs/velodrome/index.ts
+      entities:
+        - Pool
+        - Token
+      abis:
+        - name: VelodromeV2Pool
+          file: ../abis/pools/VelodromeV2Pool.json
+        - name: VelodromeV2Factory
+          file: ../abis/factories/VelodromeV2Factory.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleVelodromeV2PoolMint
+        - event: Burn(indexed address,indexed address,uint256,uint256)
+          handler: handleVelodromeV2PoolBurn
+        - event: Swap(indexed address,indexed address,uint256,uint256,uint256,uint256)
+          handler: handleVelodromeV2PoolSwap
+        - event: Sync(uint256,uint256)
+          handler: handleVelodromeV2PoolSync
+        - event: Fees(indexed address,uint256,uint256)
+          handler: handleVelodromeV2PoolFees
+  - kind: ethereum/contract
+    name: UniswapV3Pool
+    network: optimism
+    source:
+      abi: UniswapV3Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v3-pools/mappings/pool/dexs/uniswap/index.ts
+      entities:
+        - Pool
+        - Token
+      abis:
+        - name: UniswapV3Pool
+          file: ../abis/pools/UniswapV3Pool.json
+        - name: UniswapV3Factory
+          file: "../abis/factories/UniswapV3Factory.json"
+      eventHandlers:
+        - event: Mint(address,indexed address,indexed int24,indexed int24,uint128,uint256,uint256)
+          handler: handleUniswapV3PoolMint
+        - event: Initialize(uint160,int24)
+          handler: handleUniswapV3PoolInitialize
+        - event: Collect(indexed address,address,indexed int24,indexed int24,uint128,uint128)
+          handler: handleUniswapV3PoolCollect
+        - event: Swap(indexed address,indexed address,int256,int256,uint160,uint128,int24)
+          handler: handleUniswapV3PoolSwap
+        - event: CollectProtocol(indexed address,indexed address,uint128,uint128)
+          handler: handleUniswapV3PoolCollectProtocol
+  - kind: ethereum/contract
+    name: UniswapV2Pool
+    network: optimism
+    source:
+      abi: UniswapV2Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ../src/v2-pools/mappings/pool/dexs/uniswap/index.ts
+      entities:
+        - Pool
+        - Token
+      abis:
+        - name: UniswapV2Pool
+          file: ../abis/pools/UniswapV2Pool.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleUniswapV2Mint
+        - event: Burn(indexed address,uint256,uint256,indexed address)
+          handler: handleUniswapV2Burn
+        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
+          handler: handleUniswapV2Swap
+        - event: Sync(uint112,uint112)
+          handler: handleUniswapV2Sync

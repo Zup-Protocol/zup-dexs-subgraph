@@ -4,6 +4,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  OP_NETWORK_NAME,
   POLYGON_NETWORK_NAME,
   SCROLL_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
@@ -49,6 +50,12 @@ describe("Permit2Address", () => {
 
   test("uniswap returns correct address for polygon", () => {
     dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
+    assert.stringEquals(Permit2Address.uniswap, "0x000000000022D473030F116dDEE9F6B43aC78BA3");
+  });
+
+  test("Uniswap returns the correct address for optimism", () => {
+    dataSourceMock.setNetwork(OP_NETWORK_NAME);
+
     assert.stringEquals(Permit2Address.uniswap, "0x000000000022D473030F116dDEE9F6B43aC78BA3");
   });
 

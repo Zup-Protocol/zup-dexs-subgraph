@@ -140,3 +140,17 @@ test("QuickSwap V3 Id should be correct", () => {
 
   assert.stringEquals(actualId, expectedId);
 });
+
+test("Velodrome V3 Id should be correct", () => {
+  const expectedId = "velodrome-v3";
+  const actualId = ProtocolId.velodromeV3;
+
+  assert.stringEquals(actualId, expectedId);
+});
+
+test("Velodrome V2 Id should be correct", () => {
+  const expectedId = "velodrome-v2";
+  const actualId = ProtocolId.velodromeV2;
+
+  assert.stringEquals(actualId, expectedId);
+});

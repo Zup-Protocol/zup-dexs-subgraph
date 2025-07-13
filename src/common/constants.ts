@@ -30,3 +30,5 @@ export const BNB_NETWORK_NAME = "bsc";
 export const ARBITRUM_NETWORK_NAME = "arbitrum-one";
 
 export const POLYGON_NETWORK_NAME = "matic";
+
+export const OP_NETWORK_NAME = "optimism";

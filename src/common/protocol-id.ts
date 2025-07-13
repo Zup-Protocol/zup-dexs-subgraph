@@ -24,4 +24,6 @@ export abstract class ProtocolId {
   static ramsesV2: string = "ramses-v2";
   static quickSwapV2: string = "quickswap-v2";
   static quickSwapV3: string = "quickswap-v3";
+  static velodromeV3: string = "velodrome-v3";
+  static velodromeV2: string = "velodrome-v2";
 }

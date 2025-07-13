@@ -4,6 +4,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  OP_NETWORK_NAME,
   POLYGON_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
   UNICHAIN_NETWORK_NAME,
@@ -22,6 +23,7 @@ export class V4StateViewAddress {
     if (dataSource.network() == BNB_NETWORK_NAME) return "0xd13Dd3D6E93f276FAfc9Db9E6BB47C1180aeE0c4";
     if (dataSource.network() == ARBITRUM_NETWORK_NAME) return "0x76Fd297e2D437cd7f76d50F01AfE6160f86e9990";
     if (dataSource.network() == POLYGON_NETWORK_NAME) return "0x5eA1bD7974c8A611cBAB0bDCAFcB1D9CC9b3BA5a";
+    if (dataSource.network() == OP_NETWORK_NAME) return "0xc18a3169788F4F75A170290584ECA6395C75Ecdb";
 
     throw V4StateViewAddress.unsupportedProtocolNetworkError("Uniswap");
   }

@@ -4,6 +4,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  OP_NETWORK_NAME,
   POLYGON_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
   UNICHAIN_NETWORK_NAME,
@@ -46,6 +47,12 @@ describe("V4StateViewAddress", () => {
     dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
 
     assert.stringEquals(V4StateViewAddress.uniswap, "0x5eA1bD7974c8A611cBAB0bDCAFcB1D9CC9b3BA5a");
+  });
+
+  test("UniswapV4 returns correct address for optimism", () => {
+    dataSourceMock.setNetwork(OP_NETWORK_NAME);
+
+    assert.stringEquals(V4StateViewAddress.uniswap, "0xc18a3169788F4F75A170290584ECA6395C75Ecdb");
   });
 
   test(

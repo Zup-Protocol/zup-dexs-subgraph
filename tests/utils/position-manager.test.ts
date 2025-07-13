@@ -4,6 +4,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  OP_NETWORK_NAME,
   POLYGON_NETWORK_NAME,
   SCROLL_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
@@ -166,6 +167,18 @@ describe("V3PositionManagerAddress", () => {
     assert.stringEquals(V3PositionManagerAddress.quickSwap, "0x8eF88E4c7CfbbaC1C163f7eddd4B578792201de6");
   });
 
+  test("Uniswap returns correct address for OP", () => {
+    dataSourceMock.setNetwork(OP_NETWORK_NAME);
+
+    assert.stringEquals(V3PositionManagerAddress.uniswap, "0xC36442b4a4522E871399CD717aBDD847Ab11FE88");
+  });
+
+  test("Velodrome returns correct address for OP", () => {
+    dataSourceMock.setNetwork(OP_NETWORK_NAME);
+
+    assert.stringEquals(V3PositionManagerAddress.velodrome, "0x416b433906b1B72FA758e166e239c43d68dC6F29");
+  });
+
   test(
     "unsupportedProtocolNetworkError throws for unsupported network",
     () => {
@@ -217,6 +230,12 @@ describe("V4PositionManagerAddress", () => {
     dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
 
     assert.stringEquals(V4PositionManagerAddress.uniswap, "0x1Ec2eBf4F37E7363FDfe3551602425af0B3ceef9");
+  });
+
+  test("UniswapV4 returns correct address for optimism", () => {
+    dataSourceMock.setNetwork(OP_NETWORK_NAME);
+
+    assert.stringEquals(V4PositionManagerAddress.uniswap, "0x3C3Ea4B57a46241e54610e5f022E5c45859A1017");
   });
 
   test(
