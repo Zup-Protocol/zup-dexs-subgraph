@@ -5,6 +5,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  POLYGON_NETWORK_NAME,
   SCROLL_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
   UNICHAIN_NETWORK_NAME,
@@ -72,6 +73,15 @@ describe("`wrappedNativeAddress` should return the correct value for each networ
     assert.addressEquals(
       Address.fromString(CurrentNetwork.wrappedNativeAddress),
       Address.fromString("0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"),
+    );
+  });
+
+  test("Polygon", () => {
+    dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
+
+    assert.addressEquals(
+      Address.fromString(CurrentNetwork.wrappedNativeAddress),
+      Address.fromString("0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"),
     );
   });
 });
@@ -174,6 +184,21 @@ describe("`stablecoinsAddresses` should return a correct list of stablecoins for
         ].join(),
     );
   });
+
+  test("Polygon", () => {
+    dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
+
+    assert.assertTrue(
+      CurrentNetwork.stablecoinsAddresses.join() ==
+        [
+          "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359",
+          "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+          "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+          "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+          "0xbC2b48BC930Ddc4E5cFb2e87a45c379Aab3aac5C",
+        ].join(),
+    );
+  });
 });
 
 test(
@@ -241,5 +266,13 @@ describe("`NativeToken` should return a correct native token object for each net
     assert.stringEquals(CurrentNetwork.nativeToken().symbol, "ETH");
     assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
     assert.stringEquals(CurrentNetwork.nativeToken().name, "Ether");
+  });
+
+  test("Polygon", () => {
+    dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
+
+    assert.stringEquals(CurrentNetwork.nativeToken().symbol, "POL");
+    assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
+    assert.stringEquals(CurrentNetwork.nativeToken().name, "Polygon");
   });
 });

@@ -13,7 +13,8 @@
     "base": "subgraph-manifests/base.subgraph.yaml",
     "unichain": "subgraph-manifests/unichain.subgraph.yaml",
     "bnb": "subgraph-manifests/bnb.subgraph.yaml",
-    "arbitrum": "subgraph-manifests/arbitrum.subgraph.yaml"
+    "arbitrum": "subgraph-manifests/arbitrum.subgraph.yaml",
+    "polygon": "subgraph-manifests/polygon.subgraph.yaml"
   },
   "commands": {
     "deploystudio": "graph deploy --node https://api.studio.thegraph.com/deploy/",
@@ -30,6 +31,7 @@
     "codegen:unichain": "$npm_package_commands_codegen $npm_package_manifests_unichain",
     "codegen:bnb": "$npm_package_commands_codegen $npm_package_manifests_bnb",
     "codegen:arbitrum": "$npm_package_commands_codegen $npm_package_manifests_arbitrum",
+    "codegen:polygon": "$npm_package_commands_codegen $npm_package_manifests_polygon",
     "build:sepolia": "$npm_package_commands_build $npm_package_manifests_sepolia",
     "build:mainnet": "$npm_package_commands_build $npm_package_manifests_mainnet",
     "build:scroll": "$npm_package_commands_build $npm_package_manifests_scroll",
@@ -37,6 +39,7 @@
     "build:unichain": "$npm_package_commands_build $npm_package_manifests_unichain",
     "build:bnb": "$npm_package_commands_build $npm_package_manifests_bnb",
     "build:arbitrum": "$npm_package_commands_build $npm_package_manifests_arbitrum",
+    "build:polygon": "$npm_package_commands_build $npm_package_manifests_polygon",
     "deploy:mainnet": "$npm_package_commands_deploystudio zup-dexs-ethereum $npm_package_manifests_mainnet --version-label=$npm_package_version",
     "deploy:bnb": "$npm_package_commands_deploystudio zup-dexs-bnb $npm_package_manifests_bnb --version-label=$npm_package_version",
     "deploy:scroll": "$npm_package_commands_deploystudio zup-dexs-scroll $npm_package_manifests_scroll --version-label=$npm_package_version",
@@ -44,6 +47,7 @@
     "deploy:unichain": "$npm_package_commands_deploystudio zup-dexs-unichain $npm_package_manifests_unichain --version-label=$npm_package_version",
     "deploy:base": "$npm_package_commands_deploystudio zup-dexs-base $npm_package_manifests_base --version-label=$npm_package_version",
     "deploy:arbitrum": "$npm_package_commands_deploystudio zup-dexs-arbitrum $npm_package_manifests_arbitrum --version-label=$npm_package_version",
+    "deploy:polygon": "$npm_package_commands_deploystudio zup-dexs-polygon $npm_package_manifests_polygon --version-label=$npm_package_version",
     "remove-local": "graph remove --node http://localhost:8020/ zup-dexs-subgraph",
     "create-local": "graph create --node http://localhost:8020/ zup-dexs-subgraph",
     "deploy-local:scroll": "$npm_package_commands_deploylocal $npm_package_manifests_scroll",
@@ -53,6 +57,7 @@
     "deploy-local:unichain": "$npm_package_commands_deploylocal $npm_package_manifests_unichain",
     "deploy-local:bnb": "$npm_package_commands_deploylocal $npm_package_manifests_bnb",
     "deploy-local:arbitrum": "$npm_package_commands_deploylocal $npm_package_manifests_arbitrum",
+    "deploy-local:polygon": "$npm_package_commands_deploylocal $npm_package_manifests_polygon",
     "test": "graph codegen && graph test && rm -rf generated",
     "prepare": "husky"
   },

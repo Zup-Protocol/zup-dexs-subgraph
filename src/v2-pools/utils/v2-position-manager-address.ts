@@ -4,6 +4,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  POLYGON_NETWORK_NAME,
   SCROLL_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
   UNICHAIN_NETWORK_NAME,
@@ -21,6 +22,7 @@ export class V2PositionManagerAddress {
     if (dataSource.network() == BNB_NETWORK_NAME) return "0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24";
     if (dataSource.network() == BASE_NETWORK_NAME) return "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24";
     if (dataSource.network() == ARBITRUM_NETWORK_NAME) return "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24";
+    if (dataSource.network() == POLYGON_NETWORK_NAME) return "0xedf6066a2b290C185783862C7F4776A2C8077AD1";
 
     throw V2PositionManagerAddress.unsupportedProtocolNetworkError("Uniswap V2");
   }
@@ -31,6 +33,7 @@ export class V2PositionManagerAddress {
     if (dataSource.network() == BNB_NETWORK_NAME) return "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506";
     if (dataSource.network() == BASE_NETWORK_NAME) return "0x6BDED42c6DA8FBf0d2bA55B2fa120C5e0c8D7891";
     if (dataSource.network() == ARBITRUM_NETWORK_NAME) return "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506";
+    if (dataSource.network() == POLYGON_NETWORK_NAME) return "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506";
 
     throw V2PositionManagerAddress.unsupportedProtocolNetworkError("SushiSwap V2");
   }
@@ -72,5 +75,11 @@ export class V2PositionManagerAddress {
     if (dataSource.network() == ARBITRUM_NETWORK_NAME) return "0xAAA87963EFeB6f7E0a2711F397663105Acb1805e";
 
     throw V2PositionManagerAddress.unsupportedProtocolNetworkError("Ramses V2");
+  }
+
+  static get quickSwap(): string {
+    if (dataSource.network() == POLYGON_NETWORK_NAME) return "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff";
+
+    throw V2PositionManagerAddress.unsupportedProtocolNetworkError("QuickSwap V2");
   }
 }

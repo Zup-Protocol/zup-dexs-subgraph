@@ -4,6 +4,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  POLYGON_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
   UNICHAIN_NETWORK_NAME,
 } from "../../common/constants";
@@ -20,6 +21,7 @@ export class V4PositionManagerAddress {
     if (dataSource.network() == BASE_NETWORK_NAME) return "0x7c5f5a4bbd8fd63184577525326123b519429bdc";
     if (dataSource.network() == BNB_NETWORK_NAME) return "0x7A4a5c919aE2541AeD11041A1AEeE68f1287f95b";
     if (dataSource.network() == ARBITRUM_NETWORK_NAME) return "0xd88F38F930b7952f2DB2432Cb002E7abbF3dD869";
+    if (dataSource.network() == POLYGON_NETWORK_NAME) return "0x1Ec2eBf4F37E7363FDfe3551602425af0B3ceef9";
 
     throw V4PositionManagerAddress.unsupportedProtocolNetworkError("Uniswap V4");
   }

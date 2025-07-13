@@ -126,3 +126,17 @@ test("Ramses V2 Id should be correct", () => {
 
   assert.stringEquals(actualId, expectedId);
 });
+
+test("QuickSwap V2 Id should be correct", () => {
+  const expectedId = "quickswap-v2";
+  const actualId = ProtocolId.quickSwapV2;
+
+  assert.stringEquals(actualId, expectedId);
+});
+
+test("QuickSwap V3 Id should be correct", () => {
+  const expectedId = "quickswap-v3";
+  const actualId = ProtocolId.quickSwapV3;
+
+  assert.stringEquals(actualId, expectedId);
+});

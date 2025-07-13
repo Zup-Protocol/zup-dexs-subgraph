@@ -4,6 +4,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  POLYGON_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
   UNICHAIN_NETWORK_NAME,
 } from "../../../src/common/constants";
@@ -39,6 +40,12 @@ describe("V4StateViewAddress", () => {
     dataSourceMock.setNetwork(ARBITRUM_NETWORK_NAME);
 
     assert.stringEquals(V4StateViewAddress.uniswap, "0x76Fd297e2D437cd7f76d50F01AfE6160f86e9990");
+  });
+
+  test("UniswapV4 returns correct address for polygon", () => {
+    dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
+
+    assert.stringEquals(V4StateViewAddress.uniswap, "0x5eA1bD7974c8A611cBAB0bDCAFcB1D9CC9b3BA5a");
   });
 
   test(

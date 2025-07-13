@@ -4,6 +4,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  POLYGON_NETWORK_NAME,
   SCROLL_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
   UNICHAIN_NETWORK_NAME,
@@ -51,6 +52,11 @@ describe("V3PositionManagerAddress", () => {
     assert.stringEquals(V3PositionManagerAddress.uniswap, "0x03a520b32C04BF3bEEf7BEb72E919cf822Ed34f1");
   });
 
+  test("uniswap returns correct address for polygon", () => {
+    dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
+    assert.stringEquals(V3PositionManagerAddress.uniswap, "0xC36442b4a4522E871399CD717aBDD847Ab11FE88");
+  });
+
   test("pancakeSwap returns correct address for all supported networks", () => {
     let networks = [MAINNET_NETWORK_NAME, SEPOLIA_NETWORK_NAME, SCROLL_NETWORK_NAME, BASE_NETWORK_NAME];
     for (let i = 0; i < networks.length; i++) {
@@ -67,6 +73,11 @@ describe("V3PositionManagerAddress", () => {
   test("sushiSwap returns correct address for scroll", () => {
     dataSourceMock.setNetwork(SCROLL_NETWORK_NAME);
     assert.stringEquals(V3PositionManagerAddress.sushiSwap, "0x0389879e0156033202C44BF784ac18fC02edeE4f");
+  });
+
+  test("sushiSwap returns correct address for polygon", () => {
+    dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
+    assert.stringEquals(V3PositionManagerAddress.sushiSwap, "0xb7402ee99F0A008e461098AC3A27F4957Df89a40");
   });
 
   test("sushiSwap returns correct address for base", () => {
@@ -149,6 +160,12 @@ describe("V3PositionManagerAddress", () => {
     assert.stringEquals(V3PositionManagerAddress.ramses, "0xAA277CB7914b7e5514946Da92cb9De332Ce610EF");
   });
 
+  test("QuickSwap returns correct address for Polygon", () => {
+    dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
+
+    assert.stringEquals(V3PositionManagerAddress.quickSwap, "0x8eF88E4c7CfbbaC1C163f7eddd4B578792201de6");
+  });
+
   test(
     "unsupportedProtocolNetworkError throws for unsupported network",
     () => {
@@ -194,6 +211,12 @@ describe("V4PositionManagerAddress", () => {
     dataSourceMock.setNetwork(ARBITRUM_NETWORK_NAME);
 
     assert.stringEquals(V4PositionManagerAddress.uniswap, "0xd88F38F930b7952f2DB2432Cb002E7abbF3dD869");
+  });
+
+  test("UniswapV4 returns correct address for polygon", () => {
+    dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
+
+    assert.stringEquals(V4PositionManagerAddress.uniswap, "0x1Ec2eBf4F37E7363FDfe3551602425af0B3ceef9");
   });
 
   test(

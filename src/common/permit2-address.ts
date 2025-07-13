@@ -4,6 +4,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  POLYGON_NETWORK_NAME,
   SCROLL_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
   UNICHAIN_NETWORK_NAME,
@@ -22,6 +23,7 @@ export class Permit2Address {
     if (dataSource.network() == UNICHAIN_NETWORK_NAME) return "0x000000000022D473030F116dDEE9F6B43aC78BA3";
     if (dataSource.network() == BNB_NETWORK_NAME) return "0x000000000022D473030F116dDEE9F6B43aC78BA3";
     if (dataSource.network() == ARBITRUM_NETWORK_NAME) return "0x000000000022D473030F116dDEE9F6B43aC78BA3";
+    if (dataSource.network() == POLYGON_NETWORK_NAME) return "0x000000000022D473030F116dDEE9F6B43aC78BA3";
 
     throw Permit2Address.unsupportedProtocolNetworkError("Uniswap");
   }

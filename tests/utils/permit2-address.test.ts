@@ -4,6 +4,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  POLYGON_NETWORK_NAME,
   SCROLL_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
   UNICHAIN_NETWORK_NAME,
@@ -46,6 +47,11 @@ describe("Permit2Address", () => {
     assert.stringEquals(Permit2Address.uniswap, "0x000000000022D473030F116dDEE9F6B43aC78BA3");
   });
 
+  test("uniswap returns correct address for polygon", () => {
+    dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
+    assert.stringEquals(Permit2Address.uniswap, "0x000000000022D473030F116dDEE9F6B43aC78BA3");
+  });
+
   test(
     "uniswap throws for unsupported network",
     () => {
@@ -56,7 +62,7 @@ describe("Permit2Address", () => {
   );
 
   test("pancakeSWap returns correct address for bsc", () => {
-    dataSourceMock.setNetwork("bsc");
+    dataSourceMock.setNetwork(BNB_NETWORK_NAME);
     assert.stringEquals(Permit2Address.pancakeSwap, "0x31c2F6fcFf4F8759b3Bd5Bf0e1084A055615c768");
   });
 

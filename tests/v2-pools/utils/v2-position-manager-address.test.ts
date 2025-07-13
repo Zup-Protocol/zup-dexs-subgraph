@@ -4,6 +4,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  POLYGON_NETWORK_NAME,
   SCROLL_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
   UNICHAIN_NETWORK_NAME,
@@ -64,6 +65,12 @@ test("When calling 'uniswap' on arbitrum, it should return the correct address",
   assert.stringEquals(address, "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24");
 });
 
+test("When calling 'uniswap' on Polygon, it should return the correct address", () => {
+  dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
+  let address = V2PositionManagerAddress.uniswap;
+  assert.stringEquals(address, "0xedf6066a2b290C185783862C7F4776A2C8077AD1");
+});
+
 test(
   "When calling 'uniswap' on a network that is not mapped, it should throw an error",
   () => {
@@ -100,6 +107,12 @@ test("When calling 'sushiSwap' on Base, it should return the correct address", (
 
 test("When calling 'sushiSwap' on arbitrum, it should return the correct address", () => {
   dataSourceMock.setNetwork(ARBITRUM_NETWORK_NAME);
+  let address = V2PositionManagerAddress.sushiSwap;
+  assert.stringEquals(address, "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506");
+});
+
+test("When calling 'sushiSwap' on Polygon, it should return the correct address", () => {
+  dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
   let address = V2PositionManagerAddress.sushiSwap;
   assert.stringEquals(address, "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506");
 });
@@ -223,6 +236,22 @@ test(
   () => {
     dataSourceMock.setNetwork("ababa");
     V2PositionManagerAddress.ramses;
+  },
+  true,
+);
+
+// QuickSwap
+test("When calling 'quickSwap' on Polygon, it should return the correct address", () => {
+  dataSourceMock.setNetwork(POLYGON_NETWORK_NAME);
+  let address = V2PositionManagerAddress.quickSwap;
+  assert.stringEquals(address, "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff");
+});
+
+test(
+  "When calling 'quickSwap' on a network that is not mapped, it should throw an error",
+  () => {
+    dataSourceMock.setNetwork("ababa");
+    V2PositionManagerAddress.quickSwap;
   },
   true,
 );
