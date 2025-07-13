@@ -439,3 +439,5 @@ templates:
           handler: handleAerodromeV2Swap
         - event: Sync(uint256,uint256)
           handler: handleAerodromeV2Sync
+        - event: Fees(indexed address,uint256,uint256)
+          handler: handleAerodromeV2Fees

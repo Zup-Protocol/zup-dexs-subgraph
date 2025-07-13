@@ -455,3 +455,5 @@ templates:
           handler: handleRamsesV2PoolSwap
         - event: Sync(uint256,uint256)
           handler: handleRamsesV2PoolSync
+        - event: Fees(indexed address,uint256,uint256)
+          handler: handleRamsesV2PoolFees
