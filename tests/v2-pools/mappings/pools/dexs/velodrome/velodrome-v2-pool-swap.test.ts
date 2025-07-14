@@ -1,6 +1,16 @@
 import { Address, BigInt, ethereum } from "@graphprotocol/graph-ts";
-import { assert, beforeEach, clearStore, createMockedFunction, describe, newMockEvent, test } from "matchstick-as";
+import {
+  assert,
+  beforeEach,
+  clearStore,
+  createMockedFunction,
+  dataSourceMock,
+  describe,
+  newMockEvent,
+  test,
+} from "matchstick-as";
 import { Swap as SwapEvent } from "../../../../../../generated/templates/VelodromeV2Pool/VelodromeV2Pool";
+import { OP_NETWORK_NAME } from "../../../../../../src/common/constants";
 import { handleVelodromeV2PoolSwap } from "../../../../../../src/v2-pools/mappings/pool/dexs/velodrome/velodrome-v2-pool-swap";
 import { V2FactoryAddress } from "../../../../../../src/v2-pools/utils/v2-factory-address";
 import { PoolMock } from "../../../../../mocks";
@@ -57,6 +67,8 @@ function createEvent(eventParams: SwapEventParams = new SwapEventParams()): Swap
 describe("Velodrome V2 Swap", () => {
   beforeEach(() => {
     clearStore();
+
+    dataSourceMock.setNetwork(OP_NETWORK_NAME);
   });
 
   test(`When calling the handler, it should get the pool fee from the factory and pass

@@ -500,6 +500,52 @@ dataSources:
       eventHandlers:
         - event: Pool(indexed address,indexed address,address)
           handler: handleQuickSwapV3PoolCreated
+  - kind: ethereum
+    name: VelodromeV3Factory
+    network: mainnet
+    source:
+      address: "0xCc0bDDB707055e04e497aB22a59c2aF4391cd12F"
+      abi: AerodromeV3Factory
+      startBlock: 121501661
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/v3-pools/mappings/factory/dexs/velodrome-v3-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: AerodromeV3Factory
+          file: "./abis/factories/AerodromeV3Factory.json"
+        - name: ERC20
+          file: "./abis/ERC20.json"
+        - name: AerodromeV3Pool
+          file: "./abis/pools/AerodromeV3Pool.json"
+      eventHandlers:
+        - event: PoolCreated(indexed address,indexed address,indexed int24,address)
+          handler: handleVelodromeV3PoolCreated
+  - kind: ethereum
+    name: VelodromeV2Factory
+    network: mainnet
+    source:
+      address: "0xF1046053aa5682b4F9a81b5481394DA16BE5FF5a"
+      abi: VelodromeV2Factory
+      startBlock: 105896804
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/v2-pools/mappings/factory/dexs/velodrome-v2-factory.ts
+      entities:
+        - Pool
+      abis:
+        - name: VelodromeV2Factory
+          file: "./abis/factories/VelodromeV2Factory.json"
+        - name: ERC20
+          file: "./abis/ERC20.json"
+      eventHandlers:
+        - event: PoolCreated(indexed address,indexed address,indexed bool,address,uint256)
+          handler: handleVelodromeV2PoolCreated
 
 templates:
   - kind: ethereum/contract
@@ -813,3 +859,32 @@ templates:
           handler: handleQuickSwapV3PoolSwap
         - event: Fee(uint16)
           handler: handleQuickSwapV3PoolFee
+  - kind: ethereum/contract
+    name: VelodromeV2Pool
+    network: mainnet
+    source:
+      abi: VelodromeV2Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/v2-pools/mappings/pool/dexs/velodrome/index.ts
+      entities:
+        - Pool
+        - Token
+      abis:
+        - name: VelodromeV2Pool
+          file: ./abis/pools/VelodromeV2Pool.json
+        - name: VelodromeV2Factory
+          file: ./abis/factories/VelodromeV2Factory.json
+      eventHandlers:
+        - event: Mint(indexed address,uint256,uint256)
+          handler: handleVelodromeV2PoolMint
+        - event: Burn(indexed address,indexed address,uint256,uint256)
+          handler: handleVelodromeV2PoolBurn
+        - event: Swap(indexed address,indexed address,uint256,uint256,uint256,uint256)
+          handler: handleVelodromeV2PoolSwap
+        - event: Sync(uint256,uint256)
+          handler: handleVelodromeV2PoolSync
+        - event: Fees(indexed address,uint256,uint256)
+          handler: handleVelodromeV2PoolFees

@@ -5,6 +5,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  OP_NETWORK_NAME,
   POLYGON_NETWORK_NAME,
   SCROLL_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
@@ -82,6 +83,15 @@ describe("`wrappedNativeAddress` should return the correct value for each networ
     assert.addressEquals(
       Address.fromString(CurrentNetwork.wrappedNativeAddress),
       Address.fromString("0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"),
+    );
+  });
+
+  test("Optimism", () => {
+    dataSourceMock.setNetwork(OP_NETWORK_NAME);
+
+    assert.addressEquals(
+      Address.fromString(CurrentNetwork.wrappedNativeAddress),
+      Address.fromString("0x4200000000000000000000000000000000000006"),
     );
   });
 });
@@ -199,6 +209,22 @@ describe("`stablecoinsAddresses` should return a correct list of stablecoins for
         ].join(),
     );
   });
+
+  test("Optimism", () => {
+    dataSourceMock.setNetwork(OP_NETWORK_NAME);
+
+    assert.assertTrue(
+      CurrentNetwork.stablecoinsAddresses.join() ==
+        [
+          "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // USDC
+          "0x7f5c764cbc14f9669b88837ca1490cca17c31607", // USDC.e
+          "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58", // USDT
+          "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1", // DAI
+          "0x8aE125E8653821E851F12A49F7765db9a9ce7384", // DOLA
+          "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34", // USDe
+        ].join(),
+    );
+  });
 });
 
 test(
@@ -274,5 +300,13 @@ describe("`NativeToken` should return a correct native token object for each net
     assert.stringEquals(CurrentNetwork.nativeToken().symbol, "POL");
     assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
     assert.stringEquals(CurrentNetwork.nativeToken().name, "Polygon");
+  });
+
+  test("Optimism", () => {
+    dataSourceMock.setNetwork(OP_NETWORK_NAME);
+
+    assert.stringEquals(CurrentNetwork.nativeToken().symbol, "ETH");
+    assert.i32Equals(CurrentNetwork.nativeToken().decimals, 18);
+    assert.stringEquals(CurrentNetwork.nativeToken().name, "Ether");
   });
 });

@@ -42,4 +42,6 @@ export function handleV2PoolClaimFeesImpl(
   v2PoolSetters.setPoolDailyDataTVL(event, poolEntity);
 
   poolEntity.save();
+  token0Entity.save();
+  token1Entity.save();
 }

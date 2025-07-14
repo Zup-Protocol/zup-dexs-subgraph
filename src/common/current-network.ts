@@ -4,6 +4,7 @@ import {
   BASE_NETWORK_NAME,
   BNB_NETWORK_NAME,
   MAINNET_NETWORK_NAME,
+  OP_NETWORK_NAME,
   POLYGON_NETWORK_NAME,
   SCROLL_NETWORK_NAME,
   SEPOLIA_NETWORK_NAME,
@@ -23,6 +24,7 @@ export abstract class CurrentNetwork {
     if (dataSource.network() == BNB_NETWORK_NAME) return "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
     if (dataSource.network() == ARBITRUM_NETWORK_NAME) return "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1";
     if (dataSource.network() == POLYGON_NETWORK_NAME) return "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270";
+    if (dataSource.network() == OP_NETWORK_NAME) return "0x4200000000000000000000000000000000000006";
 
     throw CurrentNetwork.unsupportedNetworkError;
   }
@@ -36,6 +38,7 @@ export abstract class CurrentNetwork {
     if (dataSource.network() == BNB_NETWORK_NAME) return new NativeToken("BNB", 18, "BNB");
     if (dataSource.network() == ARBITRUM_NETWORK_NAME) return new NativeToken("ETH", 18, "Ether");
     if (dataSource.network() == POLYGON_NETWORK_NAME) return new NativeToken("POL", 18, "Polygon");
+    if (dataSource.network() == OP_NETWORK_NAME) return new NativeToken("ETH", 18, "Ether");
 
     throw CurrentNetwork.unsupportedNetworkError;
   }
@@ -110,6 +113,17 @@ export abstract class CurrentNetwork {
         "0xc2132d05d31c914a87c6611c10748aeb04b58e8f", // USDT
         "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063", // DAI
         "0xbC2b48BC930Ddc4E5cFb2e87a45c379Aab3aac5C", // DOLA
+      ];
+    }
+
+    if (dataSource.network() == OP_NETWORK_NAME) {
+      return [
+        "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // USDC
+        "0x7f5c764cbc14f9669b88837ca1490cca17c31607", // USDC.e
+        "0x94b008aa00579c1307b0ef2c499ad98a8ce58e58", // USDT
+        "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1", // DAI
+        "0x8aE125E8653821E851F12A49F7765db9a9ce7384", // DOLA
+        "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34", // USDe
       ];
     }
 
