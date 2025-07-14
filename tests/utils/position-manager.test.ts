@@ -179,6 +179,12 @@ describe("V3PositionManagerAddress", () => {
     assert.stringEquals(V3PositionManagerAddress.velodrome, "0x416b433906b1B72FA758e166e239c43d68dC6F29");
   });
 
+  test("Velodrome returns correct address for Unichain", () => {
+    dataSourceMock.setNetwork(UNICHAIN_NETWORK_NAME);
+
+    assert.stringEquals(V3PositionManagerAddress.velodrome, "0x991d5546C4B442B4c5fdc4c8B8b8d131DEB24702");
+  });
+
   test(
     "unsupportedProtocolNetworkError throws for unsupported network",
     () => {

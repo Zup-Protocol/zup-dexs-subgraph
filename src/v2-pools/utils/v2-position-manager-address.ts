@@ -88,6 +88,7 @@ export class V2PositionManagerAddress {
 
   static get velodrome(): string {
     if (dataSource.network() == OP_NETWORK_NAME) return "0xa062aE8A9c5e11aaA026fc2670B0D65cCc8B2858";
+    if (dataSource.network() == UNICHAIN_NETWORK_NAME) return "0x3a63171DD9BebF4D07BC782FECC7eb0b890C2A45";
 
     throw V2PositionManagerAddress.unsupportedProtocolNetworkError("Velodrome V2");
   }

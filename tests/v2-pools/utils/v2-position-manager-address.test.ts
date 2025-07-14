@@ -279,6 +279,13 @@ test("When calling 'velodrome' on OP, it should return the correct address", () 
   assert.stringEquals(address, "0xa062aE8A9c5e11aaA026fc2670B0D65cCc8B2858");
 });
 
+test("When calling 'velodrome' on unichain, it should return the correct address", () => {
+  dataSourceMock.setNetwork(UNICHAIN_NETWORK_NAME);
+  let address = V2PositionManagerAddress.velodrome;
+
+  assert.stringEquals(address, "0x3a63171DD9BebF4D07BC782FECC7eb0b890C2A45");
+});
+
 test(
   "When calling 'velodrome' on a network that is not mapped, it should throw an error",
   () => {

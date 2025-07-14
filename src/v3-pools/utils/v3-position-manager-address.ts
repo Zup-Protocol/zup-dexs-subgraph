@@ -114,6 +114,7 @@ export class V3PositionManagerAddress {
 
   static get velodrome(): string {
     if (dataSource.network() == OP_NETWORK_NAME) return "0x416b433906b1B72FA758e166e239c43d68dC6F29";
+    if (dataSource.network() == UNICHAIN_NETWORK_NAME) return "0x991d5546C4B442B4c5fdc4c8B8b8d131DEB24702";
 
     throw V3PositionManagerAddress.unsupportedProtocolNetworkError("Velodrome V3");
   }
