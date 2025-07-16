@@ -1,5 +1,10 @@
 import { dataSource } from "@graphprotocol/graph-ts";
-import { ARBITRUM_NETWORK_NAME, BASE_NETWORK_NAME, OP_NETWORK_NAME } from "../../common/constants";
+import {
+  ARBITRUM_NETWORK_NAME,
+  BASE_NETWORK_NAME,
+  OP_NETWORK_NAME,
+  UNICHAIN_NETWORK_NAME,
+} from "../../common/constants";
 
 export class V2FactoryAddress {
   static get aerodrome(): string {
@@ -16,6 +21,7 @@ export class V2FactoryAddress {
 
   static get velodrome(): string {
     if (dataSource.network() == OP_NETWORK_NAME) return "0xF1046053aa5682b4F9a81b5481394DA16BE5FF5a";
+    if (dataSource.network() == UNICHAIN_NETWORK_NAME) return "0x31832f2a97Fd20664D76Cc421207669b55CE4BC0";
 
     throw new Error(`V2 Factory address not mapped for Velodrome on ${dataSource.network()} network`);
   }

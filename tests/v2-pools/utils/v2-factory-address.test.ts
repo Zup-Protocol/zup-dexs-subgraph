@@ -1,6 +1,11 @@
 import { Address } from "@graphprotocol/graph-ts";
 import { assert, beforeEach, clearStore, dataSourceMock, describe, test } from "matchstick-as";
-import { ARBITRUM_NETWORK_NAME, BASE_NETWORK_NAME, OP_NETWORK_NAME } from "../../../src/common/constants";
+import {
+  ARBITRUM_NETWORK_NAME,
+  BASE_NETWORK_NAME,
+  OP_NETWORK_NAME,
+  UNICHAIN_NETWORK_NAME,
+} from "../../../src/common/constants";
 import { V2FactoryAddress } from "../../../src/v2-pools/utils/v2-factory-address";
 
 describe("V2 Factory Address Tests", () => {
@@ -30,6 +35,15 @@ describe("V2 Factory Address Tests", () => {
     dataSourceMock.setNetwork(OP_NETWORK_NAME);
 
     const expectedAddress = "0xF1046053aa5682b4F9a81b5481394DA16BE5FF5a";
+    const actualAddress = V2FactoryAddress.velodrome;
+
+    assert.addressEquals(Address.fromString(expectedAddress), Address.fromString(actualAddress));
+  });
+
+  test("When calling `velodrome` in unichain network it should return the correct address", () => {
+    dataSourceMock.setNetwork(UNICHAIN_NETWORK_NAME);
+
+    const expectedAddress = "0x31832f2a97Fd20664D76Cc421207669b55CE4BC0";
     const actualAddress = V2FactoryAddress.velodrome;
 
     assert.addressEquals(Address.fromString(expectedAddress), Address.fromString(actualAddress));
